@@ -1,0 +1,1898 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>OMAC Incident Log Analyzer · S M Baqir</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=DM+Mono:wght@400;500&display=swap');
+
+  /* ═══════════════════════════════════════
+     DESIGN TOKENS — DARK (DEFAULT)
+  ═══════════════════════════════════════ */
+  :root {
+    /* Canvas */
+    --bg:        #080c14;
+    --surface:   #0e1520;
+    --surface2:  #131d2e;
+    --surface3:  #1a2640;
+    --surface4:  #1f2e4a;
+
+    /* Borders */
+    --border:    rgba(99,132,199,0.14);
+    --border-md: rgba(99,132,199,0.24);
+
+    /* Typography */
+    --text:      #e8eef8;
+    --text-muted:#7f93b8;
+    --text-dim:  #3d5070;
+
+    /* Brand */
+    --gold:      #c9a84c;
+    --gold-light:#e8c96a;
+    --gold-bg:   rgba(201,168,76,0.08);
+    --gold-glow: rgba(201,168,76,0.18);
+
+    /* Accent */
+    --accent:    #4d86f5;
+    --accent2:   #6b9fff;
+    --accent-bg: rgba(77,134,245,0.10);
+    --accent-glow:rgba(77,134,245,0.18);
+
+    /* Semantic */
+    --green:     #34c77b;
+    --green-bg:  rgba(52,199,123,0.10);
+    --amber:     #e8a83a;
+    --amber-bg:  rgba(232,168,58,0.10);
+    --red:       #f05c5c;
+    --red-bg:    rgba(240,92,92,0.10);
+    --purple:    #9b72ef;
+    --purple-bg: rgba(155,114,239,0.10);
+    --cyan:      #3fc8d8;
+    --cyan-bg:   rgba(63,200,216,0.10);
+
+    /* Shape */
+    --radius:    10px;
+    --radius-lg: 16px;
+    --radius-xl: 22px;
+
+    /* Shadows */
+    --shadow-sm: 0 1px 3px rgba(0,0,0,0.4);
+    --shadow:    0 4px 16px rgba(0,0,0,0.5);
+    --shadow-lg: 0 8px 32px rgba(0,0,0,0.6);
+    --glow-gold: 0 0 24px rgba(201,168,76,0.15);
+  }
+
+  /* ═══════════════════════════════════════
+     LIGHT MODE
+  ═══════════════════════════════════════ */
+  body.light {
+    --bg:        #f0f4fb;
+    --surface:   #ffffff;
+    --surface2:  #f5f7fc;
+    --surface3:  #eaeff8;
+    --surface4:  #dde5f5;
+    --border:    rgba(60,100,180,0.12);
+    --border-md: rgba(60,100,180,0.22);
+    --text:      #0f1f3d;
+    --text-muted:#5a6f95;
+    --text-dim:  #a0b0cc;
+    --gold:      #a07c28;
+    --gold-light:#c09830;
+    --gold-bg:   rgba(160,124,40,0.07);
+    --gold-glow: rgba(160,124,40,0.14);
+    --accent:    #1558cc;
+    --accent2:   #2468e0;
+    --accent-bg: rgba(21,88,204,0.08);
+    --accent-glow:rgba(21,88,204,0.14);
+    --green:     #1d9e5c;
+    --green-bg:  rgba(29,158,92,0.10);
+    --amber:     #c47a10;
+    --amber-bg:  rgba(196,122,16,0.10);
+    --red:       #d63b3b;
+    --red-bg:    rgba(214,59,59,0.10);
+    --purple:    #7040cc;
+    --purple-bg: rgba(112,64,204,0.10);
+    --cyan:      #1898a8;
+    --cyan-bg:   rgba(24,152,168,0.10);
+    --shadow-sm: 0 1px 3px rgba(15,31,61,0.07);
+    --shadow:    0 4px 16px rgba(15,31,61,0.10);
+    --shadow-lg: 0 8px 32px rgba(15,31,61,0.12);
+    --glow-gold: 0 0 20px rgba(160,124,40,0.10);
+  }
+
+  /* ═══════════════════════════════════════
+     RESET & BASE
+  ═══════════════════════════════════════ */
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'Plus Jakarta Sans', system-ui, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    font-size: 14px;
+    line-height: 1.65;
+    -webkit-font-smoothing: antialiased;
+    transition: background 0.3s, color 0.3s;
+  }
+
+  /* Subtle grid texture on dark */
+  body:not(.light)::before {
+    content: '';
+    position: fixed; inset: 0; pointer-events: none; z-index: 0;
+    background-image:
+      linear-gradient(rgba(77,134,245,0.025) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(77,134,245,0.025) 1px, transparent 1px);
+    background-size: 48px 48px;
+  }
+
+  /* ═══════════════════════════════════════
+     HEADER
+  ═══════════════════════════════════════ */
+  .header {
+    background: var(--surface);
+    border-bottom: 1px solid var(--border);
+    padding: 0 32px;
+    height: 64px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    box-shadow: 0 1px 0 var(--border), var(--shadow-sm);
+  }
+  body:not(.light) .header {
+    background: rgba(14,21,32,0.85);
+  }
+
+  .header-brand { display: flex; align-items: center; gap: 14px; }
+
+  .header-logo {
+    width: 40px; height: 40px;
+    background: linear-gradient(135deg, #c9a84c 0%, #e8c96a 50%, #9b6f2a 100%);
+    border-radius: 10px;
+    display: flex; align-items: center; justify-content: center;
+    font-weight: 800; font-size: 13px; color: #0e1520;
+    letter-spacing: -0.5px;
+    box-shadow: 0 0 0 1px rgba(201,168,76,0.4), var(--glow-gold);
+    flex-shrink: 0;
+  }
+
+  .header-title {
+    font-weight: 700; font-size: 15px; letter-spacing: -0.2px;
+    background: linear-gradient(135deg, var(--text) 60%, var(--text-muted));
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+  body.light .header-title { -webkit-text-fill-color: var(--text); }
+
+  .header-sub { color: var(--text-muted); font-size: 11px; font-weight: 500; letter-spacing: 0.2px; }
+
+  .header-right { display: flex; align-items: center; gap: 12px; }
+
+  .header-badge {
+    background: var(--gold-bg);
+    border: 1px solid rgba(201,168,76,0.35);
+    color: var(--gold);
+    padding: 5px 12px;
+    border-radius: 20px;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+  }
+  body.light .header-badge { color: var(--gold); border-color: rgba(160,124,40,0.4); }
+
+  /* ── THEME TOGGLE ── */
+  .theme-toggle-wrap { display: flex; align-items: center; gap: 7px; }
+  .theme-icon { font-size: 13px; user-select: none; }
+  .theme-toggle {
+    width: 46px; height: 26px;
+    background: var(--surface3);
+    border: 1px solid var(--border-md);
+    border-radius: 13px;
+    cursor: pointer;
+    position: relative;
+    transition: background 0.25s, border-color 0.25s;
+    flex-shrink: 0;
+  }
+  .theme-toggle::after {
+    content: '';
+    position: absolute;
+    width: 20px; height: 20px;
+    background: var(--text-muted);
+    border-radius: 50%;
+    top: 2px; left: 2px;
+    transition: transform 0.25s cubic-bezier(.34,1.56,.64,1), background 0.25s;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.3);
+  }
+  body.light .theme-toggle { background: var(--accent-bg); border-color: var(--accent); }
+  body.light .theme-toggle::after { transform: translateX(20px); background: var(--accent); }
+
+  /* ═══════════════════════════════════════
+     LAYOUT
+  ═══════════════════════════════════════ */
+  .main { max-width: 1240px; margin: 0 auto; padding: 40px 28px; position: relative; z-index: 1; }
+
+  /* ═══════════════════════════════════════
+     SECTION HEADERS
+  ═══════════════════════════════════════ */
+  .section-header { display: flex; align-items: center; gap: 14px; margin-bottom: 24px; }
+
+  .section-num {
+    width: 32px; height: 32px;
+    background: linear-gradient(135deg, var(--accent), #3568d4);
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 13px; font-weight: 700; color: white;
+    flex-shrink: 0;
+    box-shadow: 0 0 0 4px var(--accent-bg);
+  }
+  .section-num.done {
+    background: linear-gradient(135deg, var(--green), #28a068);
+    box-shadow: 0 0 0 4px var(--green-bg);
+  }
+  .section-label { font-size: 20px; font-weight: 800; letter-spacing: -0.4px; }
+  .section-desc { color: var(--text-muted); font-size: 13px; margin-top: 2px; }
+
+  /* ═══════════════════════════════════════
+     CARDS
+  ═══════════════════════════════════════ */
+  .card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    padding: 24px 28px;
+    margin-bottom: 24px;
+    box-shadow: var(--shadow-sm);
+    transition: border-color 0.2s, box-shadow 0.2s;
+  }
+  .card:hover { border-color: var(--border-md); }
+  .card-title { font-weight: 700; font-size: 14px; margin-bottom: 18px; display: flex; align-items: center; gap: 8px; letter-spacing: -0.1px; }
+
+  /* ═══════════════════════════════════════
+     FIELD GUIDE
+  ═══════════════════════════════════════ */
+  .legend-bar {
+    display: flex; gap: 20px; flex-wrap: wrap;
+    padding: 14px 20px;
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    margin-bottom: 22px;
+    align-items: center;
+  }
+  .legend-item { display: flex; align-items: center; gap: 7px; font-size: 12px; color: var(--text-muted); }
+
+  .badge {
+    padding: 3px 9px; border-radius: 20px;
+    font-size: 10px; font-weight: 700; letter-spacing: 0.4px;
+    text-transform: uppercase;
+  }
+  .badge-mandatory  { background: var(--red-bg);    color: var(--red);    border: 1px solid rgba(240,92,92,0.3); }
+  .badge-recommended{ background: var(--amber-bg);  color: var(--amber);  border: 1px solid rgba(232,168,58,0.3); }
+  .badge-optional   { background: var(--surface3);  color: var(--text-muted); border: 1px solid var(--border-md); }
+  .badge-auto       { background: var(--purple-bg); color: var(--purple); border: 1px solid rgba(155,114,239,0.3); }
+
+  .fields-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(330px, 1fr));
+    gap: 10px;
+  }
+  .field-item {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 13px 16px;
+    display: flex; align-items: flex-start; gap: 12px;
+    transition: border-color 0.15s, background 0.15s, transform 0.15s;
+    cursor: default;
+  }
+  .field-item:hover {
+    border-color: var(--border-md);
+    background: var(--surface3);
+    transform: translateY(-1px);
+    box-shadow: var(--shadow-sm);
+  }
+  .field-col {
+    font-family: 'DM Mono', monospace; font-size: 10px;
+    color: var(--gold); background: var(--gold-bg);
+    border: 1px solid rgba(201,168,76,0.2);
+    border-radius: 5px; padding: 1px 5px;
+    width: 28px; text-align: center; flex-shrink: 0; margin-top: 2px;
+    font-weight: 500;
+  }
+  .field-body { flex: 1; }
+  .field-name { font-weight: 600; font-size: 13px; margin-bottom: 3px; display: flex; align-items: center; gap: 7px; flex-wrap: wrap; }
+  .field-hint { color: var(--text-muted); font-size: 11px; line-height: 1.5; }
+
+  /* ═══════════════════════════════════════
+     SEPARATOR
+  ═══════════════════════════════════════ */
+  .sep {
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--border-md), transparent);
+    margin: 40px 0;
+  }
+
+  /* ═══════════════════════════════════════
+     UPLOAD ZONE
+  ═══════════════════════════════════════ */
+  .upload-zone {
+    border: 2px dashed var(--border-md);
+    border-radius: var(--radius-xl);
+    padding: 56px 32px;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.25s;
+    background: var(--surface2);
+    position: relative;
+    overflow: hidden;
+  }
+  .upload-zone::before {
+    content: '';
+    position: absolute; inset: 0;
+    background: radial-gradient(ellipse at 50% 0%, var(--accent-bg), transparent 70%);
+    opacity: 0; transition: opacity 0.25s;
+    pointer-events: none;
+  }
+  .upload-zone:hover::before, .upload-zone.drag-over::before { opacity: 1; }
+  .upload-zone:hover, .upload-zone.drag-over {
+    border-color: var(--accent);
+    background: var(--surface3);
+    transform: translateY(-2px);
+    box-shadow: var(--shadow);
+  }
+  .upload-zone input[type=file] {
+    position: absolute; inset: 0; opacity: 0; cursor: pointer; width: 100%; height: 100%;
+  }
+  .upload-icon {
+    font-size: 48px; margin-bottom: 16px;
+    display: block;
+    filter: drop-shadow(0 0 12px var(--accent-bg));
+  }
+  .upload-title { font-size: 18px; font-weight: 700; margin-bottom: 8px; letter-spacing: -0.3px; }
+  .upload-hint { color: var(--text-muted); font-size: 13px; }
+  .upload-formats { display: flex; gap: 8px; justify-content: center; flex-wrap: wrap; margin-top: 20px; }
+  .fmt-tag {
+    background: var(--surface3);
+    border: 1px solid var(--border-md);
+    border-radius: 20px;
+    padding: 4px 12px;
+    font-size: 11px;
+    font-family: 'DM Mono', monospace;
+    color: var(--text-muted);
+    font-weight: 500;
+  }
+
+  /* ═══════════════════════════════════════
+     TEMPLATE CARD
+  ═══════════════════════════════════════ */
+  .template-card {
+    background: linear-gradient(135deg, var(--gold-bg) 0%, var(--surface2) 60%);
+    border: 1px solid rgba(201,168,76,0.28);
+    border-radius: var(--radius-lg);
+    padding: 22px 28px;
+    display: flex; align-items: center; justify-content: space-between;
+    gap: 16px; flex-wrap: wrap;
+    margin-bottom: 28px;
+    position: relative; overflow: hidden;
+    box-shadow: var(--glow-gold);
+  }
+  .template-card::before {
+    content: '';
+    position: absolute; top: 0; left: 0; right: 0; height: 2px;
+    background: linear-gradient(90deg, transparent, var(--gold), transparent);
+  }
+  .template-info .title { font-weight: 700; margin-bottom: 4px; font-size: 14px; }
+  .template-info .desc { color: var(--text-muted); font-size: 12px; }
+
+  /* ═══════════════════════════════════════
+     BUTTONS
+  ═══════════════════════════════════════ */
+  .btn {
+    padding: 10px 20px;
+    border-radius: var(--radius);
+    font-weight: 700;
+    font-size: 13px;
+    cursor: pointer;
+    border: none;
+    transition: all 0.18s;
+    display: inline-flex; align-items: center; gap: 7px;
+    text-decoration: none;
+    font-family: inherit;
+    letter-spacing: -0.1px;
+    white-space: nowrap;
+  }
+  .btn-primary {
+    background: linear-gradient(135deg, var(--accent), #3568d4);
+    color: white;
+    box-shadow: 0 2px 8px rgba(77,134,245,0.35);
+  }
+  .btn-primary:hover { background: linear-gradient(135deg, var(--accent2), var(--accent)); transform: translateY(-1px); box-shadow: 0 4px 14px rgba(77,134,245,0.45); }
+  .btn-ghost {
+    background: var(--surface2);
+    border: 1px solid var(--border-md);
+    color: var(--text);
+  }
+  .btn-ghost:hover { background: var(--surface3); border-color: var(--accent); color: var(--accent); }
+  .btn-gold {
+    background: linear-gradient(135deg, #c9a84c, #e8c96a);
+    color: #0e1520;
+    box-shadow: 0 2px 10px rgba(201,168,76,0.4);
+    font-weight: 800;
+  }
+  .btn-gold:hover { background: linear-gradient(135deg, #e8c96a, #c9a84c); transform: translateY(-1px); box-shadow: 0 4px 16px rgba(201,168,76,0.5); }
+  .btn-green {
+    background: linear-gradient(135deg, var(--green), #28a068);
+    color: white;
+    box-shadow: 0 2px 8px rgba(52,199,123,0.3);
+  }
+  .btn-green:hover { transform: translateY(-1px); box-shadow: 0 4px 14px rgba(52,199,123,0.4); }
+
+  /* ═══════════════════════════════════════
+     LOADING
+  ═══════════════════════════════════════ */
+  #loading { display: none; text-align: center; padding: 60px; }
+  .spinner {
+    width: 40px; height: 40px;
+    border: 3px solid var(--border-md);
+    border-top-color: var(--gold);
+    border-right-color: var(--accent);
+    border-radius: 50%;
+    animation: spin 0.9s linear infinite;
+    margin: 0 auto 20px;
+  }
+  @keyframes spin { to { transform: rotate(360deg); } }
+
+  /* ═══════════════════════════════════════
+     DASHBOARD
+  ═══════════════════════════════════════ */
+  #dashboard { display: none; }
+
+  /* KPI CARDS */
+  .stats-row {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(168px, 1fr));
+    gap: 14px;
+    margin-bottom: 28px;
+  }
+  .stat-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    padding: 20px 22px;
+    position: relative;
+    overflow: hidden;
+    transition: transform 0.2s, box-shadow 0.2s, border-color 0.2s;
+    cursor: default;
+  }
+  .stat-card:hover { transform: translateY(-2px); box-shadow: var(--shadow); border-color: var(--border-md); }
+  .stat-card::before {
+    content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px;
+    border-radius: 3px 3px 0 0;
+  }
+  .stat-card::after {
+    content: ''; position: absolute; bottom: -20px; right: -10px;
+    width: 70px; height: 70px; border-radius: 50%;
+    opacity: 0.05;
+  }
+  .stat-card.blue::before  { background: linear-gradient(90deg, var(--accent), var(--accent2)); }
+  .stat-card.blue::after   { background: var(--accent); }
+  .stat-card.green::before { background: linear-gradient(90deg, var(--green), #56e0a0); }
+  .stat-card.green::after  { background: var(--green); }
+  .stat-card.amber::before { background: linear-gradient(90deg, var(--amber), #f5c842); }
+  .stat-card.amber::after  { background: var(--amber); }
+  .stat-card.red::before   { background: linear-gradient(90deg, var(--red), #ff8080); }
+  .stat-card.red::after    { background: var(--red); }
+  .stat-card.purple::before{ background: linear-gradient(90deg, var(--purple), #c4a0ff); }
+  .stat-card.purple::after { background: var(--purple); }
+  .stat-card.cyan::before  { background: linear-gradient(90deg, var(--cyan), #7ae8f4); }
+  .stat-card.cyan::after   { background: var(--cyan); }
+
+  .stat-icon { font-size: 18px; margin-bottom: 10px; opacity: 0.8; }
+  .stat-num {
+    font-size: 32px; font-weight: 800;
+    font-family: 'DM Mono', monospace;
+    letter-spacing: -1px;
+    margin-bottom: 4px;
+    line-height: 1;
+  }
+  .stat-label { font-size: 11px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.8px; font-weight: 600; }
+
+  /* SLICERS */
+  .slicer-row {
+    display: flex; flex-wrap: wrap; gap: 14px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    padding: 20px 24px;
+    margin-bottom: 24px;
+    align-items: flex-end;
+    box-shadow: var(--shadow-sm);
+  }
+  .slicer-group { display: flex; flex-direction: column; gap: 5px; }
+  .slicer-label {
+    font-size: 10px; color: var(--text-muted);
+    text-transform: uppercase; letter-spacing: 0.8px; font-weight: 700;
+  }
+  .slicer-select {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    color: var(--text);
+    padding: 8px 14px;
+    border-radius: var(--radius);
+    font-size: 13px; font-weight: 500;
+    min-width: 136px;
+    cursor: pointer;
+    font-family: inherit;
+    transition: border-color 0.15s, box-shadow 0.15s;
+    appearance: auto;
+  }
+  .slicer-select:focus { outline: none; border-color: var(--accent); box-shadow: 0 0 0 3px var(--accent-bg); }
+  .slicer-select option { background: var(--surface2); }
+
+  /* CHART CARDS */
+  .charts-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 18px;
+    margin-bottom: 24px;
+  }
+  @media(max-width: 768px) { .charts-grid { grid-template-columns: 1fr; } }
+
+  .chart-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    padding: 24px;
+    transition: border-color 0.2s, box-shadow 0.2s;
+    box-shadow: var(--shadow-sm);
+  }
+  .chart-card:hover { border-color: var(--border-md); box-shadow: var(--shadow); }
+
+  .chart-title {
+    font-weight: 700; font-size: 11px; margin-bottom: 18px;
+    color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px;
+    display: flex; align-items: center; gap: 8px;
+  }
+  .chart-title::before {
+    content: ''; display: inline-block;
+    width: 10px; height: 10px; border-radius: 3px;
+    background: linear-gradient(135deg, var(--accent), var(--gold));
+  }
+  .chart-body { min-height: 200px; }
+
+  /* BAR CHART */
+  .bar-row { display: flex; align-items: center; gap: 12px; margin-bottom: 9px; }
+  .bar-label {
+    width: 148px; font-size: 11px; color: var(--text-muted);
+    text-align: right; flex-shrink: 0;
+    overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+    font-weight: 500;
+  }
+  .bar-track {
+    flex: 1; height: 22px;
+    background: var(--surface2);
+    border-radius: 6px;
+    overflow: hidden;
+    border: 1px solid var(--border);
+  }
+  .bar-fill {
+    height: 100%; border-radius: 6px;
+    transition: width 0.5s cubic-bezier(.25,.46,.45,.94);
+    min-width: 6px;
+    display: flex; align-items: center; padding-left: 8px;
+  }
+  .bar-val { font-size: 10px; font-weight: 700; color: rgba(255,255,255,0.9); font-family: 'DM Mono', monospace; }
+
+  /* DONUT */
+  .donut-wrap { display: flex; align-items: center; gap: 24px; flex-wrap: wrap; }
+  .donut-legend { flex: 1; min-width: 150px; }
+  .legend-row { display: flex; align-items: center; gap: 8px; margin-bottom: 7px; font-size: 12px; font-weight: 500; }
+  .legend-dot { width: 10px; height: 10px; border-radius: 3px; flex-shrink: 0; }
+  .legend-pct { color: var(--text-muted); font-size: 11px; margin-left: auto; font-family: 'DM Mono', monospace; }
+
+  /* TABLE */
+  .table-wrap { overflow-x: auto; border-radius: var(--radius); }
+  table { width: 100%; border-collapse: collapse; font-size: 12px; }
+  thead th {
+    background: var(--surface2);
+    padding: 11px 14px;
+    text-align: left;
+    font-size: 10px; font-weight: 700;
+    text-transform: uppercase; letter-spacing: 0.8px;
+    color: var(--text-muted);
+    border-bottom: 1px solid var(--border-md);
+    white-space: nowrap;
+    cursor: pointer; user-select: none;
+    transition: color 0.15s;
+    position: sticky; top: 0;
+  }
+  thead th:first-child { border-radius: var(--radius) 0 0 0; }
+  thead th:last-child  { border-radius: 0 var(--radius) 0 0; }
+  thead th:hover { color: var(--text); }
+  tbody tr { border-bottom: 1px solid var(--border); transition: background 0.12s; }
+  tbody tr:hover { background: var(--surface2); }
+  tbody tr:last-child { border-bottom: none; }
+  tbody td { padding: 10px 14px; vertical-align: middle; color: var(--text); }
+
+  /* STATUS/HARM/RISK PILLS */
+  .status-pill, .harm-pill, .risk-badge {
+    padding: 3px 9px; border-radius: 20px; font-size: 10px; font-weight: 700;
+    display: inline-block; letter-spacing: 0.3px; text-transform: uppercase;
+  }
+  .pill-closed     { background: var(--green-bg);  color: var(--green); border: 1px solid rgba(52,199,123,0.25); }
+  .pill-open       { background: var(--amber-bg);  color: var(--amber); border: 1px solid rgba(232,168,58,0.25); }
+  .pill-inprogress { background: var(--accent-bg); color: var(--accent); border: 1px solid rgba(77,134,245,0.25); }
+  .harm-1 { background: var(--green-bg);  color: var(--green); border: 1px solid rgba(52,199,123,0.2); }
+  .harm-2 { background: var(--cyan-bg);   color: var(--cyan);  border: 1px solid rgba(63,200,216,0.2); }
+  .harm-3 { background: var(--amber-bg);  color: var(--amber); border: 1px solid rgba(232,168,58,0.2); }
+  .harm-4 { background: var(--red-bg);    color: #ff8080;      border: 1px solid rgba(240,92,92,0.2); }
+  .harm-5 { background: var(--red-bg);    color: var(--red);   border: 1px solid rgba(240,92,92,0.3); }
+  .risk-low  { background: var(--green-bg);  color: var(--green); border: 1px solid rgba(52,199,123,0.25); }
+  .risk-mod  { background: var(--amber-bg);  color: var(--amber); border: 1px solid rgba(232,168,58,0.25); }
+  .risk-high { background: var(--red-bg);    color: #ff8080;      border: 1px solid rgba(240,92,92,0.2); }
+  .risk-ext  { background: rgba(240,92,92,0.18); color: var(--red); border: 1px solid rgba(240,92,92,0.35); }
+
+  /* PAGINATION */
+  .page-nav { display: flex; align-items: center; gap: 6px; margin-top: 18px; justify-content: flex-end; flex-wrap: wrap; }
+  .page-info { color: var(--text-muted); font-size: 12px; margin-right: 8px; font-weight: 500; }
+  .page-btn {
+    background: var(--surface2); border: 1px solid var(--border);
+    color: var(--text-muted); padding: 6px 13px;
+    border-radius: 8px; font-size: 12px; cursor: pointer;
+    transition: all 0.15s; font-family: inherit; font-weight: 600;
+  }
+  .page-btn:hover:not(:disabled) { background: var(--surface3); border-color: var(--border-md); color: var(--text); }
+  .page-btn:disabled { opacity: 0.3; cursor: not-allowed; }
+  .page-btn.active { background: var(--accent); border-color: var(--accent); color: white; box-shadow: 0 2px 8px var(--accent-bg); }
+
+  /* ═══════════════════════════════════════
+     MODALS
+  ═══════════════════════════════════════ */
+  .modal-overlay {
+    display: none; position: fixed; inset: 0;
+    background: rgba(4,8,16,0.75);
+    backdrop-filter: blur(6px);
+    -webkit-backdrop-filter: blur(6px);
+    z-index: 200;
+    align-items: center; justify-content: center;
+  }
+  .modal-overlay.show { display: flex; }
+
+  .modal {
+    background: var(--surface);
+    border: 1px solid var(--border-md);
+    border-radius: var(--radius-xl);
+    width: 92%; max-width: 640px;
+    max-height: 84vh;
+    overflow-y: auto;
+    padding: 32px;
+    box-shadow: var(--shadow-lg);
+    animation: modalIn 0.22s cubic-bezier(.34,1.56,.64,1);
+    position: relative;
+  }
+  .modal::before {
+    content: '';
+    position: absolute; top: 0; left: 40px; right: 40px; height: 1px;
+    background: linear-gradient(90deg, transparent, var(--gold), transparent);
+  }
+  @keyframes modalIn { from { opacity:0; transform: scale(0.93) translateY(8px); } to { opacity:1; transform: scale(1) translateY(0); } }
+
+  .modal-title { font-size: 18px; font-weight: 800; margin-bottom: 6px; letter-spacing: -0.4px; }
+  .modal-sub { color: var(--text-muted); font-size: 13px; margin-bottom: 22px; line-height: 1.6; }
+
+  .map-row { display: flex; align-items: center; gap: 12px; margin-bottom: 11px; }
+  .map-label { width: 168px; flex-shrink: 0; font-size: 12px; font-weight: 600; }
+  .map-label span { font-size: 10px; color: var(--text-muted); display: block; font-weight: 400; }
+  .map-select {
+    flex: 1; background: var(--surface2); border: 1px solid var(--border);
+    color: var(--text); padding: 7px 11px; border-radius: var(--radius);
+    font-size: 12px; font-family: inherit; font-weight: 500;
+    transition: border-color 0.15s;
+  }
+  .map-select:focus { outline: none; border-color: var(--accent); box-shadow: 0 0 0 3px var(--accent-bg); }
+
+  /* ═══════════════════════════════════════
+     HEADER ROW PICKER
+  ═══════════════════════════════════════ */
+  .hr-row { cursor: pointer; transition: background 0.1s; }
+  .hr-row:hover td { background: var(--accent-bg) !important; }
+  .hr-row.hr-selected td { background: rgba(77,134,245,0.15) !important; }
+  .hr-row td {
+    padding: 8px 11px;
+    border-bottom: 1px solid var(--border);
+    white-space: nowrap; max-width: 150px;
+    overflow: hidden; text-overflow: ellipsis; font-size: 11px;
+  }
+  .hr-row td.row-num-cell {
+    font-family: 'DM Mono', monospace; font-size: 10px;
+    color: var(--gold); background: var(--gold-bg);
+    width: 36px; text-align: center;
+    border-right: 1px solid var(--border);
+  }
+  .hr-detected-banner {
+    background: var(--green-bg); border: 1px solid rgba(52,199,123,0.3);
+    border-radius: var(--radius); padding: 11px 15px;
+    font-size: 12px; color: var(--green); font-weight: 600;
+    display: flex; align-items: center; gap: 8px;
+  }
+  .hr-row-btn {
+    padding: 5px 12px; border-radius: 7px; font-size: 11px; font-weight: 700;
+    border: 1px solid var(--border); background: var(--surface2); color: var(--text-muted);
+    cursor: pointer; transition: all 0.12s; font-family: inherit;
+  }
+  .hr-row-btn:hover { border-color: var(--accent); color: var(--accent); background: var(--accent-bg); }
+  .hr-row-btn.active { background: var(--accent); border-color: var(--accent); color: white; }
+
+  /* ═══════════════════════════════════════
+     SHEET OPTION CARDS
+  ═══════════════════════════════════════ */
+  .sheet-option {
+    background: var(--surface2); border: 1px solid var(--border);
+    border-radius: var(--radius); padding: 14px 18px;
+    cursor: pointer; display: flex; align-items: center;
+    justify-content: space-between; transition: all 0.15s;
+  }
+  .sheet-option:hover { border-color: var(--accent); background: var(--accent-bg); transform: translateX(2px); }
+  .sheet-suggested { border-color: rgba(52,199,123,0.4) !important; background: var(--green-bg) !important; }
+
+  /* ═══════════════════════════════════════
+     TOAST
+  ═══════════════════════════════════════ */
+  #toast {
+    position: fixed; bottom: 28px; right: 28px;
+    background: var(--surface2);
+    border: 1px solid var(--green);
+    color: var(--green);
+    padding: 12px 20px; border-radius: var(--radius);
+    font-size: 13px; font-weight: 600;
+    transform: translateY(70px); opacity: 0;
+    transition: all 0.3s cubic-bezier(.34,1.56,.64,1);
+    z-index: 300;
+    box-shadow: 0 4px 16px rgba(52,199,123,0.2);
+  }
+  #toast.show { transform: translateY(0); opacity: 1; }
+
+  /* ═══════════════════════════════════════
+     INFO BOX
+  ═══════════════════════════════════════ */
+  .info-box {
+    background: var(--accent-bg);
+    border: 1px solid rgba(77,134,245,0.2);
+    border-radius: var(--radius);
+    padding: 13px 18px;
+    font-size: 12px; color: var(--accent2);
+    margin-bottom: 20px;
+    display: flex; gap: 10px; align-items: flex-start; line-height: 1.65;
+  }
+  body.light .info-box { color: var(--accent); }
+  .info-box .icon { flex-shrink: 0; margin-top: 1px; }
+
+  /* ═══════════════════════════════════════
+     TABS
+  ═══════════════════════════════════════ */
+  .tab-row {
+    display: flex; gap: 2px; margin-bottom: 18px;
+    border-bottom: 1px solid var(--border);
+    overflow-x: auto;
+  }
+  .tab-btn {
+    padding: 9px 18px; cursor: pointer; font-size: 13px; font-weight: 600;
+    border: none; background: none; color: var(--text-muted);
+    border-bottom: 2px solid transparent; margin-bottom: -1px;
+    transition: all 0.15s; font-family: inherit; white-space: nowrap;
+    letter-spacing: -0.1px;
+  }
+  .tab-btn.active { color: var(--text); border-bottom-color: var(--gold); }
+  .tab-btn:hover:not(.active) { color: var(--text); background: var(--surface2); border-radius: var(--radius) var(--radius) 0 0; }
+  .tab-content { display: none; }
+  .tab-content.active { display: block; animation: fadeIn 0.2s ease; }
+  @keyframes fadeIn { from { opacity:0; transform: translateY(4px); } to { opacity:1; transform: none; } }
+
+  /* ═══════════════════════════════════════
+     MISC
+  ═══════════════════════════════════════ */
+  .no-data { text-align: center; padding: 48px; color: var(--text-muted); font-size: 13px; }
+  .no-data-icon { font-size: 36px; margin-bottom: 12px; opacity: 0.5; }
+
+  .search-input {
+    background: var(--surface2); border: 1px solid var(--border);
+    color: var(--text); padding: 9px 14px;
+    border-radius: var(--radius); font-size: 13px;
+    width: 260px; font-family: inherit; font-weight: 500;
+    transition: border-color 0.15s, box-shadow 0.15s;
+  }
+  .search-input:focus { outline: none; border-color: var(--accent); box-shadow: 0 0 0 3px var(--accent-bg); }
+  .search-input::placeholder { color: var(--text-dim); }
+
+  .export-bar { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; justify-content: flex-end; margin-bottom: 18px; }
+
+  /* Scrollbar styling (dark mode) */
+  body:not(.light) ::-webkit-scrollbar { width: 6px; height: 6px; }
+  body:not(.light) ::-webkit-scrollbar-track { background: var(--surface2); border-radius: 3px; }
+  body:not(.light) ::-webkit-scrollbar-thumb { background: var(--surface4); border-radius: 3px; }
+  body:not(.light) ::-webkit-scrollbar-thumb:hover { background: var(--border-md); }
+
+  @media (max-width: 640px) {
+    .header { padding: 0 16px; }
+    .main { padding: 24px 16px; }
+    .modal { padding: 22px 18px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<header class="header">
+  <div class="header-brand">
+    <div class="header-logo">OI</div>
+    <div>
+      <div class="header-title">Incident Log Analyzer</div>
+      <div class="header-sub">OMAC Developers · S M Baqir</div>
+    </div>
+  </div>
+  <div class="header-right">
+    <div class="header-badge">QI TOOL v1.0</div>
+    <div class="theme-toggle-wrap">
+      <span class="theme-icon">🌙</span>
+      <div class="theme-toggle" id="themeToggle" onclick="toggleTheme()" title="Toggle light / dark mode"></div>
+      <span class="theme-icon">☀️</span>
+    </div>
+  </div>
+</header>
+
+<div class="main">
+
+<!-- ══════════════════════════════════════════════
+     SECTION 1 — FIELD GUIDE
+══════════════════════════════════════════════ -->
+<div class="section-header">
+  <div class="section-num" id="num1">1</div>
+  <div>
+    <div class="section-label">Field Guide — Know Your Columns</div>
+    <div class="section-desc">Understand what fields your log must contain, should contain, and can optionally include</div>
+  </div>
+</div>
+
+<div class="info-box">
+  <span class="icon">ℹ️</span>
+  <span>These fields are extracted from a real-world JCI-aligned Master Incident Log. Column names in <b>your</b> file don't need to match exactly — you'll map them in Step 2. Use this guide to ensure your data covers the essentials before uploading.</span>
+</div>
+
+<div class="legend-bar">
+  <span style="font-size:12px;font-weight:600;color:var(--text-muted);margin-right:4px;">FIELD TYPE</span>
+  <span class="legend-item"><span class="badge badge-mandatory">Mandatory</span> Required for any analysis to work</span>
+  <span class="legend-item"><span class="badge badge-recommended">Recommended</span> Strongly advised for meaningful insight</span>
+  <span class="legend-item"><span class="badge badge-optional">Optional</span> Enhances detail; not required</span>
+  <span class="legend-item"><span class="badge badge-auto">Auto / Calculated</span> Usually formula-derived; can skip</span>
+</div>
+
+<!-- TABS -->
+<div class="tab-row">
+  <button class="tab-btn active" onclick="showTab('tab-core', this)">Core Fields</button>
+  <button class="tab-btn" onclick="showTab('tab-risk', this)">Risk & Harm</button>
+  <button class="tab-btn" onclick="showTab('tab-workflow', this)">Workflow & TAT</button>
+  <button class="tab-btn" onclick="showTab('tab-optional', this)">Optional / Extended</button>
+</div>
+
+<!-- CORE -->
+<div id="tab-core" class="tab-content active">
+  <div class="fields-grid">
+    <div class="field-item"><div class="field-col">A</div><div class="field-body"><div class="field-name">Serial / Incident No. <span class="badge badge-mandatory">Mandatory</span></div><div class="field-hint">Unique sequential number for each incident record</div></div></div>
+    <div class="field-item"><div class="field-col">K</div><div class="field-body"><div class="field-name">Incident Number <span class="badge badge-mandatory">Mandatory</span></div><div class="field-hint">System-generated or manually coded incident ID (e.g. IHHN/KRG/IN/2407/001)</div></div></div>
+    <div class="field-item"><div class="field-col">M</div><div class="field-body"><div class="field-name">Incident Date <span class="badge badge-mandatory">Mandatory</span></div><div class="field-hint">Date the incident occurred (MM-DD-YYYY). Drives Month/Year slicers.</div></div></div>
+    <div class="field-item"><div class="field-col">F</div><div class="field-body"><div class="field-name">Year <span class="badge badge-mandatory">Mandatory</span></div><div class="field-hint">Calendar year of the incident. Required for year-wise filtering.</div></div></div>
+    <div class="field-item"><div class="field-col">O</div><div class="field-body"><div class="field-name">Department / Ward <span class="badge badge-mandatory">Mandatory</span></div><div class="field-hint">Where the incident was reported from. Drives department-wise analysis.</div></div></div>
+    <div class="field-item"><div class="field-col">R</div><div class="field-body"><div class="field-name">Incident Category <span class="badge badge-mandatory">Mandatory</span></div><div class="field-hint">High-level classification (e.g. Medication/Fluid, Fall Event, Equipment)</div></div></div>
+    <div class="field-item"><div class="field-col">S</div><div class="field-body"><div class="field-name">Sub-Category <span class="badge badge-recommended">Recommended</span></div><div class="field-hint">Detailed type within the category. Enables sub-category drill-down.</div></div></div>
+    <div class="field-item"><div class="field-col">P</div><div class="field-body"><div class="field-name">Status <span class="badge badge-mandatory">Mandatory</span></div><div class="field-hint">Current state: Open / In Progress / Closed. Drives status-wise slicers.</div></div></div>
+    <div class="field-item"><div class="field-col">Q</div><div class="field-body"><div class="field-name">Details of Incident <span class="badge badge-mandatory">Mandatory</span></div><div class="field-hint">Free-text narrative of what happened</div></div></div>
+    <div class="field-item"><div class="field-col">V</div><div class="field-body"><div class="field-name">Clinical / Non-Clinical <span class="badge badge-recommended">Recommended</span></div><div class="field-hint">Classify whether the event was patient-clinical or operational/non-clinical</div></div></div>
+  </div>
+</div>
+
+<!-- RISK & HARM -->
+<div id="tab-risk" class="tab-content">
+  <div class="fields-grid">
+    <div class="field-item"><div class="field-col">BM</div><div class="field-body"><div class="field-name">Harm Category <span class="badge badge-mandatory">Mandatory</span></div><div class="field-hint">Degree of harm: No Harm / Near Miss / Mild / Moderate / Severe / Death. Primary slicer.</div></div></div>
+    <div class="field-item"><div class="field-col">BD</div><div class="field-body"><div class="field-name">Likelihood (1–5) <span class="badge badge-recommended">Recommended</span></div><div class="field-hint">Probability score for risk matrix. 1 = Rare, 5 = Almost Certain</div></div></div>
+    <div class="field-item"><div class="field-col">BF</div><div class="field-body"><div class="field-name">Consequence (1–5) <span class="badge badge-recommended">Recommended</span></div><div class="field-hint">Severity score. 1 = Negligible, 5 = Catastrophic</div></div></div>
+    <div class="field-item"><div class="field-col">BJ</div><div class="field-body"><div class="field-name">Risk Score (L×C) <span class="badge badge-auto">Auto</span></div><div class="field-hint">Product of Likelihood × Consequence. Can be formula-calculated.</div></div></div>
+    <div class="field-item"><div class="field-col">BK</div><div class="field-body"><div class="field-name">Risk Level <span class="badge badge-recommended">Recommended</span></div><div class="field-hint">Low / Moderate / High / Extreme. Mapped from Risk Score.</div></div></div>
+    <div class="field-item"><div class="field-col">BL</div><div class="field-body"><div class="field-name">Sentinel Event (Y/N) <span class="badge badge-recommended">Recommended</span></div><div class="field-hint">Flag for serious/sentinel events. Triggers special TAT (45-day) tracking.</div></div></div>
+    <div class="field-item"><div class="field-col">BE</div><div class="field-body"><div class="field-name">Likelihood Description <span class="badge badge-optional">Optional</span></div><div class="field-hint">Text label for the likelihood score (e.g. "Unlikely")</div></div></div>
+    <div class="field-item"><div class="field-col">BG</div><div class="field-body"><div class="field-name">Consequence Description <span class="badge badge-optional">Optional</span></div><div class="field-hint">Text label for the consequence score (e.g. "Major")</div></div></div>
+    <div class="field-item"><div class="field-col">BN</div><div class="field-body"><div class="field-name">Authenticity of Incident <span class="badge badge-optional">Optional</span></div><div class="field-hint">Valid / Invalid / Duplicate. Used to filter out non-genuine incidents.</div></div></div>
+  </div>
+</div>
+
+<!-- WORKFLOW -->
+<div id="tab-workflow" class="tab-content">
+  <div class="fields-grid">
+    <div class="field-item"><div class="field-col">BB</div><div class="field-body"><div class="field-name">Corrective Action <span class="badge badge-recommended">Recommended</span></div><div class="field-hint">Actions taken to address the immediate incident</div></div></div>
+    <div class="field-item"><div class="field-col">BC</div><div class="field-body"><div class="field-name">Preventive Action <span class="badge badge-recommended">Recommended</span></div><div class="field-hint">Systemic actions to prevent recurrence</div></div></div>
+    <div class="field-item"><div class="field-col">BV</div><div class="field-body"><div class="field-name">Total TAT (Days) <span class="badge badge-recommended">Recommended</span></div><div class="field-hint">Total turnaround time from incident raised to closure. Benchmarked to 15 days (general) or 45 days (sentinel).</div></div></div>
+    <div class="field-item"><div class="field-col">B</div><div class="field-body"><div class="field-name">TAT Indicator <span class="badge badge-auto">Auto</span></div><div class="field-hint">Auto-flag if TAT exceeded threshold (Sentinel vs General)</div></div></div>
+    <div class="field-item"><div class="field-col">W</div><div class="field-body"><div class="field-name">Forwarding Date <span class="badge badge-recommended">Recommended</span></div><div class="field-hint">Date the incident was forwarded for investigation/response</div></div></div>
+    <div class="field-item"><div class="field-col">AD</div><div class="field-body"><div class="field-name">Response Receiving Date <span class="badge badge-recommended">Recommended</span></div><div class="field-hint">Date response from responsible department was received</div></div></div>
+    <div class="field-item"><div class="field-col">AZ</div><div class="field-body"><div class="field-name">Response Received (Y/N) <span class="badge badge-optional">Optional</span></div><div class="field-hint">Binary flag confirming whether response was received</div></div></div>
+    <div class="field-item"><div class="field-col">BP</div><div class="field-body"><div class="field-name">Sent for Approval Date <span class="badge badge-optional">Optional</span></div><div class="field-hint">Synopsis/summary submission date for management approval</div></div></div>
+    <div class="field-item"><div class="field-col">BQ</div><div class="field-body"><div class="field-name">Date of Approval <span class="badge badge-optional">Optional</span></div><div class="field-hint">When management formally approved the incident closure</div></div></div>
+    <div class="field-item"><div class="field-col">BR</div><div class="field-body"><div class="field-name">Dissemination Date <span class="badge badge-optional">Optional</span></div><div class="field-hint">Date learning/findings were shared across the organization</div></div></div>
+  </div>
+</div>
+
+<!-- OPTIONAL -->
+<div id="tab-optional" class="tab-content">
+  <div class="fields-grid">
+    <div class="field-item"><div class="field-col">D</div><div class="field-body"><div class="field-name">Campus / Site Name <span class="badge badge-optional">Optional</span></div><div class="field-hint">Facility or campus where the incident occurred. Enables multi-site comparison.</div></div></div>
+    <div class="field-item"><div class="field-col">E</div><div class="field-body"><div class="field-name">Campus Code <span class="badge badge-optional">Optional</span></div><div class="field-hint">Short code for the site (e.g. KRG, SSM). Used in auto-numbering.</div></div></div>
+    <div class="field-item"><div class="field-col">G</div><div class="field-body"><div class="field-name">Patient / Subject Name <span class="badge badge-optional">Optional</span></div><div class="field-hint">Name of the involved patient or subject. Handle per data privacy policy.</div></div></div>
+    <div class="field-item"><div class="field-col">H</div><div class="field-body"><div class="field-name">MR # / Item Code <span class="badge badge-optional">Optional</span></div><div class="field-hint">Medical Record number or equipment item code linked to the incident</div></div></div>
+    <div class="field-item"><div class="field-col">I</div><div class="field-body"><div class="field-name">Age <span class="badge badge-optional">Optional</span></div><div class="field-hint">Patient age at the time of incident. Used for demographic analysis.</div></div></div>
+    <div class="field-item"><div class="field-col">J</div><div class="field-body"><div class="field-name">A/B (Adult/Baby) <span class="badge badge-optional">Optional</span></div><div class="field-hint">Patient classification: Adult or Baby/Paediatric</div></div></div>
+    <div class="field-item"><div class="field-col">N</div><div class="field-body"><div class="field-name">Reporting Staff <span class="badge badge-optional">Optional</span></div><div class="field-hint">Name or ID of the staff member who raised the report</div></div></div>
+    <div class="field-item"><div class="field-col">U</div><div class="field-body"><div class="field-name">Remarks <span class="badge badge-optional">Optional</span></div><div class="field-hint">Additional notes or context added by the quality team</div></div></div>
+    <div class="field-item"><div class="field-col">Z</div><div class="field-body"><div class="field-name">Incident Location <span class="badge badge-optional">Optional</span></div><div class="field-hint">Specific room, ward, or location within the department</div></div></div>
+    <div class="field-item"><div class="field-col">BO</div><div class="field-body"><div class="field-name">Forwarded to HR / S&amp;S <span class="badge badge-optional">Optional</span></div><div class="field-hint">Whether the incident was escalated to HR or Safety &amp; Security</div></div></div>
+    <div class="field-item"><div class="field-col">T</div><div class="field-body"><div class="field-name">Sub-category (Other) Specify <span class="badge badge-optional">Optional</span></div><div class="field-hint">Free-text when sub-category is "Other (please specify)"</div></div></div>
+  </div>
+</div>
+
+<div class="sep"></div>
+
+<!-- ══════════════════════════════════════════════
+     TEMPLATE DOWNLOAD
+══════════════════════════════════════════════ -->
+<div class="template-card">
+  <div class="template-info">
+    <div class="title">📋 Download Blank Template</div>
+    <div class="desc">Pre-formatted Excel template with all mandatory + recommended headers. Ready to fill in.</div>
+  </div>
+  <button class="btn btn-gold" onclick="downloadTemplate()">⬇ Download Template (.xlsx)</button>
+</div>
+
+<!-- ══════════════════════════════════════════════
+     SECTION 2 — UPLOAD
+══════════════════════════════════════════════ -->
+<div class="section-header">
+  <div class="section-num" id="num2">2</div>
+  <div>
+    <div class="section-label">Upload Your Incident Log</div>
+    <div class="section-desc">Upload your Excel incident log, risk register, or event log — we'll auto-detect your columns</div>
+  </div>
+</div>
+
+<div class="upload-zone" id="uploadZone" onclick="document.getElementById('fileInput').click()" ondragover="dragOver(event)" ondragleave="dragLeave(event)" ondrop="dropFile(event)">
+  <input type="file" id="fileInput" accept=".xlsx,.xls,.csv" onchange="handleFile(this.files[0])" onclick="event.stopPropagation()">
+  <div class="upload-icon">📂</div>
+  <div class="upload-title">Drop your file here or click to browse</div>
+  <div class="upload-hint">Incident Log · Risk Register · Event Log · Near Miss Log</div>
+  <div class="upload-formats">
+    <span class="fmt-tag">.xlsx</span>
+    <span class="fmt-tag">.xls</span>
+    <span class="fmt-tag">.csv</span>
+  </div>
+</div>
+
+<div id="loading">
+  <div class="spinner"></div>
+  <div style="color:var(--text-muted);font-size:13px;">Reading your file and mapping columns…</div>
+</div>
+
+<!-- ══════════════════════════════════════════════
+     SHEET SELECTOR MODAL
+══════════════════════════════════════════════ -->
+<div class="modal-overlay" id="sheetModal">
+  <div class="modal" style="max-width:480px;">
+    <div class="modal-title">📑 Select Sheet to Analyze</div>
+    <div class="modal-sub" id="sheetModalSub">Your workbook contains multiple sheets. Choose the one that holds your incident log data.</div>
+    <div id="sheetList" style="display:flex;flex-direction:column;gap:8px;margin:16px 0;max-height:320px;overflow-y:auto;"></div>
+    <div style="display:flex;gap:10px;justify-content:flex-end;margin-top:8px;">
+      <button class="btn btn-ghost" onclick="closeSheetModal()">Cancel</button>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════
+     HEADER ROW PICKER MODAL
+══════════════════════════════════════════════ -->
+<div class="modal-overlay" id="headerRowModal">
+  <div class="modal" style="max-width:700px;">
+    <div class="modal-title">🔍 Confirm Header Row</div>
+    <div class="modal-sub" id="hrModalSub"></div>
+
+    <!-- Auto-detected banner -->
+    <div id="hrDetectedBanner" style="display:none;margin-bottom:14px;"></div>
+
+    <!-- Row preview table -->
+    <div style="overflow-x:auto;margin-bottom:16px;border:1px solid var(--border);border-radius:var(--radius);">
+      <table style="width:100%;border-collapse:collapse;font-size:12px;" id="hrPreviewTable"></table>
+    </div>
+
+    <!-- Manual row picker -->
+    <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:18px;">
+      <span style="font-size:12px;font-weight:600;color:var(--text-muted);">Header is on row:</span>
+      <div id="hrRowBtns" style="display:flex;flex-wrap:wrap;gap:6px;"></div>
+      <span style="font-size:11px;color:var(--text-dim);">Click a row above or pick manually</span>
+    </div>
+
+    <div style="display:flex;gap:10px;justify-content:flex-end;">
+      <button class="btn btn-ghost" onclick="closeHeaderRowModal()">← Back</button>
+      <button class="btn btn-primary" id="hrConfirmBtn" onclick="confirmHeaderRow()">Use This Row →</button>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════
+     COLUMN MAPPING MODAL
+══════════════════════════════════════════════ -->
+<div class="modal-overlay" id="mapModal">
+  <div class="modal">
+    <div class="modal-title">🔗 Map Your Columns</div>
+    <div class="modal-sub">We found the following headers. Tell us which column corresponds to each required field.</div>
+    <div id="mapRows"></div>
+    <div style="display:flex;gap:10px;justify-content:flex-end;margin-top:20px;">
+      <button class="btn btn-ghost" onclick="closeModal()">Cancel</button>
+      <button class="btn btn-primary" onclick="applyMapping()">Confirm Mapping →</button>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════
+     SECTION 3 — DASHBOARD
+══════════════════════════════════════════════ -->
+<div id="dashboard">
+  <div class="sep"></div>
+  <div class="section-header">
+    <div class="section-num done" id="num3">✓</div>
+    <div>
+      <div class="section-label">Interactive Dashboard</div>
+      <div class="section-desc" id="dashFileLabel">Analyzing your data…</div>
+    </div>
+  </div>
+
+  <!-- KPI CARDS -->
+  <div class="stats-row" id="kpiRow"></div>
+
+  <!-- SLICERS -->
+  <div class="slicer-row">
+    <div class="slicer-group">
+      <div class="slicer-label">📅 Year</div>
+      <select class="slicer-select" id="slYear" onchange="applyFilters()"><option value="">All Years</option></select>
+    </div>
+    <div class="slicer-group">
+      <div class="slicer-label">📆 Month</div>
+      <select class="slicer-select" id="slMonth" onchange="applyFilters()"><option value="">All Months</option></select>
+    </div>
+    <div class="slicer-group">
+      <div class="slicer-label">🏥 Department</div>
+      <select class="slicer-select" id="slDept" onchange="applyFilters()"><option value="">All Departments</option></select>
+    </div>
+    <div class="slicer-group">
+      <div class="slicer-label">⚠️ Harm Level</div>
+      <select class="slicer-select" id="slHarm" onchange="applyFilters()"><option value="">All Harm Levels</option></select>
+    </div>
+    <div class="slicer-group">
+      <div class="slicer-label">📋 Category</div>
+      <select class="slicer-select" id="slCat" onchange="applyFilters()"><option value="">All Categories</option></select>
+    </div>
+    <div class="slicer-group">
+      <div class="slicer-label">🔵 Status</div>
+      <select class="slicer-select" id="slStatus" onchange="applyFilters()"><option value="">All Statuses</option></select>
+    </div>
+    <div class="slicer-group">
+      <div class="slicer-label">🏢 Site</div>
+      <select class="slicer-select" id="slSite" onchange="applyFilters()"><option value="">All Sites</option></select>
+    </div>
+    <div style="margin-left:auto;align-self:flex-end;">
+      <button class="btn btn-ghost" onclick="resetFilters()">↺ Reset</button>
+    </div>
+  </div>
+
+  <!-- CHARTS -->
+  <div class="charts-grid">
+    <div class="chart-card">
+      <div class="chart-title">Incidents by Category</div>
+      <div class="chart-body" id="chartCategory"></div>
+    </div>
+    <div class="chart-card">
+      <div class="chart-title">Harm Level Distribution</div>
+      <div class="chart-body" id="chartHarm"></div>
+    </div>
+    <div class="chart-card">
+      <div class="chart-title">Monthly Trend</div>
+      <div class="chart-body" id="chartMonth"></div>
+    </div>
+    <div class="chart-card">
+      <div class="chart-title">Top 10 Departments</div>
+      <div class="chart-body" id="chartDept"></div>
+    </div>
+    <div class="chart-card">
+      <div class="chart-title">Status Breakdown</div>
+      <div class="chart-body" id="chartStatus"></div>
+    </div>
+    <div class="chart-card">
+      <div class="chart-title">Risk Level Distribution</div>
+      <div class="chart-body" id="chartRisk"></div>
+    </div>
+  </div>
+
+  <!-- DATA TABLE -->
+  <div class="card">
+    <div class="export-bar">
+      <input type="text" class="search-input" placeholder="🔍 Search incidents…" oninput="searchTable(this.value)" id="tableSearch">
+      <button class="btn btn-ghost" onclick="exportCSV()">⬇ Export CSV</button>
+    </div>
+    <div class="table-wrap">
+      <table id="dataTable">
+        <thead id="tableHead"></thead>
+        <tbody id="tableBody"></tbody>
+      </table>
+    </div>
+    <div class="page-nav" id="pageNav"></div>
+  </div>
+</div>
+
+</div><!-- /main -->
+
+<div id="toast">✓ Done</div>
+
+<script>
+// ────────────────────────────────────────────
+// GLOBALS
+// ────────────────────────────────────────────
+let rawData = [];
+let filteredData = [];
+let displayData = [];
+let colHeaders = [];
+let mapping = {};
+let currentPage = 1;
+const PAGE_SIZE = 20;
+let searchQuery = '';
+
+const FIELD_DEFS = [
+  { key:'date',     label:'Incident Date',     hint:'Date the incident occurred',        required:true  },
+  { key:'dept',     label:'Department',         hint:'Reporting department / ward',       required:true  },
+  { key:'category', label:'Incident Category',  hint:'High-level incident type',          required:true  },
+  { key:'status',   label:'Status',             hint:'Open / In Progress / Closed',       required:true  },
+  { key:'harm',     label:'Harm Category',      hint:'Degree of harm to patient/staff',   required:false },
+  { key:'sub',      label:'Sub-Category',       hint:'Detailed incident sub-type',        required:false },
+  { key:'risk',     label:'Risk Level',         hint:'Low / Moderate / High / Extreme',   required:false },
+  { key:'sentinel', label:'Sentinel Event',     hint:'Yes / No',                          required:false },
+  { key:'site',     label:'Site / Campus',      hint:'Facility or campus',                required:false },
+  { key:'details',  label:'Details of Incident',hint:'Free-text description',             required:false },
+  { key:'tat',      label:'TAT (Days)',          hint:'Total turnaround time in days',     required:false },
+];
+
+const MONTHS = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+const COLORS = ['#1f6feb','#3fb950','#d29922','#f85149','#8957e5','#39c5cf','#ff7b54','#a8dadc','#e76f51','#264653','#2a9d8f','#e9c46a','#f4a261','#457b9d','#e63946','#06d6a0','#118ab2','#ffd166'];
+
+// ────────────────────────────────────────────
+// TABS
+// ────────────────────────────────────────────
+function showTab(id, btn) {
+  document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  btn.classList.add('active');
+}
+
+// ────────────────────────────────────────────
+// DRAG & DROP
+// ────────────────────────────────────────────
+function dragOver(e) { e.preventDefault(); document.getElementById('uploadZone').classList.add('drag-over'); }
+function dragLeave(e) { document.getElementById('uploadZone').classList.remove('drag-over'); }
+function dropFile(e) {
+  e.preventDefault();
+  dragLeave(e);
+  if (e.dataTransfer.files[0]) handleFile(e.dataTransfer.files[0]);
+}
+
+// ────────────────────────────────────────────
+// FILE HANDLING
+// ────────────────────────────────────────────
+function handleFile(file) {
+  if (!file) return;
+  document.getElementById('loading').style.display = 'block';
+  document.getElementById('dashboard').style.display = 'none';
+
+  const reader = new FileReader();
+  reader.onload = e => {
+    try {
+      if (file.name.endsWith('.csv')) {
+        const wb2 = XLSX.read(e.target.result, {type:'string'});
+        const ws = wb2.Sheets[wb2.SheetNames[0]];
+        window._pendingWs = ws;
+        window._pendingSheetName = 'CSV';
+        window._pendingFilename = file.name;
+        window._pendingWb = wb2;
+        document.getElementById('loading').style.display = 'none';
+        openHeaderRowModal(ws, 'CSV', file.name);
+      } else {
+        const wb = XLSX.read(e.target.result, {type:'array', cellDates:true});
+        document.getElementById('loading').style.display = 'none';
+        if (wb.SheetNames.length === 1) {
+          loadSheetData(wb, wb.SheetNames[0], file.name);
+        } else {
+          openSheetModal(wb, file.name);
+        }
+      }
+    } catch(err) {
+      document.getElementById('loading').style.display = 'none';
+      alert('Error reading file: ' + err.message);
+    }
+  };
+  if (file.name.endsWith('.csv')) reader.readAsText(file);
+  else reader.readAsArrayBuffer(file);
+}
+
+// ────────────────────────────────────────────
+// SHEET SELECTOR MODAL
+// ────────────────────────────────────────────
+function openSheetModal(wb, filename) {
+  window._pendingWb = wb;
+  window._pendingFilename = filename;
+
+  // Build sheet info: name + row count preview
+  const sheetInfos = wb.SheetNames.map(name => {
+    const ws = wb.Sheets[name];
+    const ref = ws['!ref'];
+    if (!ref) return { name, rows: 0, hint: 'Empty' };
+    const range = XLSX.utils.decode_range(ref);
+    const rows = Math.max(0, range.e.r - range.s.r); // exclude header
+    return { name, rows, hint: rows > 0 ? `~${rows.toLocaleString()} row${rows!==1?'s':''}` : 'Empty' };
+  });
+
+  const sub = `Found <b>${wb.SheetNames.length} sheets</b> in <b>${escH(filename)}</b>. Click the sheet containing your incident data.`;
+  document.getElementById('sheetModalSub').innerHTML = sub;
+
+  // Suggest the sheet with the most rows
+  const best = [...sheetInfos].sort((a,b)=>b.rows-a.rows)[0]?.name;
+
+  document.getElementById('sheetList').innerHTML = sheetInfos.map(s => `
+    <div class="sheet-option ${s.name===best?'sheet-suggested':''}" onclick="selectSheet('${escH(s.name.replace(/'/g,"\\'"))}')">
+      <div style="display:flex;align-items:center;gap:10px;">
+        <span style="font-size:20px;">${s.rows>0?'📋':'📄'}</span>
+        <div>
+          <div style="font-weight:600;font-size:13px;">${escH(s.name)}</div>
+          <div style="font-size:11px;color:var(--text-muted);">${s.hint}</div>
+        </div>
+      </div>
+      ${s.name===best ? '<span class="badge badge-recommended" style="margin-left:auto;flex-shrink:0;">Suggested</span>' : ''}
+    </div>
+  `).join('');
+
+  document.getElementById('sheetModal').classList.add('show');
+}
+
+function selectSheet(sheetName) {
+  closeSheetModal();
+  loadSheetData(window._pendingWb, sheetName, window._pendingFilename);
+}
+
+function closeSheetModal() {
+  document.getElementById('sheetModal').classList.remove('show');
+}
+
+function loadSheetData(wb, sheetName, filename) {
+  try {
+    const ws = wb.Sheets[sheetName];
+    if (!ws || !ws['!ref']) {
+      alert(`Sheet "${sheetName}" appears empty. Please select a different sheet.`);
+      if (wb.SheetNames.length > 1) openSheetModal(wb, filename);
+      return;
+    }
+    // Store raw sheet for header-row detection
+    window._pendingWs = ws;
+    window._pendingSheetName = sheetName;
+    window._pendingFilename = filename;
+    document.getElementById('loading').style.display = 'none';
+    openHeaderRowModal(ws, sheetName, filename);
+  } catch(err) {
+    document.getElementById('loading').style.display = 'none';
+    alert('Error loading sheet: ' + err.message);
+  }
+}
+
+// ────────────────────────────────────────────
+// HEADER ROW DETECTION & MODAL
+// ────────────────────────────────────────────
+
+// Score a row as a potential header: text-density, keyword hits, uniqueness
+function scoreHeaderRow(rowValues) {
+  if (!rowValues || rowValues.length === 0) return 0;
+  const nonEmpty = rowValues.filter(v => v !== null && v !== undefined && String(v).trim() !== '');
+  if (nonEmpty.length < 2) return 0;
+
+  let score = 0;
+
+  // Text ratio (headers are usually text, not numbers/dates)
+  const textCount = nonEmpty.filter(v => isNaN(Number(v)) && !(v instanceof Date)).length;
+  score += (textCount / nonEmpty.length) * 40;
+
+  // Keyword hit bonus
+  const headerKeywords = /date|dept|depart|ward|unit|category|status|harm|incident|name|type|id|no\.|number|staff|campus|site|risk|action|remark|detail|description|sub|level|likelihood|consequence|sentinel|tat|age|location|month|year|code/i;
+  const keyHits = nonEmpty.filter(v => headerKeywords.test(String(v))).length;
+  score += Math.min(keyHits * 6, 35);
+
+  // Uniqueness (headers should all be unique)
+  const uniq = new Set(nonEmpty.map(v => String(v).toLowerCase().trim()));
+  if (uniq.size === nonEmpty.length) score += 15;
+
+  // Short cell values bonus (header names tend to be short)
+  const avgLen = nonEmpty.reduce((s, v) => s + String(v).length, 0) / nonEmpty.length;
+  if (avgLen < 35) score += 10;
+
+  return Math.round(score);
+}
+
+function getRawRows(ws, maxRows = 15) {
+  const range = XLSX.utils.decode_range(ws['!ref']);
+  const rows = [];
+  for (let r = range.s.r; r <= Math.min(range.e.r, range.s.r + maxRows - 1); r++) {
+    const row = [];
+    for (let c = range.s.c; c <= Math.min(range.e.c, range.s.c + 25); c++) {
+      const cell = ws[XLSX.utils.encode_cell({r, c})];
+      row.push(cell ? (cell.v !== undefined ? cell.v : '') : '');
+    }
+    rows.push({ rowIndex: r, values: row });
+  }
+  return rows;
+}
+
+function openHeaderRowModal(ws, sheetName, filename) {
+  const previewRows = getRawRows(ws, 15);
+  if (previewRows.length === 0) {
+    alert('No rows found in sheet.'); return;
+  }
+
+  // Score each row
+  const scored = previewRows.map(r => ({ ...r, score: scoreHeaderRow(r.values) }));
+  const bestRow = scored.reduce((a, b) => b.score > a.score ? b : a);
+  window._hrRows = previewRows;
+  window._hrSelectedIndex = bestRow.rowIndex;
+
+  // Banner
+  const banner = document.getElementById('hrDetectedBanner');
+  banner.style.display = 'block';
+  banner.innerHTML = `<div class="hr-detected-banner">✅ Auto-detected header on <b>Row ${bestRow.rowIndex + 1}</b> (confidence score: ${bestRow.score}/100). Click any row to override.</div>`;
+
+  // Sub
+  document.getElementById('hrModalSub').innerHTML =
+    `Sheet: <b>${escH(sheetName)}</b> · Showing first ${previewRows.length} rows. The highlighted row will be used as column headers.`;
+
+  // Build preview table
+  const maxCols = 8;
+  let thead = '<thead><tr><th style="background:var(--surface2);padding:6px 10px;border-bottom:1px solid var(--border);font-size:10px;color:var(--text-dim);width:36px;border-right:1px solid var(--border);">ROW</th>';
+  for (let c = 0; c < maxCols; c++) thead += `<th style="background:var(--surface2);padding:6px 10px;border-bottom:1px solid var(--border);font-size:10px;color:var(--text-dim);">Col ${c+1}</th>`;
+  thead += '</tr></thead>';
+
+  let tbody = '<tbody>';
+  for (const row of previewRows) {
+    const isSel = row.rowIndex === bestRow.rowIndex;
+    tbody += `<tr class="hr-row${isSel?' hr-selected':''}" id="hrtr-${row.rowIndex}" onclick="selectHeaderRow(${row.rowIndex})">`;
+    tbody += `<td class="row-num-cell">${row.rowIndex + 1}</td>`;
+    for (let c = 0; c < maxCols; c++) {
+      const val = row.values[c];
+      const display = val !== null && val !== undefined && val !== '' ? escH(String(val).slice(0, 30)) : '<span style="color:var(--text-dim)">—</span>';
+      tbody += `<td>${display}</td>`;
+    }
+    tbody += '</tr>';
+  }
+  tbody += '</tbody>';
+  document.getElementById('hrPreviewTable').innerHTML = thead + tbody;
+
+  // Row buttons
+  const btnContainer = document.getElementById('hrRowBtns');
+  btnContainer.innerHTML = previewRows.map(r =>
+    `<button class="hr-row-btn${r.rowIndex === bestRow.rowIndex ? ' active' : ''}" id="hrbtn-${r.rowIndex}" onclick="selectHeaderRow(${r.rowIndex})">Row ${r.rowIndex + 1}</button>`
+  ).join('');
+
+  document.getElementById('headerRowModal').classList.add('show');
+}
+
+function selectHeaderRow(rowIndex) {
+  window._hrSelectedIndex = rowIndex;
+  // Update table highlight
+  document.querySelectorAll('.hr-row').forEach(tr => tr.classList.remove('hr-selected'));
+  const tr = document.getElementById(`hrtr-${rowIndex}`);
+  if (tr) tr.classList.add('hr-selected');
+  // Update buttons
+  document.querySelectorAll('.hr-row-btn').forEach(b => b.classList.remove('active'));
+  const btn = document.getElementById(`hrbtn-${rowIndex}`);
+  if (btn) btn.classList.add('active');
+}
+
+function closeHeaderRowModal() {
+  document.getElementById('headerRowModal').classList.remove('show');
+  // Re-open sheet selector if multi-sheet
+  if (window._pendingWb && window._pendingWb.SheetNames.length > 1) {
+    openSheetModal(window._pendingWb, window._pendingFilename);
+  }
+}
+
+function confirmHeaderRow() {
+  const ws = window._pendingWs;
+  const headerRowIndex = window._hrSelectedIndex;
+  const filename = window._pendingFilename;
+  const sheetName = window._pendingSheetName;
+
+  document.getElementById('headerRowModal').classList.remove('show');
+
+  // Parse the sheet using the chosen header row
+  try {
+    const range = XLSX.utils.decode_range(ws['!ref']);
+    // Set the range to start from the header row
+    const newRange = { s: { r: headerRowIndex, c: range.s.c }, e: range.e };
+    const wsClone = Object.assign({}, ws);
+    wsClone['!ref'] = XLSX.utils.encode_range(newRange);
+
+    const data = XLSX.utils.sheet_to_json(wsClone, { defval: '', cellDates: true });
+    if (!data || data.length === 0) {
+      alert('No data rows found below the selected header row. Please choose a different row.');
+      openHeaderRowModal(ws, sheetName, filename);
+      return;
+    }
+    rawData = data;
+    colHeaders = Object.keys(data[0]);
+    openMappingModal(filename, sheetName, headerRowIndex);
+  } catch(err) {
+    alert('Error parsing sheet from row ' + (headerRowIndex + 1) + ': ' + err.message);
+  }
+}
+
+// ────────────────────────────────────────────
+// MAPPING MODAL
+// ────────────────────────────────────────────
+function openMappingModal(filename, sheetName, headerRowIndex) {
+  const container = document.getElementById('mapRows');
+  // Auto-detect mapping
+  const autoMap = autoDetect(colHeaders);
+  let html = '';
+  for (const fd of FIELD_DEFS) {
+    const opts = colHeaders.map(h => `<option value="${escH(h)}" ${autoMap[fd.key]===h?'selected':''}>${escH(h)}</option>`).join('');
+    html += `<div class="map-row">
+      <div class="map-label">${fd.label}<span>${fd.hint}</span></div>
+      <select class="map-select" data-key="${fd.key}">
+        <option value="">— skip —</option>
+        ${opts}
+      </select>
+    </div>`;
+  }
+  container.innerHTML = html;
+  // Update modal subtitle
+  const sub = document.querySelector('#mapModal .modal-sub');
+  if (sub) {
+    const rowInfo = headerRowIndex !== undefined ? ` · headers from row ${headerRowIndex + 1}` : '';
+    sub.innerHTML = `Sheet: <b>${escH(sheetName||'')}</b>${rowInfo} · <b>${colHeaders.length}</b> columns found. Map fields or skip.`;
+  }
+  document.getElementById('mapModal').classList.add('show');
+  window._pendingFile = filename;
+}
+
+function autoDetect(headers) {
+  const map = {};
+  const patterns = {
+    date:     /date|incident.date|event.date|occur|reported.date/i,
+    dept:     /dept|department|ward|unit|section/i,
+    category: /categor|type|class|incident.type/i,
+    status:   /status|state|closure/i,
+    harm:     /harm|severity|outcome|injury/i,
+    sub:      /sub.?categ|sub.?type/i,
+    risk:     /risk.?level|risk.?rating|level/i,
+    sentinel: /sentinel/i,
+    site:     /site|campus|facility|location|branch/i,
+    details:  /detail|description|narrative|summary/i,
+    tat:      /tat|turnaround|turn.around|days/i,
+  };
+  for (const [key, re] of Object.entries(patterns)) {
+    const match = headers.find(h => re.test(h));
+    if (match) map[key] = match;
+  }
+  return map;
+}
+
+function closeModal() { document.getElementById('mapModal').classList.remove('show'); }
+
+function applyMapping() {
+  const selects = document.querySelectorAll('#mapRows .map-select');
+  mapping = {};
+  for (const sel of selects) {
+    if (sel.value) mapping[sel.dataset.key] = sel.value;
+  }
+  closeModal();
+  buildDashboard(window._pendingFile);
+}
+
+// ────────────────────────────────────────────
+// DASHBOARD BUILD
+// ────────────────────────────────────────────
+function buildDashboard(filename) {
+  document.getElementById('dashFileLabel').textContent = `${filename} · ${rawData.length.toLocaleString()} records loaded`;
+  document.getElementById('dashboard').style.display = 'block';
+  document.getElementById('num1').classList.add('done');
+  document.getElementById('num2').classList.add('done');
+
+  // Normalize data
+  rawData = rawData.map(r => normalizeRow(r));
+
+  // Populate slicers
+  populateSlicers();
+  applyFilters();
+  showToast(`✓ ${rawData.length} records loaded`);
+}
+
+function normalizeRow(r) {
+  const g = key => mapping[key] ? r[mapping[key]] : '';
+  const dateRaw = g('date');
+  let dt = null;
+  if (dateRaw instanceof Date) dt = dateRaw;
+  else if (dateRaw && typeof dateRaw === 'string') dt = new Date(dateRaw);
+  else if (dateRaw && typeof dateRaw === 'number') dt = XLSX.SSF.parse_date_code(dateRaw);
+  
+  const month = dt && !isNaN(dt.getTime()) ? dt.getMonth() : -1;
+  const year  = dt && !isNaN(dt.getTime()) ? dt.getFullYear() : null;
+
+  return {
+    _raw: r,
+    date: dt,
+    month, year,
+    dept:     clean(g('dept')),
+    category: clean(g('category')),
+    status:   clean(g('status')),
+    harm:     clean(g('harm')),
+    sub:      clean(g('sub')),
+    risk:     clean(g('risk')),
+    sentinel: clean(g('sentinel')),
+    site:     clean(g('site')),
+    details:  clean(g('details')),
+    tat:      parseFloat(g('tat')) || null,
+  };
+}
+
+function clean(v) { return (v===undefined||v===null) ? '' : String(v).trim(); }
+function escH(s) { return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
+
+function unique(arr) { return [...new Set(arr.filter(Boolean))].sort(); }
+
+function populateSlicers() {
+  const rows = rawData;
+  const years  = unique(rows.map(r=>r.year).filter(Boolean));
+  const months = [...new Set(rows.map(r=>r.month).filter(m=>m>=0))].sort((a,b)=>a-b);
+  const depts  = unique(rows.map(r=>r.dept));
+  const harms  = unique(rows.map(r=>r.harm));
+  const cats   = unique(rows.map(r=>r.category));
+  const stats  = unique(rows.map(r=>r.status));
+  const sites  = unique(rows.map(r=>r.site));
+
+  fillSel('slYear',  years,  v=>v);
+  fillSel('slMonth', months, v=>MONTHS[v], v=>v);
+  fillSel('slDept',  depts,  v=>v);
+  fillSel('slHarm',  harms,  v=>v);
+  fillSel('slCat',   cats,   v=>v);
+  fillSel('slStatus',stats,  v=>v);
+  fillSel('slSite',  sites,  v=>v);
+}
+
+function fillSel(id, vals, labelFn, valFn) {
+  const sel = document.getElementById(id);
+  const cur = sel.value;
+  sel.innerHTML = '<option value="">All</option>';
+  for (const v of vals) {
+    const opt = document.createElement('option');
+    opt.value = valFn ? valFn(v) : v;
+    opt.textContent = labelFn(v);
+    sel.appendChild(opt);
+  }
+  sel.value = cur;
+}
+
+function getSlicerValues() {
+  return {
+    year:   document.getElementById('slYear').value,
+    month:  document.getElementById('slMonth').value,
+    dept:   document.getElementById('slDept').value,
+    harm:   document.getElementById('slHarm').value,
+    cat:    document.getElementById('slCat').value,
+    status: document.getElementById('slStatus').value,
+    site:   document.getElementById('slSite').value,
+  };
+}
+
+function applyFilters() {
+  const f = getSlicerValues();
+  filteredData = rawData.filter(r => {
+    if (f.year   && String(r.year)  !== f.year)   return false;
+    if (f.month  && String(r.month) !== f.month)  return false;
+    if (f.dept   && r.dept   !== f.dept)   return false;
+    if (f.harm   && r.harm   !== f.harm)   return false;
+    if (f.cat    && r.category !== f.cat)  return false;
+    if (f.status && r.status !== f.status) return false;
+    if (f.site   && r.site   !== f.site)   return false;
+    return true;
+  });
+  searchQuery = document.getElementById('tableSearch')?.value || '';
+  if (searchQuery) {
+    const q = searchQuery.toLowerCase();
+    filteredData = filteredData.filter(r =>
+      Object.values(r._raw).some(v => String(v).toLowerCase().includes(q))
+    );
+  }
+  displayData = filteredData;
+  currentPage = 1;
+  renderKPIs();
+  renderCharts();
+  renderTable();
+}
+
+function resetFilters() {
+  ['slYear','slMonth','slDept','slHarm','slCat','slStatus','slSite'].forEach(id => {
+    document.getElementById(id).value = '';
+  });
+  if(document.getElementById('tableSearch')) document.getElementById('tableSearch').value = '';
+  searchQuery = '';
+  applyFilters();
+}
+
+function searchTable(q) { searchQuery = q; applyFilters(); }
+
+// ────────────────────────────────────────────
+// KPI CARDS
+// ────────────────────────────────────────────
+function renderKPIs() {
+  const d = filteredData;
+  const total = d.length;
+  const open = d.filter(r => /open/i.test(r.status)).length;
+  const closed = d.filter(r => /closed|close/i.test(r.status)).length;
+  const sentinel = d.filter(r => /yes|y/i.test(r.sentinel)).length;
+  const highHarm = d.filter(r => /severe|death|major|critical/i.test(r.harm)).length;
+  const avgTAT = d.filter(r=>r.tat).length ? Math.round(d.filter(r=>r.tat).reduce((s,r)=>s+r.tat,0) / d.filter(r=>r.tat).length) : 'N/A';
+
+  document.getElementById('kpiRow').innerHTML = `
+    <div class="stat-card blue"><div class="stat-icon">📋</div><div class="stat-num">${total.toLocaleString()}</div><div class="stat-label">Total Incidents</div></div>
+    <div class="stat-card amber"><div class="stat-icon">🔓</div><div class="stat-num">${open.toLocaleString()}</div><div class="stat-label">Open</div></div>
+    <div class="stat-card green"><div class="stat-icon">✅</div><div class="stat-num">${closed.toLocaleString()}</div><div class="stat-label">Closed</div></div>
+    <div class="stat-card red"><div class="stat-icon">🚨</div><div class="stat-num">${sentinel.toLocaleString()}</div><div class="stat-label">Sentinel Events</div></div>
+    <div class="stat-card purple"><div class="stat-icon">⚠️</div><div class="stat-num">${highHarm.toLocaleString()}</div><div class="stat-label">High Harm</div></div>
+    <div class="stat-card cyan"><div class="stat-icon">⏱</div><div class="stat-num">${avgTAT}</div><div class="stat-label">Avg TAT (Days)</div></div>
+  `;
+}
+
+// ────────────────────────────────────────────
+// CHARTS
+// ────────────────────────────────────────────
+function countBy(arr, key) {
+  const m = {};
+  for (const r of arr) {
+    const v = r[key] || 'Unknown';
+    m[v] = (m[v]||0)+1;
+  }
+  return Object.entries(m).sort((a,b)=>b[1]-a[1]);
+}
+
+function barChart(el, entries, color, limit=10) {
+  const data = entries.slice(0, limit);
+  const max = data[0]?.[1] || 1;
+  el.innerHTML = data.length ? data.map(([k,v],i) => `
+    <div class="bar-row">
+      <div class="bar-label" title="${escH(k)}">${escH(k.length>22?k.slice(0,20)+'…':k)}</div>
+      <div class="bar-track">
+        <div class="bar-fill" style="width:${Math.max(8,Math.round(v/max*100))}%;background:${color||COLORS[i%COLORS.length]}">
+          <span class="bar-val">${v}</span>
+        </div>
+      </div>
+    </div>`).join('') : '<div class="no-data"><div class="no-data-icon">📊</div>No data</div>';
+}
+
+function donutChart(el, entries) {
+  const total = entries.reduce((s,[,v])=>s+v,0);
+  if (!total) { el.innerHTML = '<div class="no-data"><div class="no-data-icon">📊</div>No data</div>'; return; }
+  const slices = entries.slice(0,8).map(([k,v],i)=>({ k, v, c:COLORS[i%COLORS.length], pct: Math.round(v/total*100) }));
+
+  // SVG donut
+  let ang = -90, svgPaths = '';
+  for (const s of slices) {
+    const sweep = 360 * s.v / total;
+    const start = ang; const end = ang + sweep;
+    const r = 70, cx = 90, cy = 90;
+    const s1 = polarToXY(cx,cy,r,start), e1 = polarToXY(cx,cy,r,end);
+    const large = sweep > 180 ? 1 : 0;
+    const inner = 42;
+    const s2 = polarToXY(cx,cy,inner,end), e2 = polarToXY(cx,cy,inner,start);
+    svgPaths += `<path d="M${s1.x},${s1.y} A${r},${r} 0 ${large},1 ${e1.x},${e1.y} L${s2.x},${s2.y} A${inner},${inner} 0 ${large},0 ${e2.x},${e2.y} Z" fill="${s.c}" opacity="0.9"/>`;
+    ang = end;
+  }
+  const legend = slices.map(s=>`<div class="legend-row"><div class="legend-dot" style="background:${s.c}"></div><span>${escH(s.k.length>18?s.k.slice(0,16)+'…':s.k)}</span><span class="legend-pct">${s.pct}%</span></div>`).join('');
+
+  el.innerHTML = `<div class="donut-wrap">
+    <svg viewBox="0 0 180 180" width="140" height="140">
+      ${svgPaths}
+      <text x="90" y="88" text-anchor="middle" fill="#e6edf3" font-size="22" font-weight="700">${total}</text>
+      <text x="90" y="104" text-anchor="middle" fill="#8b949e" font-size="10">total</text>
+    </svg>
+    <div class="donut-legend">${legend}</div>
+  </div>`;
+}
+
+function polarToXY(cx,cy,r,angle) {
+  const rad = (angle * Math.PI) / 180;
+  return { x: cx + r*Math.cos(rad), y: cy + r*Math.sin(rad) };
+}
+
+function renderCharts() {
+  const d = filteredData;
+  barChart(document.getElementById('chartCategory'), countBy(d,'category'), null, 10);
+  donutChart(document.getElementById('chartHarm'), countBy(d,'harm'));
+  // Monthly trend
+  const monthMap = {};
+  for (const r of d) {
+    if (r.month>=0) { const k=MONTHS[r.month]; monthMap[k]=(monthMap[k]||0)+1; }
+  }
+  const monthEntries = MONTHS.map(m=>[m, monthMap[m]||0]);
+  barChart(document.getElementById('chartMonth'), monthEntries, '#1f6feb', 12);
+  barChart(document.getElementById('chartDept'), countBy(d,'dept'), '#3fb950', 10);
+  donutChart(document.getElementById('chartStatus'), countBy(d,'status'));
+  donutChart(document.getElementById('chartRisk'), countBy(d,'risk'));
+}
+
+// ────────────────────────────────────────────
+// TABLE
+// ────────────────────────────────────────────
+function renderTable() {
+  const start = (currentPage-1)*PAGE_SIZE;
+  const pageData = displayData.slice(start, start+PAGE_SIZE);
+
+  // Build columns from mapping + raw headers fallback
+  const cols = [
+    {key:'date',    label:'Date',       fn: r=>r.date&&!isNaN(r.date)?r.date.toLocaleDateString('en-GB'):'' },
+    {key:'dept',    label:'Department', fn: r=>r.dept },
+    {key:'category',label:'Category',  fn: r=>r.category },
+    {key:'sub',     label:'Sub-Category',fn:r=>r.sub },
+    {key:'status',  label:'Status',    fn: r=>statusPill(r.status) },
+    {key:'harm',    label:'Harm',       fn: r=>harmPill(r.harm) },
+    {key:'risk',    label:'Risk',       fn: r=>riskBadge(r.risk) },
+    {key:'sentinel',label:'Sentinel',  fn: r=>r.sentinel },
+    {key:'site',    label:'Site',       fn: r=>r.site },
+    {key:'tat',     label:'TAT (d)',    fn: r=>r.tat!==null?r.tat:'' },
+  ].filter(c => mapping[c.key] || ['date','dept','category','status'].includes(c.key));
+
+  document.getElementById('tableHead').innerHTML = '<tr>' + cols.map(c=>`<th>${c.label}</th>`).join('') + '</tr>';
+  document.getElementById('tableBody').innerHTML = pageData.length ? pageData.map(r=>
+    '<tr>' + cols.map(c=>`<td>${c.fn(r)}</td>`).join('') + '</tr>'
+  ).join('') : '<tr><td colspan="10" class="no-data">No records match the current filters.</td></tr>';
+
+  renderPagination();
+}
+
+function statusPill(s) {
+  if (!s) return '';
+  const l = s.toLowerCase();
+  if (l.includes('close')) return `<span class="status-pill pill-closed">${escH(s)}</span>`;
+  if (l.includes('open'))  return `<span class="status-pill pill-open">${escH(s)}</span>`;
+  return `<span class="status-pill pill-inprogress">${escH(s)}</span>`;
+}
+function harmPill(h) {
+  if (!h) return '';
+  const l = h.toLowerCase();
+  let cls = 'harm-1';
+  if (/near.miss|no.harm/i.test(l)) cls='harm-1';
+  else if (/mild|minor/i.test(l))   cls='harm-2';
+  else if (/moderate/i.test(l))     cls='harm-3';
+  else if (/major|severe/i.test(l)) cls='harm-4';
+  else if (/death|catastroph/i.test(l)) cls='harm-5';
+  return `<span class="harm-pill ${cls}">${escH(h)}</span>`;
+}
+function riskBadge(r) {
+  if (!r) return '';
+  const l = r.toLowerCase();
+  let cls = 'risk-low';
+  if (/low/i.test(l)) cls='risk-low';
+  else if (/mod/i.test(l)) cls='risk-mod';
+  else if (/high/i.test(l)) cls='risk-high';
+  else if (/ext/i.test(l)) cls='risk-ext';
+  return `<span class="risk-badge ${cls}">${escH(r)}</span>`;
+}
+
+function renderPagination() {
+  const total = displayData.length;
+  const pages = Math.ceil(total / PAGE_SIZE);
+  const start = (currentPage-1)*PAGE_SIZE + 1;
+  const end = Math.min(currentPage*PAGE_SIZE, total);
+  
+  let html = `<span class="page-info">Showing ${start}–${end} of ${total.toLocaleString()}</span>`;
+  html += `<button class="page-btn" onclick="goPage(${currentPage-1})" ${currentPage===1?'disabled':''}>← Prev</button>`;
+  
+  const range = [];
+  for (let p=Math.max(1,currentPage-2); p<=Math.min(pages,currentPage+2); p++) range.push(p);
+  for (const p of range) html += `<button class="page-btn ${p===currentPage?'active':''}" onclick="goPage(${p})">${p}</button>`;
+  html += `<button class="page-btn" onclick="goPage(${currentPage+1})" ${currentPage>=pages?'disabled':''}>Next →</button>`;
+  
+  document.getElementById('pageNav').innerHTML = html;
+}
+
+function goPage(p) {
+  const pages = Math.ceil(displayData.length/PAGE_SIZE);
+  if (p<1||p>pages) return;
+  currentPage = p;
+  renderTable();
+}
+
+// ────────────────────────────────────────────
+// EXPORT CSV
+// ────────────────────────────────────────────
+function exportCSV() {
+  if (!filteredData.length) return;
+  const keys = colHeaders;
+  const rows = filteredData.map(r => keys.map(k=>{
+    const v = r._raw[k];
+    return typeof v === 'string' ? `"${v.replace(/"/g,'""')}"` : (v||'');
+  }).join(','));
+  const csv = [keys.join(','), ...rows].join('\n');
+  const blob = new Blob([csv], {type:'text/csv'});
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = 'OMAC_Incident_Export.csv';
+  a.click();
+}
+
+// ────────────────────────────────────────────
+// TEMPLATE DOWNLOAD
+// ────────────────────────────────────────────
+function downloadTemplate() {
+  const headers = [
+    'Serial No.','Incident Date (MM/DD/YYYY)','Year','Campus / Site',
+    'Department / Ward','Incident Number','Patient Name','MR # / Item Code',
+    'Age','Adult/Baby','Details of Incident','Incident Category',
+    'Sub-Category','Sub-Category (Other Specify)','Clinical / Non-Clinical',
+    'Status','Corrective Action','Preventive Action',
+    'Likelihood (1-5)','Consequence (1-5)','Risk Score','Risk Level',
+    'Sentinel Event (Yes/No)','Harm Category','Authenticity of Incident',
+    'Forwarded to HR/S&S','TAT (Days)','Remarks'
+  ];
+  const wb = XLSX.utils.book_new();
+  const ws = XLSX.utils.aoa_to_sheet([headers]);
+  // Style header row width
+  ws['!cols'] = headers.map(h => ({wch: Math.max(h.length+4, 18)}));
+  XLSX.utils.book_append_sheet(wb, ws, 'Incident Log');
+  XLSX.writeFile(wb, 'OMAC_Incident_Log_Template.xlsx');
+  showToast('✓ Template downloaded');
+}
+
+// ────────────────────────────────────────────
+// TOAST
+// ────────────────────────────────────────────
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 3000);
+}
+
+// ────────────────────────────────────────────
+// THEME TOGGLE
+// ────────────────────────────────────────────
+function toggleTheme() {
+  const isLight = document.body.classList.toggle('light');
+  localStorage.setItem('omac-theme', isLight ? 'light' : 'dark');
+  showToast(isLight ? '☀️ Light mode on' : '🌙 Dark mode on');
+}
+
+// Apply saved or system preference on load
+(function() {
+  const saved = localStorage.getItem('omac-theme');
+  const preferLight = window.matchMedia && window.matchMedia('(prefers-color-scheme: light)').matches;
+  if (saved === 'light' || (!saved && preferLight)) {
+    document.body.classList.add('light');
+  }
+})();
+</script>
+</body>
+</html>
