@@ -932,7 +932,6 @@
 </style>
 </head>
 <body>
-
 <!-- HEADER -->
 <header class="header">
   <div class="header-brand">
@@ -1322,1264 +1321,906 @@
 <div id="toast">✓ Done</div>
 
 <script>
-// ────────────────────────────────────────────
+var DASH_CSS = ":root{--bg:#080c14;--s1:#0e1520;--s2:#131d2e;--s3:#1a2640;--s4:#1f2e4a;--bd:rgba(99,132,199,.13);--bdm:rgba(99,132,199,.24);--tx:#e8eef8;--tm:#7f93b8;--td:#3d5070;--gold:#c9a84c;--goldl:#e8c96a;--goldb:rgba(201,168,76,.09);--goldg:rgba(201,168,76,.18);--ac:#4d86f5;--ac2:#6b9fff;--acb:rgba(77,134,245,.11);--acg:rgba(77,134,245,.20);--gr:#34c77b;--grb:rgba(52,199,123,.11);--am:#e8a83a;--amb:rgba(232,168,58,.11);--rd:#f05c5c;--rdb:rgba(240,92,92,.11);--pu:#9b72ef;--pub:rgba(155,114,239,.11);--cy:#3fc8d8;--cyb:rgba(63,200,216,.11);--r:10px;--rl:16px;--rx:22px;--sh:0 4px 20px rgba(0,0,0,.55);--shsm:0 1px 4px rgba(0,0,0,.4)}\nbody.light{--bg:#eef2fa;--s1:#fff;--s2:#f4f7fd;--s3:#e8edf8;--s4:#dce4f5;--bd:rgba(60,100,180,.11);--bdm:rgba(60,100,180,.22);--tx:#0f1f3d;--tm:#5a6f95;--td:#a0b0cc;--gold:#a07c28;--goldl:#c09830;--goldb:rgba(160,124,40,.07);--goldg:rgba(160,124,40,.14);--ac:#1558cc;--ac2:#2468e0;--acb:rgba(21,88,204,.08);--acg:rgba(21,88,204,.16);--gr:#1d9e5c;--grb:rgba(29,158,92,.10);--am:#c47a10;--amb:rgba(196,122,16,.10);--rd:#d63b3b;--rdb:rgba(214,59,59,.10);--pu:#7040cc;--pub:rgba(112,64,204,.10);--cy:#1898a8;--cyb:rgba(24,152,168,.10);--sh:0 4px 20px rgba(15,31,61,.10);--shsm:0 1px 4px rgba(15,31,61,.07)}\n*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}\nbody{font-family:'Plus Jakarta Sans',system-ui,sans-serif;background:var(--bg);color:var(--tx);min-height:100vh;font-size:14px;line-height:1.6;-webkit-font-smoothing:antialiased;transition:background .3s,color .3s}\nbody:not(.light)::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:0;background-image:linear-gradient(rgba(77,134,245,.025) 1px,transparent 1px),linear-gradient(90deg,rgba(77,134,245,.025) 1px,transparent 1px);background-size:52px 52px}\n.nav{background:var(--s1);border-bottom:1px solid var(--bd);height:62px;display:flex;align-items:center;justify-content:space-between;padding:0 28px;position:sticky;top:0;z-index:100;backdrop-filter:blur(12px)}\nbody:not(.light) .nav{background:rgba(14,21,32,.88)}\n.nav-brand{display:flex;align-items:center;gap:13px}\n.nav-logo{width:38px;height:38px;background:linear-gradient(135deg,#c9a84c,#e8c96a,#9b6f2a);border-radius:9px;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:12px;color:#0e1520;box-shadow:0 0 0 1px rgba(201,168,76,.4),0 0 16px var(--goldg)}\n.nav-title{font-weight:800;font-size:15px;letter-spacing:-.3px}\n.nav-sub{font-size:11px;color:var(--tm);font-weight:500}\n.nav-right{display:flex;align-items:center;gap:10px}\n.nav-badge{background:var(--goldb);border:1px solid rgba(201,168,76,.32);color:var(--gold);padding:4px 11px;border-radius:20px;font-size:10px;font-weight:700;letter-spacing:.8px;text-transform:uppercase}\n.page-tabs{display:flex;gap:3px;background:var(--s2);border-bottom:1px solid var(--bd);padding:0 28px;overflow-x:auto}\n.ptab{padding:14px 20px;cursor:pointer;font-size:13px;font-weight:600;border:none;background:none;color:var(--tm);border-bottom:2px solid transparent;margin-bottom:-1px;transition:all .15s;font-family:inherit;white-space:nowrap;display:flex;align-items:center;gap:7px}\n.ptab.active{color:var(--tx);border-bottom-color:var(--gold)}\n.ptab:hover:not(.active){color:var(--tx);background:var(--s3);border-radius:8px 8px 0 0}\n.page{display:none;animation:fadeUp .22s ease}.page.active{display:block}\n@keyframes fadeUp{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}\n.wrap{max-width:1280px;margin:0 auto;padding:32px 28px;position:relative;z-index:1}\n.hero{background:linear-gradient(135deg,var(--s2) 0%,var(--s3) 100%);border:1px solid var(--bdm);border-radius:var(--rx);padding:32px 36px;margin-bottom:28px;position:relative;overflow:hidden}\n.hero::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent,var(--gold) 30%,var(--ac) 70%,transparent)}\n.hero::after{content:'';position:absolute;top:-40px;right:-40px;width:200px;height:200px;border-radius:50%;background:radial-gradient(circle,var(--goldg),transparent 70%);pointer-events:none}\n.hero-title{font-size:26px;font-weight:800;letter-spacing:-.6px;margin-bottom:6px}\n.hero-sub{color:var(--tm);font-size:13px;max-width:600px;line-height:1.7}\n.hero-meta{display:flex;gap:16px;flex-wrap:wrap;margin-top:18px}\n.hero-chip{background:var(--s3);border:1px solid var(--bd);border-radius:20px;padding:5px 14px;font-size:12px;font-weight:600;color:var(--tm);display:flex;align-items:center;gap:6px}\n.kpi-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(170px,1fr));gap:14px;margin-bottom:28px}\n.kpi{background:var(--s1);border:1px solid var(--bd);border-radius:var(--rl);padding:20px 22px;position:relative;overflow:hidden;transition:transform .18s,box-shadow .18s,border-color .18s;cursor:default}\n.kpi:hover{transform:translateY(-3px);box-shadow:var(--sh);border-color:var(--bdm)}\n.kpi::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;border-radius:3px 3px 0 0}\n.kpi::after{content:'';position:absolute;bottom:-18px;right:-10px;width:64px;height:64px;border-radius:50%;opacity:.06}\n.kpi.k-blue::before{background:linear-gradient(90deg,var(--ac),var(--ac2))}.kpi.k-blue::after{background:var(--ac)}\n.kpi.k-grn::before{background:linear-gradient(90deg,var(--gr),#56e0a0)}.kpi.k-grn::after{background:var(--gr)}\n.kpi.k-am::before{background:linear-gradient(90deg,var(--am),#f5c842)}.kpi.k-am::after{background:var(--am)}\n.kpi.k-rd::before{background:linear-gradient(90deg,var(--rd),#ff8080)}.kpi.k-rd::after{background:var(--rd)}\n.kpi.k-pu::before{background:linear-gradient(90deg,var(--pu),#c4a0ff)}.kpi.k-pu::after{background:var(--pu)}\n.kpi.k-cy::before{background:linear-gradient(90deg,var(--cy),#7ae8f4)}.kpi.k-cy::after{background:var(--cy)}\n.kpi.k-gold::before{background:linear-gradient(90deg,var(--gold),var(--goldl))}.kpi.k-gold::after{background:var(--gold)}\n.kpi-icon{font-size:17px;margin-bottom:10px;opacity:.85}\n.kpi-num{font-size:34px;font-weight:800;font-family:'DM Mono',monospace;letter-spacing:-1.5px;line-height:1;margin-bottom:5px}\n.kpi-label{font-size:10px;color:var(--tm);text-transform:uppercase;letter-spacing:.9px;font-weight:700}\n.filter-bar{background:var(--s1);border:1px solid var(--bd);border-radius:var(--rl);padding:18px 22px;margin-bottom:24px;display:flex;flex-wrap:wrap;gap:14px;align-items:flex-end;box-shadow:var(--shsm)}\n.fg{display:flex;flex-direction:column;gap:5px}\n.fl{font-size:10px;color:var(--tm);text-transform:uppercase;letter-spacing:.8px;font-weight:700}\n.fs{background:var(--s2);border:1px solid var(--bd);color:var(--tx);padding:8px 13px;border-radius:var(--r);font-size:13px;font-weight:500;min-width:130px;cursor:pointer;font-family:inherit;transition:border-color .15s}\n.fs:focus{outline:none;border-color:var(--ac);box-shadow:0 0 0 3px var(--acb)}\n.fs option{background:var(--s2)}\n.charts2{display:grid;grid-template-columns:1fr 1fr;gap:18px;margin-bottom:22px}\n.charts3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:18px;margin-bottom:22px}\n.charts12{display:grid;grid-template-columns:2fr 1fr;gap:18px;margin-bottom:22px}\n@media(max-width:900px){.charts2,.charts3,.charts12{grid-template-columns:1fr}}\n.cc{background:var(--s1);border:1px solid var(--bd);border-radius:var(--rl);padding:22px 24px;box-shadow:var(--shsm);transition:border-color .2s,box-shadow .2s}\n.cc:hover{border-color:var(--bdm);box-shadow:var(--sh)}\n.cc-title{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--tm);margin-bottom:16px;display:flex;align-items:center;gap:8px}\n.cc-title::before{content:'';width:10px;height:10px;border-radius:3px;background:linear-gradient(135deg,var(--ac),var(--gold));flex-shrink:0}\n.cc-body{min-height:180px}\n.brow{display:flex;align-items:center;gap:11px;margin-bottom:9px}\n.blbl{width:155px;font-size:11px;color:var(--tm);text-align:right;flex-shrink:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-weight:500}\n.btrk{flex:1;height:24px;background:var(--s2);border-radius:6px;overflow:hidden;border:1px solid var(--bd)}\n.bfil{height:100%;border-radius:6px;transition:width .55s cubic-bezier(.25,.46,.45,.94);min-width:6px;display:flex;align-items:center;padding-left:8px}\n.bval{font-size:10px;font-weight:700;color:rgba(255,255,255,.92);font-family:'DM Mono',monospace}\n.dwrap{display:flex;align-items:center;gap:22px;flex-wrap:wrap}\n.dleg{flex:1;min-width:140px}\n.drow{display:flex;align-items:center;gap:8px;margin-bottom:7px;font-size:12px;font-weight:500}\n.ddot{width:10px;height:10px;border-radius:3px;flex-shrink:0}\n.dpct{color:var(--tm);font-size:11px;margin-left:auto;font-family:'DM Mono',monospace}\n.tbl-wrap{overflow-x:auto;border-radius:var(--r)}\ntable{width:100%;border-collapse:collapse;font-size:12px}\nthead th{background:var(--s2);padding:11px 14px;text-align:left;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.8px;color:var(--tm);border-bottom:1px solid var(--bdm);white-space:nowrap;cursor:pointer;user-select:none;transition:color .15s;position:sticky;top:0}\nthead th:hover{color:var(--tx)}\ntbody tr{border-bottom:1px solid var(--bd);transition:background .1s}\ntbody tr:hover{background:var(--s2)}\ntbody tr:last-child{border-bottom:none}\ntbody td{padding:9px 14px;vertical-align:middle}\n.pg{display:flex;align-items:center;gap:6px;margin-top:16px;justify-content:flex-end;flex-wrap:wrap}\n.pg-info{color:var(--tm);font-size:12px;margin-right:8px;font-weight:500}\n.pg-btn{background:var(--s2);border:1px solid var(--bd);color:var(--tm);padding:5px 12px;border-radius:7px;font-size:12px;cursor:pointer;transition:all .14s;font-family:inherit;font-weight:600}\n.pg-btn:hover:not(:disabled){background:var(--s3);color:var(--tx);border-color:var(--bdm)}\n.pg-btn:disabled{opacity:.3;cursor:not-allowed}\n.pg-btn.on{background:var(--ac);border-color:var(--ac);color:#fff}\n.pill{padding:3px 9px;border-radius:20px;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.3px;display:inline-block;white-space:nowrap}\n.p-closed{background:var(--grb);color:var(--gr);border:1px solid rgba(52,199,123,.25)}\n.p-pending{background:var(--amb);color:var(--am);border:1px solid rgba(232,168,58,.25)}\n.p-open{background:var(--acb);color:var(--ac);border:1px solid rgba(77,134,245,.25)}\n.p-harm0{background:var(--grb);color:var(--gr)}.p-harm1{background:var(--cyb);color:var(--cy)}.p-harm2{background:var(--amb);color:var(--am)}.p-harm3{background:var(--rdb);color:#ff8080}.p-harm4{background:var(--rdb);color:var(--rd)}\n.p-risk-low{background:var(--grb);color:var(--gr)}.p-risk-mod{background:var(--amb);color:var(--am)}.p-risk-high{background:var(--rdb);color:#ff8080}.p-risk-ext{background:rgba(240,92,92,.18);color:var(--rd)}\n.p-sent{background:var(--rdb);color:var(--rd);border:1px solid rgba(240,92,92,.3);animation:sentpulse 2s infinite}\n@keyframes sentpulse{0%,100%{box-shadow:none}50%{box-shadow:0 0 8px rgba(240,92,92,.4)}}\n.ttog{width:46px;height:26px;background:var(--s3);border:1px solid var(--bdm);border-radius:13px;cursor:pointer;position:relative;transition:all .25s;flex-shrink:0}\n.ttog::after{content:'';position:absolute;width:20px;height:20px;background:var(--tm);border-radius:50%;top:2px;left:2px;transition:transform .25s cubic-bezier(.34,1.56,.64,1),background .25s;box-shadow:0 1px 4px rgba(0,0,0,.3)}\nbody.light .ttog{background:var(--acb);border-color:var(--ac)}\nbody.light .ttog::after{transform:translateX(20px);background:var(--ac)}\n.trow{display:flex;align-items:center;gap:7px}.tico{font-size:13px;user-select:none}\n.nodata{text-align:center;padding:48px;color:var(--tm);font-size:13px}\n.nodata-icon{font-size:36px;margin-bottom:12px;opacity:.5}\n.srch{background:var(--s2);border:1px solid var(--bd);color:var(--tx);padding:9px 14px;border-radius:var(--r);font-size:13px;width:260px;font-family:inherit;font-weight:500;transition:border-color .15s,box-shadow .15s}\n.srch:focus{outline:none;border-color:var(--ac);box-shadow:0 0 0 3px var(--acb)}\n.srch::placeholder{color:var(--td)}\n.exp-bar{display:flex;align-items:center;gap:10px;flex-wrap:wrap;justify-content:flex-end;margin-bottom:18px}\n.btn{padding:9px 18px;border-radius:var(--r);font-weight:700;font-size:13px;cursor:pointer;border:none;transition:all .18s;display:inline-flex;align-items:center;gap:7px;font-family:inherit;white-space:nowrap}\n.btn-ghost{background:var(--s2);border:1px solid var(--bdm);color:var(--tx)}.btn-ghost:hover{background:var(--s3);border-color:var(--ac);color:var(--ac)}\n.btn-gold{background:linear-gradient(135deg,#c9a84c,#e8c96a);color:#0e1520;font-weight:800;box-shadow:0 2px 10px rgba(201,168,76,.4)}.btn-gold:hover{transform:translateY(-1px);box-shadow:0 4px 16px rgba(201,168,76,.5)}\n#toast{position:fixed;bottom:28px;right:28px;background:var(--s2);border:1px solid var(--gr);color:var(--gr);padding:12px 20px;border-radius:var(--r);font-size:13px;font-weight:600;transform:translateY(70px);opacity:0;transition:all .3s cubic-bezier(.34,1.56,.64,1);z-index:300;box-shadow:0 4px 16px rgba(52,199,123,.2)}\n#toast.show{transform:translateY(0);opacity:1}\nbody:not(.light) ::-webkit-scrollbar{width:5px;height:5px}\nbody:not(.light) ::-webkit-scrollbar-track{background:var(--s2)}\nbody:not(.light) ::-webkit-scrollbar-thumb{background:var(--s4);border-radius:3px}\n@media(max-width:640px){.wrap{padding:20px 14px}.nav,.page-tabs{padding:0 14px}}";
+// ═══════════════════════════════════════════
 // GLOBALS
-// ────────────────────────────────────────────
-let rawData = [];
-let filteredData = [];
-let displayData = [];
-let colHeaders = [];
-let mapping = {};
-let currentPage = 1;
-const PAGE_SIZE = 20;
-let searchQuery = '';
+// ═══════════════════════════════════════════
+var rawData = [], filteredData = [], displayData = [];
+var colHeaders = [], mapping = {}, kpiCards = [], kpiCardEnabled = {};
+var kpiConfig = {};
+var currentPage = 1, searchQuery = '';
+var MONTHS = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+var COLORS = ['#4d86f5','#34c77b','#e8a83a','#9b72ef','#3fc8d8','#f05c5c','#c9a84c','#ff8c69','#56cfe1','#a8dadc'];
+var PAGE_SIZE = 20;
+var KPI_ICONS = ['📋','✅','⏳','🚨','⚠️','🟢','📈','⏱','🤕','👷','🏥','💊','📊'];
+var KPI_COLOR_IDS = ['blue','green','amber','red','purple','cyan','gold'];
 
-const FIELD_DEFS = [
-  { key:'date',     label:'Incident Date',     hint:'Date the incident occurred',        required:true  },
-  { key:'dept',     label:'Department',         hint:'Reporting department / ward',       required:true  },
-  { key:'category', label:'Incident Category',  hint:'High-level incident type',          required:true  },
-  { key:'status',   label:'Status',             hint:'Open / In Progress / Closed',       required:true  },
-  { key:'harm',     label:'Harm Category',      hint:'Degree of harm to patient/staff',   required:false },
-  { key:'sub',      label:'Sub-Category',       hint:'Detailed incident sub-type',        required:false },
-  { key:'risk',     label:'Risk Level',         hint:'Low / Moderate / High / Extreme',   required:false },
-  { key:'sentinel', label:'Sentinel Event',     hint:'Yes / No',                          required:false },
-  { key:'site',     label:'Site / Campus',      hint:'Facility or campus',                required:false },
-  { key:'details',  label:'Details of Incident',hint:'Free-text description',             required:false },
-  { key:'tat',      label:'TAT (Days)',          hint:'Total turnaround time in days',     required:false },
-];
+// ═══════════════════════════════════════════
+// UTILITY
+// ═══════════════════════════════════════════
+function clean(v){ return (v===undefined||v===null) ? '' : String(v).trim(); }
+function escH(s){ return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
+function unique(arr){ return [...new Set(arr.filter(Boolean))].sort(); }
+function showToast(msg){
+  var t=document.getElementById('toast'); if(!t) return;
+  t.textContent=msg; t.classList.add('show');
+  setTimeout(function(){ t.classList.remove('show'); }, 3000);
+}
 
-const MONTHS = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
-const COLORS = ['#1f6feb','#3fb950','#d29922','#f85149','#8957e5','#39c5cf','#ff7b54','#a8dadc','#e76f51','#264653','#2a9d8f','#e9c46a','#f4a261','#457b9d','#e63946','#06d6a0','#118ab2','#ffd166'];
+// ═══════════════════════════════════════════
+// THEME
+// ═══════════════════════════════════════════
+function toggleTheme(){
+  var isLight = document.body.classList.toggle('light');
+  localStorage.setItem('omac-theme', isLight ? 'light' : 'dark');
+  showToast(isLight ? '☀️ Light mode' : '🌙 Dark mode');
+}
+(function(){
+  var saved = localStorage.getItem('omac-theme');
+  var prefLight = window.matchMedia && window.matchMedia('(prefers-color-scheme: light)').matches;
+  if(saved==='light' || (!saved && prefLight)) document.body.classList.add('light');
+})();
 
-// ────────────────────────────────────────────
+// ═══════════════════════════════════════════
 // TABS
-// ────────────────────────────────────────────
-function showTab(id, btn) {
-  document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
-  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+// ═══════════════════════════════════════════
+function showTab(id, btn){
+  document.querySelectorAll('.tab-content').forEach(function(t){ t.classList.remove('active'); });
+  document.querySelectorAll('.tab-btn').forEach(function(b){ b.classList.remove('active'); });
   document.getElementById(id).classList.add('active');
   btn.classList.add('active');
 }
 
-// ────────────────────────────────────────────
-// DRAG & DROP
-// ────────────────────────────────────────────
-function dragOver(e) { e.preventDefault(); document.getElementById('uploadZone').classList.add('drag-over'); }
-function dragLeave(e) { document.getElementById('uploadZone').classList.remove('drag-over'); }
-function dropFile(e) {
-  e.preventDefault();
-  dragLeave(e);
-  if (e.dataTransfer.files[0]) handleFile(e.dataTransfer.files[0]);
-}
-
-// ────────────────────────────────────────────
+// ═══════════════════════════════════════════
 // FILE HANDLING
-// ────────────────────────────────────────────
-function handleFile(file) {
-  if (!file) return;
+// ═══════════════════════════════════════════
+function dragOver(e){ e.preventDefault(); document.getElementById('uploadZone').classList.add('drag-over'); }
+function dragLeave(){ document.getElementById('uploadZone').classList.remove('drag-over'); }
+function dropFile(e){
+  e.preventDefault(); dragLeave();
+  if(e.dataTransfer.files[0]) handleFile(e.dataTransfer.files[0]);
+}
+function handleFile(file){
+  if(!file) return;
   document.getElementById('loading').style.display = 'block';
   document.getElementById('dashboard').style.display = 'none';
-
-  const reader = new FileReader();
-  reader.onload = e => {
-    try {
-      if (file.name.endsWith('.csv')) {
-        const wb2 = XLSX.read(e.target.result, {type:'string'});
-        const ws = wb2.Sheets[wb2.SheetNames[0]];
-        window._pendingWs = ws;
-        window._pendingSheetName = 'CSV';
-        window._pendingFilename = file.name;
-        window._pendingWb = wb2;
-        document.getElementById('loading').style.display = 'none';
-        openHeaderRowModal(ws, 'CSV', file.name);
+  var reader = new FileReader();
+  reader.onload = function(ev){
+    try{
+      var wb;
+      if(file.name.endsWith('.csv')){
+        wb = XLSX.read(ev.target.result, {type:'string'});
+        var ws = wb.Sheets[wb.SheetNames[0]];
+        window._pendingWb=wb; window._pendingWs=ws;
+        window._pendingSheetName='CSV'; window._pendingFilename=file.name;
+        document.getElementById('loading').style.display='none';
+        openHeaderRowModal(ws,'CSV',file.name);
       } else {
-        const wb = XLSX.read(e.target.result, {type:'array', cellDates:true});
-        document.getElementById('loading').style.display = 'none';
-        if (wb.SheetNames.length === 1) {
-          loadSheetData(wb, wb.SheetNames[0], file.name);
-        } else {
-          openSheetModal(wb, file.name);
-        }
+        wb = XLSX.read(ev.target.result, {type:'array',cellDates:true});
+        document.getElementById('loading').style.display='none';
+        window._pendingWb=wb; window._pendingFilename=file.name;
+        if(wb.SheetNames.length===1) loadSheetData(wb,wb.SheetNames[0],file.name);
+        else openSheetModal(wb,file.name);
       }
-    } catch(err) {
-      document.getElementById('loading').style.display = 'none';
-      alert('Error reading file: ' + err.message);
+    } catch(err){
+      document.getElementById('loading').style.display='none';
+      alert('Error reading file: '+err.message);
     }
   };
-  if (file.name.endsWith('.csv')) reader.readAsText(file);
+  if(file.name.endsWith('.csv')) reader.readAsText(file);
   else reader.readAsArrayBuffer(file);
 }
 
-// ────────────────────────────────────────────
-// SHEET SELECTOR MODAL
-// ────────────────────────────────────────────
-function openSheetModal(wb, filename) {
-  window._pendingWb = wb;
-  window._pendingFilename = filename;
-
-  // Build sheet info: name + row count preview
-  const sheetInfos = wb.SheetNames.map(name => {
-    const ws = wb.Sheets[name];
-    const ref = ws['!ref'];
-    if (!ref) return { name, rows: 0, hint: 'Empty' };
-    const range = XLSX.utils.decode_range(ref);
-    const rows = Math.max(0, range.e.r - range.s.r); // exclude header
-    return { name, rows, hint: rows > 0 ? `~${rows.toLocaleString()} row${rows!==1?'s':''}` : 'Empty' };
+// ═══════════════════════════════════════════
+// SHEET SELECTOR  — uses data-sheetname, no dynamic string escaping
+// ═══════════════════════════════════════════
+function openSheetModal(wb,filename){
+  window._pendingWb=wb; window._pendingFilename=filename;
+  var sheetInfos = wb.SheetNames.map(function(name){
+    var ws=wb.Sheets[name],ref=ws['!ref'];
+    if(!ref) return {name:name,rows:0,hint:'Empty'};
+    var range=XLSX.utils.decode_range(ref);
+    var rows=Math.max(0,range.e.r-range.s.r);
+    return {name:name,rows:rows,hint:rows>0?'~'+rows.toLocaleString()+' rows':'Empty'};
   });
-
-  const sub = `Found <b>${wb.SheetNames.length} sheets</b> in <b>${escH(filename)}</b>. Click the sheet containing your incident data.`;
-  document.getElementById('sheetModalSub').innerHTML = sub;
-
-  // Suggest the sheet with the most rows
-  const best = [...sheetInfos].sort((a,b)=>b.rows-a.rows)[0]?.name;
-
-  document.getElementById('sheetList').innerHTML = sheetInfos.map(s => `
-    <div class="sheet-option ${s.name===best?'sheet-suggested':''}" onclick="selectSheet('${escH(s.name.replace(/'/g,"\\'"))}')">
-      <div style="display:flex;align-items:center;gap:10px;">
-        <span style="font-size:20px;">${s.rows>0?'📋':'📄'}</span>
-        <div>
-          <div style="font-weight:600;font-size:13px;">${escH(s.name)}</div>
-          <div style="font-size:11px;color:var(--text-muted);">${s.hint}</div>
-        </div>
-      </div>
-      ${s.name===best ? '<span class="badge badge-recommended" style="margin-left:auto;flex-shrink:0;">Suggested</span>' : ''}
-    </div>
-  `).join('');
-
+  var best=sheetInfos.slice().sort(function(a,b){return b.rows-a.rows;})[0];
+  document.getElementById('sheetModalSub').innerHTML='Found <b>'+wb.SheetNames.length+' sheets</b> in <b>'+escH(filename)+'</b>.';
+  document.getElementById('sheetList').innerHTML=sheetInfos.map(function(s){
+    var isBest=best&&s.name===best.name;
+    return '<div class="sheet-option '+(isBest?'sheet-suggested':'')+'" data-sheetname="'+escH(s.name)+'" onclick="selectSheetEl(this)">'
+      +'<div style="display:flex;align-items:center;gap:10px;">'
+      +'<span style="font-size:20px;">'+(s.rows>0?'📋':'📄')+'</span>'
+      +'<div><div style="font-weight:600;font-size:13px;">'+escH(s.name)+'</div>'
+      +'<div style="font-size:11px;color:var(--text-muted);">'+s.hint+'</div></div></div>'
+      +(isBest?'<span class="badge badge-recommended" style="margin-left:auto;flex-shrink:0;">Suggested</span>':'')
+      +'</div>';
+  }).join('');
   document.getElementById('sheetModal').classList.add('show');
 }
-
-function selectSheet(sheetName) {
+function selectSheetEl(el){
+  var name=el.getAttribute('data-sheetname');
   closeSheetModal();
-  loadSheetData(window._pendingWb, sheetName, window._pendingFilename);
+  loadSheetData(window._pendingWb,name,window._pendingFilename);
 }
-
-function closeSheetModal() {
-  document.getElementById('sheetModal').classList.remove('show');
-}
-
-function loadSheetData(wb, sheetName, filename) {
-  try {
-    const ws = wb.Sheets[sheetName];
-    if (!ws || !ws['!ref']) {
-      alert(`Sheet "${sheetName}" appears empty. Please select a different sheet.`);
-      if (wb.SheetNames.length > 1) openSheetModal(wb, filename);
+function closeSheetModal(){ document.getElementById('sheetModal').classList.remove('show'); }
+function loadSheetData(wb,sheetName,filename){
+  try{
+    var ws=wb.Sheets[sheetName];
+    if(!ws||!ws['!ref']){
+      alert('Sheet "'+sheetName+'" appears empty.');
+      if(wb.SheetNames.length>1) openSheetModal(wb,filename);
       return;
     }
-    // Store raw sheet for header-row detection
-    window._pendingWs = ws;
-    window._pendingSheetName = sheetName;
-    window._pendingFilename = filename;
-    document.getElementById('loading').style.display = 'none';
-    openHeaderRowModal(ws, sheetName, filename);
-  } catch(err) {
-    document.getElementById('loading').style.display = 'none';
-    alert('Error loading sheet: ' + err.message);
-  }
+    window._pendingWs=ws; window._pendingSheetName=sheetName;
+    window._pendingFilename=filename; window._pendingWb=wb;
+    openHeaderRowModal(ws,sheetName,filename);
+  } catch(err){ alert('Error loading sheet: '+err.message); }
 }
 
-// ────────────────────────────────────────────
-// HEADER ROW DETECTION & MODAL
-// ────────────────────────────────────────────
-
-// Score a row as a potential header: text-density, keyword hits, uniqueness
-function scoreHeaderRow(rowValues) {
-  if (!rowValues || rowValues.length === 0) return 0;
-  const nonEmpty = rowValues.filter(v => v !== null && v !== undefined && String(v).trim() !== '');
-  if (nonEmpty.length < 2) return 0;
-
-  let score = 0;
-
-  // Text ratio (headers are usually text, not numbers/dates)
-  const textCount = nonEmpty.filter(v => isNaN(Number(v)) && !(v instanceof Date)).length;
-  score += (textCount / nonEmpty.length) * 40;
-
-  // Keyword hit bonus
-  const headerKeywords = /date|dept|depart|ward|unit|category|status|harm|incident|name|type|id|no\.|number|staff|campus|site|risk|action|remark|detail|description|sub|level|likelihood|consequence|sentinel|tat|age|location|month|year|code/i;
-  const keyHits = nonEmpty.filter(v => headerKeywords.test(String(v))).length;
-  score += Math.min(keyHits * 6, 35);
-
-  // Uniqueness (headers should all be unique)
-  const uniq = new Set(nonEmpty.map(v => String(v).toLowerCase().trim()));
-  if (uniq.size === nonEmpty.length) score += 15;
-
-  // Short cell values bonus (header names tend to be short)
-  const avgLen = nonEmpty.reduce((s, v) => s + String(v).length, 0) / nonEmpty.length;
-  if (avgLen < 35) score += 10;
-
+// ═══════════════════════════════════════════
+// HEADER ROW DETECTION
+// ═══════════════════════════════════════════
+function scoreHeaderRow(vals){
+  var nonEmpty=vals.filter(function(v){return v!==null&&v!==undefined&&String(v).trim()!=='';});
+  if(nonEmpty.length<2) return 0;
+  var score=0;
+  var textCount=nonEmpty.filter(function(v){return isNaN(Number(v))&&!(v instanceof Date);}).length;
+  score+=(textCount/nonEmpty.length)*40;
+  var re=/date|dept|depart|ward|unit|category|status|harm|incident|name|type|id|number|staff|campus|site|risk|action|remark|detail|description|sub|level|sentinel|tat|age|month|year|code/i;
+  var hits=nonEmpty.filter(function(v){return re.test(String(v));}).length;
+  score+=Math.min(hits*6,35);
+  var uniq=new Set(nonEmpty.map(function(v){return String(v).toLowerCase().trim();}));
+  if(uniq.size===nonEmpty.length) score+=15;
+  var avgLen=nonEmpty.reduce(function(s,v){return s+String(v).length;},0)/nonEmpty.length;
+  if(avgLen<35) score+=10;
   return Math.round(score);
 }
-
-function getRawRows(ws, maxRows = 15) {
-  const range = XLSX.utils.decode_range(ws['!ref']);
-  const rows = [];
-  for (let r = range.s.r; r <= Math.min(range.e.r, range.s.r + maxRows - 1); r++) {
-    const row = [];
-    for (let c = range.s.c; c <= Math.min(range.e.c, range.s.c + 25); c++) {
-      const cell = ws[XLSX.utils.encode_cell({r, c})];
-      row.push(cell ? (cell.v !== undefined ? cell.v : '') : '');
+function getRawRows(ws,maxRows){
+  maxRows=maxRows||15;
+  var range=XLSX.utils.decode_range(ws['!ref']),rows=[];
+  for(var r=range.s.r;r<=Math.min(range.e.r,range.s.r+maxRows-1);r++){
+    var row=[];
+    for(var c=range.s.c;c<=Math.min(range.e.c,range.s.c+25);c++){
+      var cell=ws[XLSX.utils.encode_cell({r:r,c:c})];
+      row.push(cell?(cell.v!==undefined?cell.v:''):'');
     }
-    rows.push({ rowIndex: r, values: row });
+    rows.push({rowIndex:r,values:row});
   }
   return rows;
 }
-
-function openHeaderRowModal(ws, sheetName, filename) {
-  const previewRows = getRawRows(ws, 15);
-  if (previewRows.length === 0) {
-    alert('No rows found in sheet.'); return;
-  }
-
-  // Score each row
-  const scored = previewRows.map(r => ({ ...r, score: scoreHeaderRow(r.values) }));
-  const bestRow = scored.reduce((a, b) => b.score > a.score ? b : a);
-  window._hrRows = previewRows;
-  window._hrSelectedIndex = bestRow.rowIndex;
-
-  // Banner
-  const banner = document.getElementById('hrDetectedBanner');
-  banner.style.display = 'block';
-  banner.innerHTML = `<div class="hr-detected-banner">✅ Auto-detected header on <b>Row ${bestRow.rowIndex + 1}</b> (confidence score: ${bestRow.score}/100). Click any row to override.</div>`;
-
-  // Sub
-  document.getElementById('hrModalSub').innerHTML =
-    `Sheet: <b>${escH(sheetName)}</b> · Showing first ${previewRows.length} rows. The highlighted row will be used as column headers.`;
-
-  // Build preview table
-  const maxCols = 8;
-  let thead = '<thead><tr><th style="background:var(--surface2);padding:6px 10px;border-bottom:1px solid var(--border);font-size:10px;color:var(--text-dim);width:36px;border-right:1px solid var(--border);">ROW</th>';
-  for (let c = 0; c < maxCols; c++) thead += `<th style="background:var(--surface2);padding:6px 10px;border-bottom:1px solid var(--border);font-size:10px;color:var(--text-dim);">Col ${c+1}</th>`;
-  thead += '</tr></thead>';
-
-  let tbody = '<tbody>';
-  for (const row of previewRows) {
-    const isSel = row.rowIndex === bestRow.rowIndex;
-    tbody += `<tr class="hr-row${isSel?' hr-selected':''}" id="hrtr-${row.rowIndex}" onclick="selectHeaderRow(${row.rowIndex})">`;
-    tbody += `<td class="row-num-cell">${row.rowIndex + 1}</td>`;
-    for (let c = 0; c < maxCols; c++) {
-      const val = row.values[c];
-      const display = val !== null && val !== undefined && val !== '' ? escH(String(val).slice(0, 30)) : '<span style="color:var(--text-dim)">—</span>';
-      tbody += `<td>${display}</td>`;
+function openHeaderRowModal(ws,sheetName,filename){
+  var previewRows=getRawRows(ws,15);
+  if(!previewRows.length){alert('No rows found.');return;}
+  var scored=previewRows.map(function(r){return {rowIndex:r.rowIndex,values:r.values,score:scoreHeaderRow(r.values)};});
+  var best=scored.reduce(function(a,b){return b.score>a.score?b:a;});
+  window._hrRows=previewRows; window._hrSelectedIndex=best.rowIndex;
+  document.getElementById('hrDetectedBanner').style.display='block';
+  document.getElementById('hrDetectedBanner').innerHTML='<div class="hr-detected-banner">✅ Auto-detected header on <b>Row '+(best.rowIndex+1)+'</b> (confidence: '+best.score+'/100).</div>';
+  document.getElementById('hrModalSub').innerHTML='Sheet: <b>'+escH(sheetName)+'</b> · First '+previewRows.length+' rows shown.';
+  var maxCols=8,thead='<thead><tr><th style="background:var(--surface2);padding:6px 10px;border-bottom:1px solid var(--border);font-size:10px;color:var(--text-dim);width:36px;border-right:1px solid var(--border);">ROW</th>';
+  for(var i=0;i<maxCols;i++) thead+='<th style="background:var(--surface2);padding:6px 10px;border-bottom:1px solid var(--border);font-size:10px;color:var(--text-dim);">Col '+(i+1)+'</th>';
+  thead+='</tr></thead>';
+  var tbody='<tbody>';
+  previewRows.forEach(function(row){
+    var isSel=row.rowIndex===best.rowIndex;
+    tbody+='<tr class="hr-row'+(isSel?' hr-selected':'')+'" id="hrtr-'+row.rowIndex+'" data-rowidx="'+row.rowIndex+'" onclick="selectHeaderRowEl(this)">';
+    tbody+='<td class="row-num-cell">'+(row.rowIndex+1)+'</td>';
+    for(var c=0;c<maxCols;c++){
+      var val=row.values[c];
+      tbody+='<td>'+(val!==null&&val!==undefined&&val!==''?escH(String(val).slice(0,30)):'<span style="color:var(--text-dim)">—</span>')+'</td>';
     }
-    tbody += '</tr>';
-  }
-  tbody += '</tbody>';
-  document.getElementById('hrPreviewTable').innerHTML = thead + tbody;
-
-  // Row buttons
-  const btnContainer = document.getElementById('hrRowBtns');
-  btnContainer.innerHTML = previewRows.map(r =>
-    `<button class="hr-row-btn${r.rowIndex === bestRow.rowIndex ? ' active' : ''}" id="hrbtn-${r.rowIndex}" onclick="selectHeaderRow(${r.rowIndex})">Row ${r.rowIndex + 1}</button>`
-  ).join('');
-
+    tbody+='</tr>';
+  });
+  tbody+='</tbody>';
+  document.getElementById('hrPreviewTable').innerHTML=thead+tbody;
+  document.getElementById('hrRowBtns').innerHTML=previewRows.map(function(r){
+    return '<button class="hr-row-btn'+(r.rowIndex===best.rowIndex?' active':'')+'" id="hrbtn-'+r.rowIndex+'" data-rowidx="'+r.rowIndex+'" onclick="selectHeaderRowEl(this)">Row '+(r.rowIndex+1)+'</button>';
+  }).join('');
   document.getElementById('headerRowModal').classList.add('show');
 }
-
-function selectHeaderRow(rowIndex) {
-  window._hrSelectedIndex = rowIndex;
-  // Update table highlight
-  document.querySelectorAll('.hr-row').forEach(tr => tr.classList.remove('hr-selected'));
-  const tr = document.getElementById(`hrtr-${rowIndex}`);
-  if (tr) tr.classList.add('hr-selected');
-  // Update buttons
-  document.querySelectorAll('.hr-row-btn').forEach(b => b.classList.remove('active'));
-  const btn = document.getElementById(`hrbtn-${rowIndex}`);
-  if (btn) btn.classList.add('active');
+function selectHeaderRowEl(el){
+  var idx=parseInt(el.getAttribute('data-rowidx'));
+  window._hrSelectedIndex=idx;
+  document.querySelectorAll('.hr-row').forEach(function(t){t.classList.remove('hr-selected');});
+  var tr=document.getElementById('hrtr-'+idx); if(tr) tr.classList.add('hr-selected');
+  document.querySelectorAll('.hr-row-btn').forEach(function(b){b.classList.remove('active');});
+  var btn=document.getElementById('hrbtn-'+idx); if(btn) btn.classList.add('active');
 }
-
-function closeHeaderRowModal() {
+function closeHeaderRowModal(){
   document.getElementById('headerRowModal').classList.remove('show');
-  // Re-open sheet selector if multi-sheet
-  if (window._pendingWb && window._pendingWb.SheetNames.length > 1) {
-    openSheetModal(window._pendingWb, window._pendingFilename);
-  }
+  if(window._pendingWb&&window._pendingWb.SheetNames.length>1) openSheetModal(window._pendingWb,window._pendingFilename);
 }
-
-function confirmHeaderRow() {
-  const ws = window._pendingWs;
-  const headerRowIndex = window._hrSelectedIndex;
-  const filename = window._pendingFilename;
-  const sheetName = window._pendingSheetName;
-
+function confirmHeaderRow(){
+  var ws=window._pendingWs,hIdx=window._hrSelectedIndex;
+  var filename=window._pendingFilename,sheetName=window._pendingSheetName;
   document.getElementById('headerRowModal').classList.remove('show');
-
-  // Parse the sheet using the chosen header row
-  try {
-    const range = XLSX.utils.decode_range(ws['!ref']);
-    // Set the range to start from the header row
-    const newRange = { s: { r: headerRowIndex, c: range.s.c }, e: range.e };
-    const wsClone = Object.assign({}, ws);
-    wsClone['!ref'] = XLSX.utils.encode_range(newRange);
-
-    const data = XLSX.utils.sheet_to_json(wsClone, { defval: '', cellDates: true });
-    if (!data || data.length === 0) {
-      alert('No data rows found below the selected header row. Please choose a different row.');
-      openHeaderRowModal(ws, sheetName, filename);
-      return;
-    }
-    rawData = data;
-    colHeaders = Object.keys(data[0]);
-    openMappingModal(filename, sheetName, headerRowIndex);
-  } catch(err) {
-    alert('Error parsing sheet from row ' + (headerRowIndex + 1) + ': ' + err.message);
-  }
+  try{
+    var range=XLSX.utils.decode_range(ws['!ref']);
+    var wsClone=Object.assign({},ws);
+    wsClone['!ref']=XLSX.utils.encode_range({s:{r:hIdx,c:range.s.c},e:range.e});
+    var data=XLSX.utils.sheet_to_json(wsClone,{defval:'',cellDates:true});
+    if(!data||!data.length){alert('No data below selected row.');openHeaderRowModal(ws,sheetName,filename);return;}
+    rawData=data; colHeaders=Object.keys(data[0]);
+    openMappingModal(filename,sheetName,hIdx);
+  } catch(err){alert('Error: '+err.message);}
 }
 
-// ────────────────────────────────────────────
-// MAPPING MODAL
-// ────────────────────────────────────────────
-function openMappingModal(filename, sheetName, headerRowIndex) {
-  const container = document.getElementById('mapRows');
-  // Auto-detect mapping
-  const autoMap = autoDetect(colHeaders);
-  let html = '';
-  for (const fd of FIELD_DEFS) {
-    const opts = colHeaders.map(h => `<option value="${escH(h)}" ${autoMap[fd.key]===h?'selected':''}>${escH(h)}</option>`).join('');
-    html += `<div class="map-row">
-      <div class="map-label">${fd.label}<span>${fd.hint}</span></div>
-      <select class="map-select" data-key="${fd.key}">
-        <option value="">— skip —</option>
-        ${opts}
-      </select>
-    </div>`;
-  }
-  container.innerHTML = html;
-  // Update modal subtitle
-  const sub = document.querySelector('#mapModal .modal-sub');
-  if (sub) {
-    const rowInfo = headerRowIndex !== undefined ? ` · headers from row ${headerRowIndex + 1}` : '';
-    sub.innerHTML = `Sheet: <b>${escH(sheetName||'')}</b>${rowInfo} · <b>${colHeaders.length}</b> columns found. Map fields or skip.`;
-  }
-  document.getElementById('mapModal').classList.add('show');
-  window._pendingFile = filename;
-}
-
-function autoDetect(headers) {
-  const map = {};
-  const patterns = {
-    date:     /date|incident.date|event.date|occur|reported.date|log.date/i,
-    dept:     /^department$|^dept$|dept.name|department.name|ward.name|unit.name|^ward$|^unit$/i,
-    category: /categor|type|class|incident.type/i,
-    status:   /status|state|closure|established/i,
-    harm:     /harm|severity|outcome|injury/i,
-    sub:      /sub.?categ|sub.?type/i,
-    risk:     /risk.?level|risk.?rating/i,
-    sentinel: /sentinel/i,
-    site:     /^site$|^campus$|facility|branch|campus.name/i,
-    details:  /detail|description|narrative|summary/i,
-    tat:      /^tat$|turnaround|turn.around/i,
+// ═══════════════════════════════════════════
+// COLUMN MAPPING
+// ═══════════════════════════════════════════
+function autoDetect(headers){
+  var map={};
+  var patterns={
+    date:/date|incident.date|event.date|log.date|occur/i,
+    dept:/^department$|^dept$|dept.name|department.name|^ward$|^unit$/i,
+    category:/categor|type|class|incident.type/i,
+    status:/status|state|closure|established/i,
+    harm:/harm|severity|outcome|injury/i,
+    sub:/sub.?categ|sub.?type/i,
+    risk:/risk.?level|risk.?rating/i,
+    sentinel:/sentinel/i,
+    site:/^site$|^campus$|facility|branch/i,
+    details:/detail|description|narrative|summary/i,
+    tat:/^tat$|turnaround/i
   };
-  for (const [key, re] of Object.entries(patterns)) {
-    const match = headers.find(h => re.test(h));
-    if (match) map[key] = match;
-  }
-  // Fallback for dept: prefer header with "name" over one with "id"
-  if (!map.dept) {
-    const deptCandidates = headers.filter(h => /dept|department|ward|unit/i.test(h));
-    map.dept = deptCandidates.find(h => !/id|code|num/i.test(h)) || deptCandidates[0];
+  Object.keys(patterns).forEach(function(key){
+    var match=headers.find(function(h){return patterns[key].test(h);});
+    if(match) map[key]=match;
+  });
+  if(!map.dept){
+    var cands=headers.filter(function(h){return /dept|department|ward|unit/i.test(h);});
+    map.dept=cands.find(function(h){return !/id|code|num/i.test(h);})||cands[0];
   }
   return map;
 }
-
-function closeModal() { document.getElementById('mapModal').classList.remove('show'); }
-
-function applyMapping() {
-  const selects = document.querySelectorAll('#mapRows .map-select');
-  mapping = {};
-  for (const sel of selects) {
-    if (sel.value) mapping[sel.dataset.key] = sel.value;
+function openMappingModal(filename,sheetName,hIdx){
+  var autoMap=autoDetect(colHeaders);
+  var FIELD_DEFS=[
+    {key:'date',label:'Incident Date',hint:'Date the incident occurred',required:true},
+    {key:'dept',label:'Department',hint:'Reporting department / ward',required:true},
+    {key:'category',label:'Incident Category',hint:'High-level incident type',required:true},
+    {key:'status',label:'Status',hint:'Open / Closed / Established etc.',required:true},
+    {key:'harm',label:'Harm Category',hint:'Degree of harm to patient/staff'},
+    {key:'sub',label:'Sub-Category',hint:'Detailed incident sub-type'},
+    {key:'risk',label:'Risk Level',hint:'Low / Moderate / High / Extreme'},
+    {key:'sentinel',label:'Sentinel Event',hint:'Yes / No'},
+    {key:'site',label:'Site / Campus',hint:'Facility or campus'},
+    {key:'details',label:'Details of Incident',hint:'Free-text description'},
+    {key:'tat',label:'TAT (Days)',hint:'Total turnaround time in days'}
+  ];
+  var html='';
+  FIELD_DEFS.forEach(function(fd){
+    var opts=colHeaders.map(function(h){
+      return '<option value="'+escH(h)+'"'+(autoMap[fd.key]===h?' selected':'')+'>'+escH(h)+'</option>';
+    }).join('');
+    html+='<div class="map-row">'
+      +'<div class="map-label">'+escH(fd.label)+(fd.required?' <span class="badge badge-mandatory">Mandatory</span>':'')
+      +'<span>'+escH(fd.hint)+'</span></div>'
+      +'<select class="map-select" data-key="'+fd.key+'"><option value="">— skip —</option>'+opts+'</select>'
+      +'</div>';
+  });
+  document.getElementById('mapRows').innerHTML=html;
+  var sub=document.querySelector('#mapModal .modal-sub');
+  if(sub){
+    var rowInfo=hIdx!==undefined?' · headers from row '+(hIdx+1):'';
+    sub.innerHTML='Sheet: <b>'+escH(sheetName||'')+'</b>'+rowInfo+' · <b>'+colHeaders.length+'</b> columns found.';
   }
+  document.getElementById('mapModal').classList.add('show');
+  window._pendingFile=filename;
+}
+function closeModal(){ document.getElementById('mapModal').classList.remove('show'); }
+function applyMapping(){
+  mapping={};
+  document.querySelectorAll('#mapRows .map-select').forEach(function(sel){ if(sel.value) mapping[sel.dataset.key]=sel.value; });
   closeModal();
-  // Normalize data first so KPI configurator can read unique values
-  rawData = rawData.map(r => normalizeRow(r));
+  rawData=rawData.map(normalizeRow);
   openKpiModal(window._pendingFile);
 }
 
-// ════════════════════════════════════════════════════════
-// KPI CARD BUILDER — full from-scratch card system
-// ════════════════════════════════════════════════════════
+// ═══════════════════════════════════════════
+// NORMALIZE ROW
+// ═══════════════════════════════════════════
+function normalizeRow(r){
+  function g(key){ return mapping[key]?r[mapping[key]]:''; }
+  var dateRaw=g('date'),dt=null;
+  if(dateRaw instanceof Date) dt=dateRaw;
+  else if(dateRaw&&typeof dateRaw==='string') dt=new Date(dateRaw);
+  else if(dateRaw&&typeof dateRaw==='number'){try{dt=XLSX.SSF.parse_date_code(dateRaw);}catch(e){}}
+  var month=(dt&&!isNaN(dt.getTime()))?dt.getMonth():-1;
+  var year=(dt&&!isNaN(dt.getTime()))?dt.getFullYear():null;
+  return {_raw:r,date:dt,month:month,year:year,
+    dept:clean(g('dept')),category:clean(g('category')),status:clean(g('status')),
+    harm:clean(g('harm')),sub:clean(g('sub')),risk:clean(g('risk')),
+    sentinel:clean(g('sentinel')),site:clean(g('site')),details:clean(g('details')),
+    tat:parseFloat(g('tat'))||null};
+}
 
-// ── Card definition ──
-// Each card: { id, label, icon, color, type, col, val, method }
-// type: 'count' | 'pct' | 'total' | 'avg_tat'
-// method for pct: denominator is total filtered records
-
-let kpiCards = [];          // active card definitions (built in modal)
-let kpiCardEnabled = {};    // id → true/false (inline toggle after generation)
-let kpiConfig = {};         // legacy compat
-
-const KPI_COLORS = [
-  {id:'blue',  label:'Blue',   cls:'blue',   hex:'var(--accent)'},
-  {id:'green', label:'Green',  cls:'green',  hex:'var(--green)'},
-  {id:'amber', label:'Amber',  cls:'amber',  hex:'var(--amber)'},
-  {id:'red',   label:'Red',    cls:'red',    hex:'var(--red)'},
-  {id:'purple',label:'Purple', cls:'purple', hex:'var(--purple)'},
-  {id:'cyan',  label:'Cyan',   cls:'cyan',   hex:'var(--cyan)'},
-  {id:'gold',  label:'Gold',   cls:'gold',   hex:'var(--gold)'},
-];
-
-const KPI_ICONS = ['📋','✅','⏳','🚨','⚠️','🟢','📈','⏱','🤕','👷','🏥','💊','📊','🔵','❌','🟡','🔴','💉','🩹','🚶'];
-
-function openKpiModal(filename) {
-  window._pendingFile = filename;
-
-  // Auto-build default cards from unique status values
-  if (kpiCards.length === 0) {
-    const statuses = [...new Set(rawData.map(r=>r.status).filter(Boolean))];
-    const harms    = [...new Set(rawData.map(r=>r.harm).filter(Boolean))];
-    const colorIdx = [0,1,2,4,3,5,6];
-    let ci = 0;
-
-    // Always add Total first
-    kpiCards.push({ id:'card_total', label:'Total Incidents', icon:'📋', color:'blue', type:'total', col:'', val:'' });
-
-    // One card per status value
-    statuses.slice(0,4).forEach((s,i) => {
-      const isPositive = /closed|established|resolved|done|complete/i.test(s);
-      const isNegative = /open|pending|not.estab|undefined|rejected/i.test(s);
-      kpiCards.push({
-        id: 'card_s_'+i,
-        label: s.length > 22 ? s.slice(0,20)+'…' : s,
-        icon: isPositive ? '✅' : isNegative ? '⏳' : '📊',
-        color: KPI_COLORS[colorIdx[ci++ % colorIdx.length]].id,
-        type: 'count', col: 'status', val: s
-      });
+// ═══════════════════════════════════════════
+// KPI CARD BUILDER — data-id on all elements, no inline string escaping
+// ═══════════════════════════════════════════
+function openKpiModal(filename){
+  window._pendingFile=filename;
+  if(kpiCards.length===0){
+    var statuses=unique(rawData.map(function(r){return r.status;}).filter(Boolean));
+    var harms=unique(rawData.map(function(r){return r.harm;}).filter(Boolean));
+    kpiCards=[{id:'card_total',label:'Total Incidents',icon:'📋',color:'blue',type:'total',col:'',val:''}];
+    var colorCycle=['blue','green','amber','purple','red','cyan','gold'];
+    var ci=0;
+    statuses.slice(0,4).forEach(function(s,i){
+      var pos=/closed|established|resolved|done|complete/i.test(s);
+      var neg=/open|pending|not.estab|undefined|reject/i.test(s);
+      kpiCards.push({id:'card_s'+i,label:s.length>22?s.slice(0,20)+'…':s,
+        icon:pos?'✅':neg?'⏳':'📊',color:colorCycle[ci++%colorCycle.length],
+        type:'count',col:'status',val:s});
     });
-
-    // Closure rate if we have a "closed" equivalent
-    const closedStatus = statuses.find(s => /closed|established|resolved|done|complete/i.test(s));
-    if (closedStatus) {
-      kpiCards.push({ id:'card_cr', label:'Closure Rate', icon:'📈', color:'gold', type:'pct', col:'status', val:closedStatus });
-    }
-
-    // Harm cards
-    const noHarm = harms.find(s => /no.harm|no.injury|none|safe/i.test(s));
-    const harmPat = harms.find(s => /harm|patient|injury|hurt/i.test(s) && !/no.harm|no.injury/i.test(s));
-    if (noHarm)  kpiCards.push({ id:'card_noh', label:'No Harm', icon:'🟢', color:'cyan', type:'count', col:'harm', val:noHarm });
-    if (harmPat) kpiCards.push({ id:'card_hp',  label:'Harm Events', icon:'⚠️', color:'red',  type:'count', col:'harm', val:harmPat });
+    var closedS=statuses.find(function(s){return /closed|established|resolved|done|complete/i.test(s);});
+    if(closedS) kpiCards.push({id:'card_cr',label:'Closure Rate',icon:'📈',color:'gold',type:'pct',col:'status',val:closedS});
+    var noH=harms.find(function(s){return /no.harm|no.injury|none|safe/i.test(s);});
+    var harmP=harms.find(function(s){return /harm|patient|injury/i.test(s)&&!/no.harm|no.injury/i.test(s);});
+    if(noH)   kpiCards.push({id:'card_noh',label:'No Harm',icon:'🟢',color:'cyan',type:'count',col:'harm',val:noH});
+    if(harmP) kpiCards.push({id:'card_hp',label:'Harm Events',icon:'⚠️',color:'red',type:'count',col:'harm',val:harmP});
   }
-
-  document.getElementById('kpiModalSub').innerHTML =
-    `<b>${rawData.length.toLocaleString()} records loaded.</b> Each card counts or calculates from your data. Cards with <b>Count (%) </b> show a percentage of total. Drag to reorder.`;
-
+  document.getElementById('kpiModalSub').innerHTML='<b>'+rawData.length.toLocaleString()+' records.</b> Configure KPI cards below.';
   renderKpiBuilderRows();
   updateKpiBuilderPreview();
   document.getElementById('kpiModal').classList.add('show');
 }
 
-// ── CARD TYPE OPTIONS ──
-function cardTypeOptions(sel) {
-  const types = [
-    { v:'total',   l:'Total records (always full count)' },
-    { v:'count',   l:'Count matching a value' },
-    { v:'pct',     l:'Count as % of total (Closure Rate style)' },
-    { v:'avg_tat', l:'Average TAT (days column)' },
-  ];
-  return types.map(t=>`<option value="${t.v}" ${sel===t.v?'selected':''}>${t.l}</option>`).join('');
-}
-
-function renderKpiBuilderRows() {
-  const container = document.getElementById('kpiBuilderRows');
-  const colNames = colHeaders.slice(0,50);
-
-  container.innerHTML = kpiCards.map((card, idx) => {
-    const colOpts = ['<option value="">— column —</option>',
-      ...colNames.map(h=>`<option value="${escH(h)}" ${card.col===h?'selected':''}>${escH(h)}</option>`)
-    ].join('');
-
-    const uniqueVals = card.col ? [...new Set(rawData.map(r=>clean(r._raw?r._raw[card.col]:'')).filter(Boolean))].sort().slice(0,80) : [];
-    const valOpts = ['<option value="">— any / all values —</option>',
-      ...uniqueVals.map(v=>`<option value="${escH(v)}" ${card.val===v?'selected':''}>${escH(v.length>40?v.slice(0,38)+'…':v)}</option>`)
-    ].join('');
-
-    const iconOpts = KPI_ICONS.map(ic=>`<option value="${ic}" ${card.icon===ic?'selected':''}>${ic}</option>`).join('');
-    const colorOpts = KPI_COLORS.map(c=>`<option value="${c.id}" ${card.color===c.id?'selected':''}>${c.label}</option>`).join('');
-    const needsCol  = card.type === 'count' || card.type === 'pct';
-    const needsVal  = card.type === 'count' || card.type === 'pct';
-
-    return `<div class="kpi-builder-row" id="kbr-${card.id}" data-id="${card.id}">
-      <div class="kbr-drag">⠿</div>
-      <div class="kbr-body">
-        <div class="kbr-row1">
-          <select class="kbr-sel" style="width:36px;padding:6px 4px;text-align:center;" onchange="kpiCardProp('${card.id}','icon',this.value)">${iconOpts}</select>
-          <input class="kbr-input" type="text" value="${escH(card.label)}" placeholder="Card label…" style="flex:1;min-width:100px;" oninput="kpiCardProp('${card.id}','label',this.value)">
-          <select class="kbr-sel" onchange="kpiCardProp('${card.id}','color',this.value)">${colorOpts}</select>
-          <button class="kbr-del" onclick="removeKpiCard('${card.id}')" title="Remove card">✕</button>
-        </div>
-        <div class="kbr-row2">
-          <select class="kbr-sel" style="flex:1.4;" onchange="kpiCardProp('${card.id}','type',this.value);renderKpiBuilderRows();updateKpiBuilderPreview()">
-            ${cardTypeOptions(card.type)}
-          </select>
-          ${needsCol ? `<select class="kbr-sel" style="flex:1;" onchange="kpiCardProp('${card.id}','col',this.value);renderKpiBuilderRows();updateKpiBuilderPreview()">${colOpts}</select>` : '<div style="flex:1"></div>'}
-          ${needsVal ? `<select class="kbr-sel" style="flex:1.2;" onchange="kpiCardProp('${card.id}','val',this.value);updateKpiBuilderPreview()">${valOpts}</select>` : '<div style="flex:1.2"></div>'}
-        </div>
-        <div class="kbr-calc-hint" id="hint-${card.id}"></div>
-      </div>
-    </div>`;
+// All card builder interactions use data-cardid attribute — zero inline string escaping
+function renderKpiBuilderRows(){
+  var container=document.getElementById('kpiBuilderRows');
+  container.innerHTML=kpiCards.map(function(card){
+    var uniqueVals=card.col?unique(rawData.map(function(r){return clean(r._raw?r._raw[card.col]:'');}).filter(Boolean)).slice(0,80):[];
+    var colOpts='<option value="">— column —</option>'+colHeaders.slice(0,50).map(function(h){
+      return '<option value="'+escH(h)+'"'+(card.col===h?' selected':'')+'>'+escH(h)+'</option>';
+    }).join('');
+    var valOpts='<option value="">— any —</option>'+uniqueVals.map(function(v){
+      return '<option value="'+escH(v)+'"'+(card.val===v?' selected':'')+'>'+escH(v.length>40?v.slice(0,38)+'…':v)+'</option>';
+    }).join('');
+    var iconOpts=KPI_ICONS.map(function(ic){return '<option value="'+ic+'"'+(card.icon===ic?' selected':'')+'>'+ic+'</option>';}).join('');
+    var colorOpts=KPI_COLOR_IDS.map(function(c){return '<option value="'+c+'"'+(card.color===c?' selected':'')+'>'+c+'</option>';}).join('');
+    var typeOpts=[['total','Total records'],['count','Count matching value'],['pct','Count as % (rate)'],['avg_tat','Average TAT days']].map(function(t){
+      return '<option value="'+t[0]+'"'+(card.type===t[0]?' selected':'')+'>'+t[1]+'</option>';
+    }).join('');
+    var needsCol=(card.type==='count'||card.type==='pct');
+    return '<div class="kpi-builder-row" id="kbr-'+card.id+'" data-cardid="'+card.id+'">'
+      +'<div class="kbr-drag">⠿</div>'
+      +'<div class="kbr-body">'
+        +'<div class="kbr-row1">'
+          +'<select class="kbr-sel" style="width:42px;padding:5px 3px;text-align:center;" data-cardid="'+card.id+'" data-prop="icon" onchange="kpiCardPropEl(this)">'+iconOpts+'</select>'
+          +'<input class="kbr-input" type="text" value="'+escH(card.label)+'" placeholder="Card label…" style="flex:1;min-width:100px;" data-cardid="'+card.id+'" data-prop="label" oninput="kpiCardPropEl(this)">'
+          +'<select class="kbr-sel" data-cardid="'+card.id+'" data-prop="color" onchange="kpiCardPropEl(this)">'+colorOpts+'</select>'
+          +'<button class="kbr-del" data-cardid="'+card.id+'" onclick="removeKpiCardEl(this)">✕</button>'
+        +'</div>'
+        +'<div class="kbr-row2">'
+          +'<select class="kbr-sel" style="flex:1.4;" data-cardid="'+card.id+'" data-prop="type" onchange="kpiCardTypeEl(this)">'+typeOpts+'</select>'
+          +(needsCol?'<select class="kbr-sel" style="flex:1;" data-cardid="'+card.id+'" data-prop="col" onchange="kpiCardColEl(this)">'+colOpts+'</select>':'<div style="flex:1"></div>')
+          +(needsCol?'<select class="kbr-sel" style="flex:1.2;" data-cardid="'+card.id+'" data-prop="val" onchange="kpiCardPropEl(this)">'+valOpts+'</select>':'<div style="flex:1.2"></div>')
+        +'</div>'
+        +'<div class="kbr-calc-hint" id="hint-'+card.id+'"></div>'
+      +'</div>'
+    +'</div>';
   }).join('');
-
-  // Update calculation hints
-  kpiCards.forEach(card => updateCalcHint(card));
+  kpiCards.forEach(updateCalcHint);
 }
 
-function updateCalcHint(card) {
-  const el = document.getElementById('hint-'+card.id);
-  if (!el) return;
-  const total = rawData.length;
-  let hint = '';
-  if (card.type === 'total') {
-    hint = `= ${total.toLocaleString()} (all records)`;
-  } else if (card.type === 'avg_tat') {
-    const tats = rawData.filter(r=>r.tat).map(r=>r.tat);
-    hint = tats.length ? `= avg of ${tats.length} records with TAT → ${Math.round(tats.reduce((a,b)=>a+b,0)/tats.length)} days` : 'No TAT column mapped';
-  } else if (card.col && card.val) {
-    const cnt = countCardValue(rawData, card);
-    if (card.type === 'pct') {
-      hint = `= ${cnt} ÷ ${total} × 100 = <b>${total?Math.round(cnt/total*100):0}%</b>`;
-    } else {
-      hint = `= ${cnt.toLocaleString()} records where <b>${card.col}</b> = "<b>${card.val}</b>"`;
-    }
-  } else if (card.col && !card.val) {
-    const cnt = rawData.filter(r => r._raw && clean(r._raw[card.col]) !== '').length;
-    hint = `= ${cnt.toLocaleString()} records with any value in <b>${card.col}</b>`;
-  } else {
-    hint = 'Select a column and value above';
+// Element-based event handlers — read from data attributes
+function kpiCardPropEl(el){
+  var id=el.getAttribute('data-cardid'), prop=el.getAttribute('data-prop'), val=el.value;
+  var card=kpiCards.find(function(c){return c.id===id;});
+  if(card){card[prop]=val; updateCalcHint(card); updateKpiBuilderPreview();}
+}
+function kpiCardTypeEl(el){
+  kpiCardPropEl(el);
+  renderKpiBuilderRows(); updateKpiBuilderPreview();
+}
+function kpiCardColEl(el){
+  kpiCardPropEl(el);
+  renderKpiBuilderRows(); updateKpiBuilderPreview();
+}
+function removeKpiCardEl(el){
+  var id=el.getAttribute('data-cardid');
+  kpiCards=kpiCards.filter(function(c){return c.id!==id;});
+  renderKpiBuilderRows(); updateKpiBuilderPreview();
+}
+function addKpiBuilderRow(){
+  var id='card_'+Date.now();
+  kpiCards.push({id:id,label:'New Card',icon:'📋',color:'blue',type:'count',col:'',val:''});
+  renderKpiBuilderRows(); updateKpiBuilderPreview();
+  var cont=document.getElementById('kpiBuilderRows');
+  setTimeout(function(){cont.scrollTop=cont.scrollHeight;},50);
+}
+
+function countCardValue(data,card){
+  if(card.type==='total') return data.length;
+  if(card.type==='avg_tat'){
+    var t=data.filter(function(r){return r.tat;}).map(function(r){return r.tat;});
+    return t.length?Math.round(t.reduce(function(a,b){return a+b;},0)/t.length):0;
   }
-  el.innerHTML = hint;
-}
-
-function kpiCardProp(id, prop, val) {
-  const card = kpiCards.find(c=>c.id===id);
-  if (card) { card[prop] = val; updateCalcHint(card); updateKpiBuilderPreview(); }
-}
-
-function removeKpiCard(id) {
-  kpiCards = kpiCards.filter(c=>c.id!==id);
-  renderKpiBuilderRows();
-  updateKpiBuilderPreview();
-}
-
-function addKpiBuilderRow() {
-  const id = 'card_' + Date.now();
-  kpiCards.push({ id, label:'New Card', icon:'📋', color:'blue', type:'count', col:'', val:'' });
-  renderKpiBuilderRows();
-  updateKpiBuilderPreview();
-  // Scroll to bottom
-  const container = document.getElementById('kpiBuilderRows');
-  setTimeout(()=>container.scrollTop=container.scrollHeight, 50);
-}
-
-function countCardValue(data, card) {
-  if (card.type === 'total') return data.length;
-  if (card.type === 'avg_tat') {
-    const tats = data.filter(r=>r.tat).map(r=>r.tat);
-    return tats.length ? Math.round(tats.reduce((a,b)=>a+b,0)/tats.length) : 0;
+  if(!card.col) return data.length;
+  var fieldMap={status:'status',harm:'harm',risk:'risk',dept:'dept',category:'category',sub:'sub',site:'site'};
+  function getVal(r){
+    var nk=Object.keys(fieldMap).find(function(k){return fieldMap[k]===card.col||k===card.col;});
+    if(nk) return clean(r[fieldMap[nk]]||'');
+    return r._raw?clean(r._raw[card.col]):'';
   }
-  if (!card.col) return data.length;
-  if (!card.val) return data.filter(r => r._raw && clean(r._raw[card.col]) !== '').length;
-  // Exact match first, then partial
-  const exact = data.filter(r => r._raw && clean(r._raw[card.col]) === card.val).length;
-  return exact > 0 ? exact : data.filter(r => {
-    const v = r._raw ? clean(r._raw[card.col]) : (r[card.col]||'');
-    return v.toLowerCase().includes(card.val.toLowerCase());
-  }).length;
+  if(!card.val) return data.filter(function(r){return getVal(r)!=='';}).length;
+  var exact=data.filter(function(r){return getVal(r)===card.val;}).length;
+  if(exact>0) return exact;
+  return data.filter(function(r){return getVal(r).toLowerCase().indexOf(card.val.toLowerCase())>=0;}).length;
 }
-
-function computeCardValue(data, card) {
-  const cnt = countCardValue(data, card);
-  if (card.type === 'pct') return { num: data.length ? Math.round(cnt/data.length*100)+'%' : '0%', raw: cnt };
-  if (card.type === 'avg_tat') return { num: cnt + (cnt===0?'':' d'), raw: cnt };
-  return { num: cnt, raw: cnt };
+function computeCardDisplay(data,card){
+  var cnt=countCardValue(data,card);
+  if(card.type==='pct') return {num:data.length?Math.round(cnt/data.length*100)+'%':'0%'};
+  if(card.type==='avg_tat') return {num:cnt+'d'};
+  return {num:cnt};
 }
-
-function updateKpiBuilderPreview() {
-  const CMAP = { blue:'var(--accent)', green:'var(--green)', amber:'var(--amber)',
-                 red:'var(--red)', purple:'var(--purple)', cyan:'var(--cyan)', gold:'var(--gold)' };
-  const d = rawData;
-  document.getElementById('kpiBuilderPreview').innerHTML = kpiCards.map(card => {
-    const { num } = computeCardValue(d, card);
-    const c = CMAP[card.color] || 'var(--accent)';
-    return `<div style="background:var(--surface2);border:1px solid var(--border);border-radius:10px;padding:12px 16px;min-width:120px;text-align:center;position:relative;overflow:hidden;flex:1;min-width:100px;max-width:180px;">
-      <div style="position:absolute;top:0;left:0;right:0;height:3px;background:${c}"></div>
-      <div style="font-size:18px;margin-bottom:5px;">${card.icon}</div>
-      <div style="font-size:22px;font-weight:800;font-family:'DM Mono',monospace;letter-spacing:-1px;color:${c};">${typeof num==='number'?num.toLocaleString():num}</div>
-      <div style="font-size:10px;color:var(--text-muted);text-transform:uppercase;letter-spacing:.5px;font-weight:600;margin-top:3px;">${escH(card.label)}</div>
-    </div>`;
+function updateCalcHint(card){
+  var el=document.getElementById('hint-'+card.id); if(!el) return;
+  var total=rawData.length,hint='';
+  if(card.type==='total') hint='= '+total.toLocaleString()+' (all records)';
+  else if(card.type==='avg_tat'){
+    var tats=rawData.filter(function(r){return r.tat;}).map(function(r){return r.tat;});
+    hint=tats.length?'= avg of '+tats.length+' records → '+Math.round(tats.reduce(function(a,b){return a+b;},0)/tats.length)+' days':'No TAT column mapped';
+  } else if(card.col&&card.val){
+    var cnt=countCardValue(rawData,card);
+    hint=card.type==='pct'?'= '+cnt+' ÷ '+total+' × 100 = <b>'+(total?Math.round(cnt/total*100):0)+'%</b>':'= '+cnt.toLocaleString()+' records where <b>'+escH(card.col)+'</b> = "<b>'+escH(card.val)+'</b>"';
+  } else if(card.col) hint='= records with any value in <b>'+escH(card.col)+'</b>';
+  else hint='Select a column and value above';
+  el.innerHTML=hint;
+}
+function updateKpiBuilderPreview(){
+  var CMAP={blue:'var(--accent)',green:'var(--green)',amber:'var(--amber)',red:'var(--red)',purple:'var(--purple)',cyan:'var(--cyan)',gold:'var(--gold)'};
+  document.getElementById('kpiBuilderPreview').innerHTML=kpiCards.map(function(card){
+    var d=computeCardDisplay(rawData,card),c=CMAP[card.color]||'var(--accent)';
+    var num=typeof d.num==='number'?d.num.toLocaleString():d.num;
+    return '<div style="background:var(--surface2);border:1px solid var(--border);border-radius:10px;padding:12px 16px;min-width:100px;max-width:160px;flex:1;text-align:center;position:relative;overflow:hidden;">'
+      +'<div style="position:absolute;top:0;left:0;right:0;height:3px;background:'+c+'"></div>'
+      +'<div style="font-size:18px;margin-bottom:5px;">'+card.icon+'</div>'
+      +'<div style="font-size:22px;font-weight:800;letter-spacing:-1px;color:'+c+';">'+num+'</div>'
+      +'<div style="font-size:10px;color:var(--text-muted);text-transform:uppercase;font-weight:600;margin-top:3px;">'+escH(card.label)+'</div>'
+      +'</div>';
   }).join('');
 }
-
-function closeKpiModal() {
+function closeKpiModal(){
   document.getElementById('kpiModal').classList.remove('show');
   document.getElementById('mapModal').classList.add('show');
 }
-
-function confirmKpiConfig() {
-  // Initialise all cards as enabled
-  kpiCardEnabled = {};
-  kpiCards.forEach(c => kpiCardEnabled[c.id] = true);
-  kpiConfig = { cards: kpiCards }; // legacy compat
+function confirmKpiConfig(){
+  kpiCardEnabled={};
+  kpiCards.forEach(function(c){kpiCardEnabled[c.id]=true;});
+  kpiConfig={cards:kpiCards};
   document.getElementById('kpiModal').classList.remove('show');
   buildDashboard(window._pendingFile);
 }
 
-// ── INLINE KPI CARD CUSTOMISER (post-generation) ──────────────────────────
+// ═══════════════════════════════════════════
+// SECTION & KPI CARD TOGGLES — data attributes throughout
+// ═══════════════════════════════════════════
+var SECTION_DEFS=[
+  {id:'dp-overview',icon:'🏠',label:'Overview'},
+  {id:'dp-status',icon:'📊',label:'Status'},
+  {id:'dp-categories',icon:'🏷️',label:'Categories'},
+  {id:'dp-harm',icon:'⚠️',label:'Harm & Risk'},
+  {id:'dp-records',icon:'📋',label:'Records'}
+];
+var sectionEnabled={};
+SECTION_DEFS.forEach(function(s){sectionEnabled[s.id]=true;});
 
-function toggleKpiCustomiser() {
-  const el  = document.getElementById('kpiCardCustomiser');
-  const btn = document.getElementById('kpiCustomiseBtn');
-  const vis = el.style.display !== 'none';
-  el.style.display = vis ? 'none' : 'block';
-  btn.textContent = vis ? '🎯 KPI Cards' : '✕ Close KPI Editor';
+function toggleSectionCustomiser(){
+  var el=document.getElementById('sectionCustomiser');
+  var vis=el.style.display!=='none';
+  el.style.display=vis?'none':'block';
+  document.getElementById('customiseBtn').textContent=vis?'🎛 Sections':'✕ Sections';
+  if(!vis) document.getElementById('kpiCardCustomiser').style.display='none';
 }
-
-function buildKpiCardToggles() {
-  const container = document.getElementById('kpiCardToggles');
-  const CMAP = { blue:'var(--accent)', green:'var(--green)', amber:'var(--amber)',
-                 red:'var(--red)', purple:'var(--purple)', cyan:'var(--cyan)', gold:'var(--gold)' };
-  container.innerHTML = kpiCards.map(card => {
-    const on = kpiCardEnabled[card.id] !== false;
-    const c = CMAP[card.color] || 'var(--accent)';
-    return `<button class="sec-toggle ${on?'on':'off'}" id="kct-${card.id}"
-                    onclick="toggleKpiCard('${card.id}')"
-                    style="${on?'border-color:'+c+';color:'+c+';background:'+c+'1a':''}">
-      <span class="sec-check" style="${on?'background:'+c+';border-color:'+c:''}">
-        ${on?'✓':''}
-      </span>
-      ${card.icon} ${escH(card.label.length>18?card.label.slice(0,16)+'…':card.label)}
-    </button>`;
+function toggleKpiCustomiser(){
+  var el=document.getElementById('kpiCardCustomiser');
+  var vis=el.style.display!=='none';
+  el.style.display=vis?'none':'block';
+  document.getElementById('kpiCustomiseBtn').textContent=vis?'🎯 KPI Cards':'✕ KPI Cards';
+  if(!vis) document.getElementById('sectionCustomiser').style.display='none';
+}
+function buildSectionToggles(){
+  document.getElementById('sectionToggles').innerHTML=SECTION_DEFS.map(function(s){
+    var on=sectionEnabled[s.id];
+    return '<button class="sec-toggle '+(on?'on':'off')+'" id="sct-'+s.id+'" data-secid="'+s.id+'" onclick="toggleSectionEl(this)">'
+      +'<span class="sec-check">'+(on?'✓':'')+'</span>'+s.icon+' '+s.label+'</button>';
+  }).join('');
+  updateSectionCountLabel();
+}
+function toggleSectionEl(el){
+  var id=el.getAttribute('data-secid');
+  sectionEnabled[id]=!sectionEnabled[id];
+  el.className='sec-toggle '+(sectionEnabled[id]?'on':'off');
+  el.querySelector('.sec-check').textContent=sectionEnabled[id]?'✓':'';
+  var tabBtn=document.querySelector('.dash-tab[data-page="'+id+'"]');
+  if(tabBtn){
+    tabBtn.style.display=sectionEnabled[id]?'':'none';
+    if(!sectionEnabled[id]&&tabBtn.classList.contains('active')){
+      var first=SECTION_DEFS.find(function(s){return sectionEnabled[s.id];});
+      if(first){var fb=document.querySelector('.dash-tab[data-page="'+first.id+'"]');if(fb)showDashPage(first.id,fb);}
+    }
+  }
+  updateSectionCountLabel();
+}
+function selectAllSections(enable){
+  SECTION_DEFS.forEach(function(s){
+    sectionEnabled[s.id]=enable;
+    var tb=document.querySelector('.dash-tab[data-page="'+s.id+'"]');
+    if(tb) tb.style.display=enable?'':'none';
+  });
+  if(!enable){sectionEnabled['dp-overview']=true;var ob=document.querySelector('.dash-tab[data-page="dp-overview"]');if(ob){ob.style.display='';showDashPage('dp-overview',ob);}}
+  buildSectionToggles();
+}
+function updateSectionCountLabel(){
+  var on=SECTION_DEFS.filter(function(s){return sectionEnabled[s.id];}).length;
+  document.getElementById('sectionCountLabel').textContent=on+' of '+SECTION_DEFS.length+' sections in download';
+}
+function buildKpiCardToggles(){
+  var CMAP={blue:'var(--accent)',green:'var(--green)',amber:'var(--amber)',red:'var(--red)',purple:'var(--purple)',cyan:'var(--cyan)',gold:'var(--gold)'};
+  document.getElementById('kpiCardToggles').innerHTML=kpiCards.map(function(card){
+    var on=kpiCardEnabled[card.id]!==false,c=CMAP[card.color]||'var(--accent)';
+    var style=on?'border-color:'+c+';color:'+c+';background:'+c+'1a':'';
+    var ckStyle=on?'background:'+c+';border-color:'+c:'';
+    return '<button class="sec-toggle '+(on?'on':'off')+'" id="kct-'+card.id+'" data-cardid="'+card.id+'" onclick="toggleKpiCardEl(this)" style="'+style+'">'
+      +'<span class="sec-check" style="'+ckStyle+'">'+(on?'✓':'')+'</span>'
+      +card.icon+' '+escH(card.label.length>18?card.label.slice(0,16)+'…':card.label)+'</button>';
   }).join('');
   updateKpiCardCountLabel();
 }
-
-function toggleKpiCard(id) {
-  kpiCardEnabled[id] = !(kpiCardEnabled[id] !== false);
-  renderKPIs();        // re-render live
-  buildKpiCardToggles(); // refresh toggle UI
+function toggleKpiCardEl(el){
+  var id=el.getAttribute('data-cardid');
+  kpiCardEnabled[id]=(kpiCardEnabled[id]!==false)?false:true;
+  renderKPIs(); buildKpiCardToggles();
+}
+function selectAllKpiCards(enable){
+  kpiCards.forEach(function(c){kpiCardEnabled[c.id]=enable;}); renderKPIs(); buildKpiCardToggles();
+}
+function updateKpiCardCountLabel(){
+  var on=kpiCards.filter(function(c){return kpiCardEnabled[c.id]!==false;}).length;
+  document.getElementById('kpiCardCountLabel').textContent=on+' of '+kpiCards.length+' cards in download';
 }
 
-function selectAllKpiCards(enable) {
-  kpiCards.forEach(c => kpiCardEnabled[c.id] = enable);
-  renderKPIs();
-  buildKpiCardToggles();
-}
-
-function updateKpiCardCountLabel() {
-  const on = kpiCards.filter(c => kpiCardEnabled[c.id] !== false).length;
-  document.getElementById('kpiCardCountLabel').textContent =
-    `${on} of ${kpiCards.length} cards shown in download`;
-}
-
-// ── RENDER KPI CARDS (live, respects enabled state) ───────────────────────
-
-function renderKPIs() {
-  const d = filteredData;
-  const CMAP = { blue:'blue', green:'green', amber:'amber', red:'red', purple:'purple', cyan:'cyan', gold:'gold' };
-  let html = '';
-  kpiCards.forEach(card => {
-    if (kpiCardEnabled[card.id] === false) return;
-    const { num } = computeCardValue(d, card);
-    const cls = CMAP[card.color] || 'blue';
-    html += `<div class="stat-card ${cls}"><div class="stat-icon">${card.icon}</div><div class="stat-num">${typeof num==='number'?num.toLocaleString():num}</div><div class="stat-label">${escH(card.label)}</div></div>`;
+// ═══════════════════════════════════════════
+// DASHBOARD BUILD
+// ═══════════════════════════════════════════
+function buildDashboard(filename){
+  document.getElementById('dashFileLabel').textContent=filename+' · '+rawData.length.toLocaleString()+' records loaded';
+  document.getElementById('heroTitle').textContent='Patient Safety Incident Log · Master Dashboard';
+  document.getElementById('heroSub').textContent=rawData.length.toLocaleString()+' incidents from "'+filename+'". Use slicers and tabs to explore.';
+  document.getElementById('dashboard').style.display='block';
+  ['customiseBtn','kpiCustomiseBtn','downloadBtn','downloadDashBtn'].forEach(function(id){
+    var el=document.getElementById(id); if(el) el.style.display='flex';
   });
-  if (!html) html = '<div style="color:var(--text-muted);font-size:13px;padding:10px 0;">No KPI cards enabled — use the KPI Cards button above to show cards.</div>';
-  document.getElementById('kpiRow').innerHTML = html;
+  document.getElementById('num1').classList.add('done');
+  document.getElementById('num2').classList.add('done');
+  var years=unique(rawData.map(function(r){return String(r.year);}).filter(Boolean));
+  var sites=unique(rawData.map(function(r){return r.site;}).filter(Boolean));
+  document.getElementById('heroChips').innerHTML=
+    '<div class="hero-chip">📅 '+years[0]+(years.length>1?'–'+years[years.length-1]:'')+' </div>'
+    +'<div class="hero-chip">🏢 '+(sites.length?sites.join(' · '):'All Sites')+'</div>'
+    +'<div class="hero-chip">📋 '+rawData.length.toLocaleString()+' Incidents</div>';
+  buildSectionToggles(); buildKpiCardToggles();
+  populateSlicers(); applyFilters();
+  showToast('✓ Dashboard ready — '+rawData.length+' records');
+  setTimeout(function(){document.getElementById('dashboard').scrollIntoView({behavior:'smooth'});},100);
+}
+function showDashPage(id,btn){
+  document.querySelectorAll('.dash-page').forEach(function(p){p.classList.remove('active');});
+  document.querySelectorAll('.dash-tab').forEach(function(b){b.classList.remove('active');});
+  document.getElementById(id).classList.add('active'); btn.classList.add('active');
+  var renders={'dp-overview':function(){renderKPIs();renderCharts();},'dp-status':renderStatusCharts,'dp-categories':renderCategoryCharts,'dp-harm':renderHarmCharts,'dp-records':renderTable};
+  if(renders[id]) renders[id]();
 }
 
-
-// ────────────────────────────────────────────
-// CHARTS
-// ────────────────────────────────────────────
-function countBy(arr, key) {
-  const m = {};
-  for (const r of arr) {
-    const v = r[key] || 'Unknown';
-    m[v] = (m[v]||0)+1;
-  }
-  return Object.entries(m).sort((a,b)=>b[1]-a[1]);
+// ═══════════════════════════════════════════
+// SLICERS & FILTERS
+// ═══════════════════════════════════════════
+function populateSlicers(){
+  var years=unique(rawData.map(function(r){return r.year;}).filter(Boolean));
+  var months=[...new Set(rawData.map(function(r){return r.month;}).filter(function(m){return m>=0;}))].sort(function(a,b){return a-b;});
+  fillSel('slYear',years,function(v){return String(v);});
+  fillSel('slMonth',months,function(v){return MONTHS[v];},function(v){return String(v);});
+  fillSel('slDept',unique(rawData.map(function(r){return r.dept;})),function(v){return v;});
+  fillSel('slHarm',unique(rawData.map(function(r){return r.harm;})),function(v){return v;});
+  fillSel('slCat', unique(rawData.map(function(r){return r.category;})),function(v){return v;});
+  fillSel('slStatus',unique(rawData.map(function(r){return r.status;})),function(v){return v;});
+  fillSel('slSite',unique(rawData.map(function(r){return r.site;})),function(v){return v;});
 }
-
-function barChart(el, entries, color, limit=10) {
-  const data = entries.slice(0, limit);
-  const max = data[0]?.[1] || 1;
-  el.innerHTML = data.length ? data.map(([k,v],i) => `
-    <div class="bar-row">
-      <div class="bar-label" title="${escH(k)}">${escH(k.length>22?k.slice(0,20)+'…':k)}</div>
-      <div class="bar-track">
-        <div class="bar-fill" style="width:${Math.max(8,Math.round(v/max*100))}%;background:${color||COLORS[i%COLORS.length]}">
-          <span class="bar-val">${v}</span>
-        </div>
-      </div>
-    </div>`).join('') : '<div class="no-data"><div class="no-data-icon">📊</div>No data</div>';
-}
-
-function donutChart(el, entries) {
-  const total = entries.reduce((s,[,v])=>s+v,0);
-  if (!total) { el.innerHTML = '<div class="no-data"><div class="no-data-icon">📊</div>No data</div>'; return; }
-  const slices = entries.slice(0,8).map(([k,v],i)=>({ k, v, c:COLORS[i%COLORS.length], pct: Math.round(v/total*100) }));
-
-  // SVG donut
-  let ang = -90, svgPaths = '';
-  for (const s of slices) {
-    const sweep = 360 * s.v / total;
-    const start = ang; const end = ang + sweep;
-    const r = 70, cx = 90, cy = 90;
-    const s1 = polarToXY(cx,cy,r,start), e1 = polarToXY(cx,cy,r,end);
-    const large = sweep > 180 ? 1 : 0;
-    const inner = 42;
-    const s2 = polarToXY(cx,cy,inner,end), e2 = polarToXY(cx,cy,inner,start);
-    svgPaths += `<path d="M${s1.x},${s1.y} A${r},${r} 0 ${large},1 ${e1.x},${e1.y} L${s2.x},${s2.y} A${inner},${inner} 0 ${large},0 ${e2.x},${e2.y} Z" fill="${s.c}" opacity="0.9"/>`;
-    ang = end;
-  }
-  const legend = slices.map(s=>`<div class="legend-row"><div class="legend-dot" style="background:${s.c}"></div><span>${escH(s.k.length>18?s.k.slice(0,16)+'…':s.k)}</span><span class="legend-pct">${s.pct}%</span></div>`).join('');
-
-  el.innerHTML = `<div class="donut-wrap">
-    <svg viewBox="0 0 180 180" width="140" height="140">
-      ${svgPaths}
-      <text x="90" y="88" text-anchor="middle" fill="#e6edf3" font-size="22" font-weight="700">${total}</text>
-      <text x="90" y="104" text-anchor="middle" fill="#8b949e" font-size="10">total</text>
-    </svg>
-    <div class="donut-legend">${legend}</div>
-  </div>`;
-}
-
-function polarToXY(cx,cy,r,angle) {
-  const rad = (angle * Math.PI) / 180;
-  return { x: cx + r*Math.cos(rad), y: cy + r*Math.sin(rad) };
-}
-
-function renderCharts() {
-  const d = filteredData;
-  // Monthly trend
-  const monthMap = {};
-  for (const r of d) {
-    if (r.month>=0) { const k=MONTHS[r.month]; monthMap[k]=(monthMap[k]||0)+1; }
-  }
-  barChart(document.getElementById('chartMonth'), MONTHS.map(m=>[m, monthMap[m]||0]), '#4d86f5', 12);
-  donutChart(document.getElementById('chartHarm'), countBy(d,'harm'));
-  barChart(document.getElementById('chartCategory'), countBy(d,'category'), null, 10);
-  barChart(document.getElementById('chartDept'), countBy(d,'dept'), '#34c77b', 12);
-}
-
-// ── STATUS CHARTS ──
-function renderStatusCharts() {
-  const d = filteredData;
-  donutChart(document.getElementById('chartStatus'), countBy(d,'status'));
-  // Status by month — stacked bars
-  const statusKeys = unique(d.map(r=>r.status));
-  const colors = ['#34c77b','#e8a83a','#9b72ef','#4d86f5'];
-  const monthData = MONTHS.map(m => {
-    const rows = d.filter(r => MONTHS[r.month] === m);
-    return { label: m, rows };
+function fillSel(id,vals,labelFn,valFn){
+  var sel=document.getElementById(id); if(!sel) return;
+  var cur=sel.value;
+  sel.innerHTML='<option value="">All</option>';
+  vals.forEach(function(v){
+    var opt=document.createElement('option');
+    opt.value=valFn?valFn(v):v; opt.textContent=labelFn(v); sel.appendChild(opt);
   });
-  const el = document.getElementById('chartStatusMonth');
-  if (!el) return;
-  const allStatuses = ['Closed', ...statusKeys.filter(s=>s!=='Closed')].slice(0,4);
-  const max = Math.max(...monthData.map(m=>m.rows.length), 1);
-  el.innerHTML = monthData.map(({label,rows})=>{
-    const total = rows.length;
-    const segs = allStatuses.map((s,i)=>{
-      const cnt = rows.filter(r=>r.status===s).length;
-      return cnt ? `<div style="width:${Math.round(cnt/max*100)}%;min-width:0;background:${colors[i]||COLORS[i]};height:100%;display:inline-block;border-radius:2px" title="${s}: ${cnt}"></div>` : '';
-    }).join('');
-    return `<div class="bar-row">
-      <div class="bar-label">${label}</div>
-      <div class="bar-track" style="display:flex;gap:2px">${segs}</div>
-      <span style="font-size:10px;color:var(--text-muted);font-family:'DM Mono',monospace;min-width:28px;text-align:right">${total||''}</span>
-    </div>`;
+  sel.value=cur;
+}
+function getSlicerValues(){
+  return {year:document.getElementById('slYear').value,month:document.getElementById('slMonth').value,
+    dept:document.getElementById('slDept').value,harm:document.getElementById('slHarm').value,
+    cat:document.getElementById('slCat').value,status:document.getElementById('slStatus').value,
+    site:document.getElementById('slSite').value};
+}
+function applyFilters(){
+  var f=getSlicerValues();
+  filteredData=rawData.filter(function(r){
+    if(f.year&&String(r.year)!==f.year) return false;
+    if(f.month&&String(r.month)!==f.month) return false;
+    if(f.dept&&r.dept!==f.dept) return false;
+    if(f.harm&&r.harm!==f.harm) return false;
+    if(f.cat&&r.category!==f.cat) return false;
+    if(f.status&&r.status!==f.status) return false;
+    if(f.site&&r.site!==f.site) return false;
+    return true;
+  });
+  searchQuery=(document.getElementById('tableSearch')&&document.getElementById('tableSearch').value)||'';
+  if(searchQuery){
+    var q=searchQuery.toLowerCase();
+    filteredData=filteredData.filter(function(r){return Object.values(r._raw).some(function(v){return String(v||'').toLowerCase().indexOf(q)>=0;});});
+  }
+  displayData=filteredData; currentPage=1;
+  renderKPIs(); renderCharts(); renderTable();
+  var ap=document.querySelector('.dash-page.active');
+  if(ap){if(ap.id==='dp-status')renderStatusCharts();else if(ap.id==='dp-categories')renderCategoryCharts();else if(ap.id==='dp-harm')renderHarmCharts();}
+}
+function resetFilters(){
+  ['slYear','slMonth','slDept','slHarm','slCat','slStatus','slSite'].forEach(function(id){document.getElementById(id).value='';});
+  if(document.getElementById('tableSearch')) document.getElementById('tableSearch').value='';
+  searchQuery=''; applyFilters();
+}
+function searchTable(q){searchQuery=q; applyFilters();}
+
+// ═══════════════════════════════════════════
+// KPI RENDER
+// ═══════════════════════════════════════════
+function renderKPIs(){
+  var d=filteredData;
+  var CMAP={blue:'blue',green:'green',amber:'amber',red:'red',purple:'purple',cyan:'cyan',gold:'gold'};
+  var html=kpiCards.filter(function(card){return kpiCardEnabled[card.id]!==false;}).map(function(card){
+    var disp=computeCardDisplay(d,card),cls=CMAP[card.color]||'blue';
+    var num=disp.num; if(typeof num==='number') num=num.toLocaleString();
+    return '<div class="stat-card '+cls+'"><div class="stat-icon">'+card.icon+'</div>'
+      +'<div class="stat-num">'+num+'</div><div class="stat-label">'+escH(card.label)+'</div></div>';
   }).join('');
-  // Status by category
-  barChart(document.getElementById('chartStatusCat'),
-    countBy(d.filter(r=>/closed/i.test(r.status)), 'category'), '#34c77b', 12);
+  if(!html) html='<div style="color:var(--text-muted);font-size:13px;padding:10px 0;">No cards enabled — click 🎯 KPI Cards above.</div>';
+  document.getElementById('kpiRow').innerHTML=html;
 }
 
-// ── CATEGORY CHARTS ──
-function renderCategoryCharts() {
-  const d = filteredData;
-  barChart(document.getElementById('chartAllCat'), countBy(d,'category'), null, 20);
-  barChart(document.getElementById('chartSubCat'), countBy(d,'sub'), '#c9a84c', 15);
-  donutChart(document.getElementById('chartCatDonut'), countBy(d,'category'));
+// ═══════════════════════════════════════════
+// CHARTS
+// ═══════════════════════════════════════════
+function countBy(arr,key){
+  var m={};
+  arr.forEach(function(r){var v=r[key]||'Unknown';m[v]=(m[v]||0)+1;});
+  return Object.entries(m).sort(function(a,b){return b[1]-a[1];});
 }
-
-// ── HARM & RISK CHARTS ──
-function renderHarmCharts() {
-  const d = filteredData;
-  barChart(document.getElementById('chartHarmCat'), countBy(d,'category'), '#f05c5c', 12);
-  donutChart(document.getElementById('chartRisk'), countBy(d,'risk'));
-  // Harm trend
-  const monthMap = {};
-  for (const r of d) {
-    if (r.month>=0) { const k=MONTHS[r.month]; monthMap[k]=(monthMap[k]||0)+1; }
+function barChart(el,entries,color,limit){
+  limit=limit||10;
+  var data=entries.slice(0,limit),max=data[0]&&data[0][1]||1;
+  if(!el) return;
+  el.innerHTML=data.length?data.map(function(e,i){
+    return '<div class="bar-row"><div class="bar-label" title="'+escH(e[0])+'">'+escH(e[0].length>22?e[0].slice(0,20)+'…':e[0])+'</div>'
+      +'<div class="bar-track"><div class="bar-fill" style="width:'+Math.max(8,Math.round(e[1]/max*100))+'%;background:'+(color||COLORS[i%COLORS.length])+'">'
+      +'<span class="bar-val">'+e[1]+'</span></div></div></div>';
+  }).join(''):'<div class="no-data"><div class="no-data-icon">📊</div>No data</div>';
+}
+function donutChart(el,entries){
+  if(!el) return;
+  var total=entries.reduce(function(s,e){return s+e[1];},0);
+  if(!total){el.innerHTML='<div class="no-data"><div class="no-data-icon">📊</div>No data</div>';return;}
+  var slices=entries.slice(0,8).map(function(e,i){return {k:e[0],v:e[1],c:COLORS[i%COLORS.length],pct:Math.round(e[1]/total*100)};});
+  var ang=-90,paths='';
+  slices.forEach(function(s){
+    var sw=360*s.v/total,st=ang,en=ang+sw,r=70,cx=90,cy=90,ir=42;
+    function pt(a){return {x:cx+r*Math.cos(a*Math.PI/180),y:cy+r*Math.sin(a*Math.PI/180)};}
+    function pi(a){return {x:cx+ir*Math.cos(a*Math.PI/180),y:cy+ir*Math.sin(a*Math.PI/180)};}
+    var lg=sw>180?1:0,s1=pt(st),e1=pt(en),s2=pi(en),e2=pi(st);
+    paths+='<path d="M'+s1.x+','+s1.y+' A'+r+','+r+' 0 '+lg+',1 '+e1.x+','+e1.y+' L'+s2.x+','+s2.y+' A'+ir+','+ir+' 0 '+lg+',0 '+e2.x+','+e2.y+' Z" fill="'+s.c+'" opacity=".9"/>';
+    ang=en;
+  });
+  var legend=slices.map(function(s){return '<div class="legend-row"><div class="legend-dot" style="background:'+s.c+'"></div><span>'+escH(s.k.length>18?s.k.slice(0,16)+'…':s.k)+'</span><span class="legend-pct">'+s.pct+'%</span></div>';}).join('');
+  el.innerHTML='<div class="donut-wrap"><svg viewBox="0 0 180 180" width="140" height="140">'+paths
+    +'<text x="90" y="88" text-anchor="middle" fill="var(--text)" font-size="22" font-weight="700">'+total+'</text>'
+    +'<text x="90" y="104" text-anchor="middle" fill="var(--text-muted)" font-size="10">total</text>'
+    +'</svg><div class="donut-legend">'+legend+'</div></div>';
+}
+function renderCharts(){
+  var d=filteredData,mm={};
+  d.forEach(function(r){if(r.month>=0){var k=MONTHS[r.month];mm[k]=(mm[k]||0)+1;}});
+  barChart(document.getElementById('chartMonth'),MONTHS.map(function(m){return[m,mm[m]||0];}),COLORS[0],12);
+  donutChart(document.getElementById('chartHarm'),countBy(d,'harm'));
+  barChart(document.getElementById('chartCategory'),countBy(d,'category'),null,10);
+  barChart(document.getElementById('chartDept'),countBy(d,'dept'),COLORS[1],12);
+}
+function renderStatusCharts(){
+  var d=filteredData;
+  donutChart(document.getElementById('chartStatus'),countBy(d,'status'));
+  var statuses=unique(d.map(function(r){return r.status;})).slice(0,4);
+  var scols=[COLORS[1],COLORS[2],COLORS[3],COLORS[0]];
+  var el=document.getElementById('chartStatusMonth');
+  if(el){
+    var monthData=MONTHS.map(function(m){
+      var rows=d.filter(function(r){return MONTHS[r.month]===m;});
+      var obj={_label:m};
+      statuses.forEach(function(s){obj[s]=rows.filter(function(r){return r.status===s;}).length;});
+      return obj;
+    });
+    var mx=Math.max.apply(null,monthData.map(function(m){return statuses.reduce(function(s,k){return s+(m[k]||0);},0);}).concat([1]));
+    el.innerHTML=monthData.map(function(m){
+      var total=statuses.reduce(function(s,k){return s+(m[k]||0);},0);
+      var segs=statuses.map(function(s,i){var cnt=m[s]||0;return cnt?'<div style="width:'+Math.round(cnt/mx*100)+'%;min-width:0;background:'+scols[i]+';height:100%;display:inline-block;border-radius:2px" title="'+escH(s)+': '+cnt+'"></div>':'';}).join('');
+      return '<div class="bar-row"><div class="bar-label">'+m._label+'</div><div class="bar-track" style="display:flex;gap:2px;">'+segs+'</div><span style="font-size:10px;color:var(--text-muted);min-width:28px;text-align:right;">'+(total||'')+'</span></div>';
+    }).join('');
   }
-  barChart(document.getElementById('chartHarmMonth'), MONTHS.map(m=>[m,monthMap[m]||0]), '#f05c5c', 12);
-  barChart(document.getElementById('chartHarmDept'), countBy(d,'dept'), '#9b72ef', 10);
+  barChart(document.getElementById('chartStatusCat'),countBy(d,'category'),COLORS[1],12);
+}
+function renderCategoryCharts(){
+  var d=filteredData;
+  barChart(document.getElementById('chartAllCat'),countBy(d,'category'),null,20);
+  barChart(document.getElementById('chartSubCat'),countBy(d,'sub'),COLORS[6],15);
+  donutChart(document.getElementById('chartCatDonut'),countBy(d,'category'));
+}
+function renderHarmCharts(){
+  var d=filteredData,mm={};
+  d.forEach(function(r){if(r.month>=0){var k=MONTHS[r.month];mm[k]=(mm[k]||0)+1;}});
+  barChart(document.getElementById('chartHarmCat'),countBy(d,'category'),COLORS[5],12);
+  donutChart(document.getElementById('chartRisk'),countBy(d,'risk'));
+  barChart(document.getElementById('chartHarmMonth'),MONTHS.map(function(m){return[m,mm[m]||0];}),COLORS[5],12);
+  barChart(document.getElementById('chartHarmDept'),countBy(d,'dept'),COLORS[3],10);
 }
 
-
-// ────────────────────────────────────────────
+// ═══════════════════════════════════════════
 // TABLE
-// ────────────────────────────────────────────
-function renderTable() {
-  const start = (currentPage-1)*PAGE_SIZE;
-  const pageData = displayData.slice(start, start+PAGE_SIZE);
-
-  // Build columns from mapping + raw headers fallback
-  const cols = [
-    {key:'date',    label:'Date',       fn: r=>r.date&&!isNaN(r.date)?r.date.toLocaleDateString('en-GB'):'' },
-    {key:'dept',    label:'Department', fn: r=>r.dept },
-    {key:'category',label:'Category',  fn: r=>r.category },
-    {key:'sub',     label:'Sub-Category',fn:r=>r.sub },
-    {key:'status',  label:'Status',    fn: r=>statusPill(r.status) },
-    {key:'harm',    label:'Harm',       fn: r=>harmPill(r.harm) },
-    {key:'risk',    label:'Risk',       fn: r=>riskBadge(r.risk) },
-    {key:'sentinel',label:'Sentinel',  fn: r=>r.sentinel },
-    {key:'site',    label:'Site',       fn: r=>r.site },
-    {key:'tat',     label:'TAT (d)',    fn: r=>r.tat!==null?r.tat:'' },
-  ].filter(c => mapping[c.key] || ['date','dept','category','status'].includes(c.key));
-
-  document.getElementById('tableHead').innerHTML = '<tr>' + cols.map(c=>`<th>${c.label}</th>`).join('') + '</tr>';
-  document.getElementById('tableBody').innerHTML = pageData.length ? pageData.map(r=>
-    '<tr>' + cols.map(c=>`<td>${c.fn(r)}</td>`).join('') + '</tr>'
-  ).join('') : '<tr><td colspan="10" class="no-data">No records match the current filters.</td></tr>';
-
+// ═══════════════════════════════════════════
+function renderTable(){
+  var start=(currentPage-1)*PAGE_SIZE,pageData=displayData.slice(start,start+PAGE_SIZE);
+  var cols=[
+    {key:'date',label:'Date',fn:function(r){return r.date&&!isNaN(r.date)?r.date.toLocaleDateString('en-GB'):'';}},
+    {key:'dept',label:'Department',fn:function(r){return escH(r.dept);}},
+    {key:'category',label:'Category',fn:function(r){return escH(r.category);}},
+    {key:'sub',label:'Sub-Category',fn:function(r){return escH(r.sub);}},
+    {key:'status',label:'Status',fn:function(r){return statusPill(r.status);}},
+    {key:'harm',label:'Harm',fn:function(r){return harmPill(r.harm);}},
+    {key:'risk',label:'Risk',fn:function(r){return riskBadge(r.risk);}},
+    {key:'site',label:'Site',fn:function(r){return escH(r.site);}},
+    {key:'tat',label:'TAT(d)',fn:function(r){return r.tat!==null?r.tat:'';}}
+  ].filter(function(c){return mapping[c.key]||['date','dept','category','status'].indexOf(c.key)>=0;});
+  document.getElementById('tableHead').innerHTML='<tr>'+cols.map(function(c){return '<th>'+c.label+'</th>';}).join('')+'</tr>';
+  document.getElementById('tableBody').innerHTML=pageData.length
+    ?pageData.map(function(r){return '<tr>'+cols.map(function(c){return '<td>'+c.fn(r)+'</td>';}).join('')+'</tr>';}).join('')
+    :'<tr><td colspan="10" class="no-data">No records match the current filters.</td></tr>';
   renderPagination();
 }
+function statusPill(s){
+  if(!s) return '';
+  if(/close/i.test(s)) return '<span class="status-pill pill-closed">'+escH(s)+'</span>';
+  if(/open|pending/i.test(s)) return '<span class="status-pill pill-open">'+escH(s)+'</span>';
+  return '<span class="status-pill pill-inprogress">'+escH(s)+'</span>';
+}
+function harmPill(h){
+  if(!h) return '';
+  var cls='harm-1';
+  if(/near.miss|no.harm|no.injury/i.test(h)) cls='harm-1';
+  else if(/mild|minor/i.test(h)) cls='harm-2';
+  else if(/moderate/i.test(h)) cls='harm-3';
+  else if(/major|severe/i.test(h)) cls='harm-4';
+  else if(/death|catastroph/i.test(h)) cls='harm-5';
+  return '<span class="harm-pill '+cls+'">'+escH(h)+'</span>';
+}
+function riskBadge(r){
+  if(!r) return '';
+  var cls='risk-ext';
+  if(/low/i.test(r)) cls='risk-low';
+  else if(/mod/i.test(r)) cls='risk-mod';
+  else if(/high/i.test(r)) cls='risk-high';
+  return '<span class="risk-badge '+cls+'">'+escH(r)+'</span>';
+}
+function renderPagination(){
+  var total=displayData.length,pages=Math.ceil(total/PAGE_SIZE);
+  var start=(currentPage-1)*PAGE_SIZE+1,end=Math.min(currentPage*PAGE_SIZE,total);
+  var html='<span class="page-info">'+start+'–'+end+' of '+total.toLocaleString()+'</span>';
+  html+='<button class="page-btn" onclick="goPage('+(currentPage-1)+')" '+(currentPage===1?'disabled':'')+'>← Prev</button>';
+  for(var p=Math.max(1,currentPage-2);p<=Math.min(pages,currentPage+2);p++)
+    html+='<button class="page-btn '+(p===currentPage?'active':'')+'" onclick="goPage('+p+')">'+p+'</button>';
+  html+='<button class="page-btn" onclick="goPage('+(currentPage+1)+')" '+(currentPage>=pages?'disabled':'')+'>Next →</button>';
+  document.getElementById('pageNav').innerHTML=html;
+}
+function goPage(p){var pages=Math.ceil(displayData.length/PAGE_SIZE);if(p<1||p>pages)return;currentPage=p;renderTable();}
 
-function statusPill(s) {
-  if (!s) return '';
-  const l = s.toLowerCase();
-  if (l.includes('close')) return `<span class="status-pill pill-closed">${escH(s)}</span>`;
-  if (l.includes('open'))  return `<span class="status-pill pill-open">${escH(s)}</span>`;
-  return `<span class="status-pill pill-inprogress">${escH(s)}</span>`;
-}
-function harmPill(h) {
-  if (!h) return '';
-  const l = h.toLowerCase();
-  let cls = 'harm-1';
-  if (/near.miss|no.harm/i.test(l)) cls='harm-1';
-  else if (/mild|minor/i.test(l))   cls='harm-2';
-  else if (/moderate/i.test(l))     cls='harm-3';
-  else if (/major|severe/i.test(l)) cls='harm-4';
-  else if (/death|catastroph/i.test(l)) cls='harm-5';
-  return `<span class="harm-pill ${cls}">${escH(h)}</span>`;
-}
-function riskBadge(r) {
-  if (!r) return '';
-  const l = r.toLowerCase();
-  let cls = 'risk-low';
-  if (/low/i.test(l)) cls='risk-low';
-  else if (/mod/i.test(l)) cls='risk-mod';
-  else if (/high/i.test(l)) cls='risk-high';
-  else if (/ext/i.test(l)) cls='risk-ext';
-  return `<span class="risk-badge ${cls}">${escH(r)}</span>`;
-}
-
-function renderPagination() {
-  const total = displayData.length;
-  const pages = Math.ceil(total / PAGE_SIZE);
-  const start = (currentPage-1)*PAGE_SIZE + 1;
-  const end = Math.min(currentPage*PAGE_SIZE, total);
-  
-  let html = `<span class="page-info">Showing ${start}–${end} of ${total.toLocaleString()}</span>`;
-  html += `<button class="page-btn" onclick="goPage(${currentPage-1})" ${currentPage===1?'disabled':''}>← Prev</button>`;
-  
-  const range = [];
-  for (let p=Math.max(1,currentPage-2); p<=Math.min(pages,currentPage+2); p++) range.push(p);
-  for (const p of range) html += `<button class="page-btn ${p===currentPage?'active':''}" onclick="goPage(${p})">${p}</button>`;
-  html += `<button class="page-btn" onclick="goPage(${currentPage+1})" ${currentPage>=pages?'disabled':''}>Next →</button>`;
-  
-  document.getElementById('pageNav').innerHTML = html;
-}
-
-function goPage(p) {
-  const pages = Math.ceil(displayData.length/PAGE_SIZE);
-  if (p<1||p>pages) return;
-  currentPage = p;
-  renderTable();
-}
-
-// ────────────────────────────────────────────
+// ═══════════════════════════════════════════
 // EXPORT CSV
-// ────────────────────────────────────────────
-function exportCSV() {
-  if (!filteredData.length) return;
-  const keys = colHeaders;
-  const rows = filteredData.map(r => keys.map(k=>{
-    const v = r._raw[k];
-    return typeof v === 'string' ? `"${v.replace(/"/g,'""')}"` : (v||'');
-  }).join(','));
-  const csv = [keys.join(','), ...rows].join('\n');
-  const blob = new Blob([csv], {type:'text/csv'});
-  const a = document.createElement('a');
-  a.href = URL.createObjectURL(blob);
-  a.download = 'OMAC_Incident_Export.csv';
-  a.click();
+// ═══════════════════════════════════════════
+function exportCSV(){
+  if(!filteredData.length) return;
+  var rows=filteredData.map(function(r){return colHeaders.map(function(k){var v=r._raw[k];return typeof v==='string'?'"'+v.replace(/"/g,'""')+'"':(v||'');}).join(',');});
+  var a=document.createElement('a');
+  a.href=URL.createObjectURL(new Blob([[colHeaders.join(',')].concat(rows).join('\n')],{type:'text/csv'}));
+  a.download='OMAC_Incident_Export.csv'; a.click();
 }
 
-// ────────────────────────────────────────────
+// ═══════════════════════════════════════════
 // TEMPLATE DOWNLOAD
-// ────────────────────────────────────────────
-function downloadTemplate() {
-  const headers = [
-    'Serial No.','Incident Date (MM/DD/YYYY)','Year','Campus / Site',
-    'Department / Ward','Incident Number','Patient Name','MR # / Item Code',
-    'Age','Adult/Baby','Details of Incident','Incident Category',
-    'Sub-Category','Sub-Category (Other Specify)','Clinical / Non-Clinical',
-    'Status','Corrective Action','Preventive Action',
-    'Likelihood (1-5)','Consequence (1-5)','Risk Score','Risk Level',
-    'Sentinel Event (Yes/No)','Harm Category','Authenticity of Incident',
-    'Forwarded to HR/S&S','TAT (Days)','Remarks'
-  ];
-  const wb = XLSX.utils.book_new();
-  const ws = XLSX.utils.aoa_to_sheet([headers]);
-  // Style header row width
-  ws['!cols'] = headers.map(h => ({wch: Math.max(h.length+4, 18)}));
-  XLSX.utils.book_append_sheet(wb, ws, 'Incident Log');
-  XLSX.writeFile(wb, 'OMAC_Incident_Log_Template.xlsx');
+// ═══════════════════════════════════════════
+function downloadTemplate(){
+  var headers=['Serial No.','Incident Date (MM/DD/YYYY)','Year','Campus / Site','Department / Ward',
+    'Incident Number','Patient Name','MR # / Item Code','Age','Adult/Baby','Details of Incident',
+    'Incident Category','Sub-Category','Sub-Category (Other Specify)','Clinical / Non-Clinical',
+    'Status','Corrective Action','Preventive Action','Likelihood (1-5)','Consequence (1-5)',
+    'Risk Score','Risk Level','Sentinel Event (Yes/No)','Harm Category',
+    'Authenticity of Incident','Forwarded to HR/S&S','TAT (Days)','Remarks'];
+  var wb=XLSX.utils.book_new();
+  var ws=XLSX.utils.aoa_to_sheet([headers]);
+  ws['!cols']=headers.map(function(h){return {wch:Math.max(h.length+4,18)};});
+  XLSX.utils.book_append_sheet(wb,ws,'Incident Log');
+  XLSX.writeFile(wb,'OMAC_Incident_Log_Template.xlsx');
   showToast('✓ Template downloaded');
 }
 
-// ────────────────────────────────────────────
-// TOAST
-// ────────────────────────────────────────────
-function showToast(msg) {
-  const t = document.getElementById('toast');
-  t.textContent = msg;
-  t.classList.add('show');
-  setTimeout(() => t.classList.remove('show'), 3000);
-}
-
-// ────────────────────────────────────────────
-// THEME TOGGLE
-// ────────────────────────────────────────────
-function toggleTheme() {
-  const isLight = document.body.classList.toggle('light');
-  localStorage.setItem('omac-theme', isLight ? 'light' : 'dark');
-  showToast(isLight ? '☀️ Light mode on' : '🌙 Dark mode on');
-}
-
-// Apply saved or system preference on load
-(function() {
-  const saved = localStorage.getItem('omac-theme');
-  const preferLight = window.matchMedia && window.matchMedia('(prefers-color-scheme: light)').matches;
-  if (saved === 'light' || (!saved && preferLight)) {
-    document.body.classList.add('light');
-  }
-})();
-
-function getStandaloneCss() {
-  return `:root{--bg:#080c14;--s1:#0e1520;--s2:#131d2e;--s3:#1a2640;--s4:#1f2e4a;--bd:rgba(99,132,199,.13);--bdm:rgba(99,132,199,.24);--tx:#e8eef8;--tm:#7f93b8;--td:#3d5070;--gold:#c9a84c;--goldl:#e8c96a;--goldb:rgba(201,168,76,.09);--goldg:rgba(201,168,76,.18);--ac:#4d86f5;--ac2:#6b9fff;--acb:rgba(77,134,245,.11);--acg:rgba(77,134,245,.20);--gr:#34c77b;--grb:rgba(52,199,123,.11);--am:#e8a83a;--amb:rgba(232,168,58,.11);--rd:#f05c5c;--rdb:rgba(240,92,92,.11);--pu:#9b72ef;--pub:rgba(155,114,239,.11);--cy:#3fc8d8;--cyb:rgba(63,200,216,.11);--r:10px;--rl:16px;--rx:22px;--sh:0 4px 20px rgba(0,0,0,.55);--shsm:0 1px 4px rgba(0,0,0,.4)}
-body.light{--bg:#eef2fa;--s1:#fff;--s2:#f4f7fd;--s3:#e8edf8;--s4:#dce4f5;--bd:rgba(60,100,180,.11);--bdm:rgba(60,100,180,.22);--tx:#0f1f3d;--tm:#5a6f95;--td:#a0b0cc;--gold:#a07c28;--goldl:#c09830;--goldb:rgba(160,124,40,.07);--goldg:rgba(160,124,40,.14);--ac:#1558cc;--ac2:#2468e0;--acb:rgba(21,88,204,.08);--acg:rgba(21,88,204,.16);--gr:#1d9e5c;--grb:rgba(29,158,92,.10);--am:#c47a10;--amb:rgba(196,122,16,.10);--rd:#d63b3b;--rdb:rgba(214,59,59,.10);--pu:#7040cc;--pub:rgba(112,64,204,.10);--cy:#1898a8;--cyb:rgba(24,152,168,.10);--sh:0 4px 20px rgba(15,31,61,.10);--shsm:0 1px 4px rgba(15,31,61,.07)}
-*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
-body{font-family:'Plus Jakarta Sans',system-ui,sans-serif;background:var(--bg);color:var(--tx);min-height:100vh;font-size:14px;line-height:1.6;-webkit-font-smoothing:antialiased;transition:background .3s,color .3s}
-body:not(.light)::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:0;background-image:linear-gradient(rgba(77,134,245,.025) 1px,transparent 1px),linear-gradient(90deg,rgba(77,134,245,.025) 1px,transparent 1px);background-size:52px 52px}
-.nav{background:var(--s1);border-bottom:1px solid var(--bd);height:62px;display:flex;align-items:center;justify-content:space-between;padding:0 28px;position:sticky;top:0;z-index:100;backdrop-filter:blur(12px)}
-body:not(.light) .nav{background:rgba(14,21,32,.88)}
-.nav-brand{display:flex;align-items:center;gap:13px}
-.nav-logo{width:38px;height:38px;background:linear-gradient(135deg,#c9a84c,#e8c96a,#9b6f2a);border-radius:9px;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:12px;color:#0e1520;box-shadow:0 0 0 1px rgba(201,168,76,.4),0 0 16px var(--goldg)}
-.nav-title{font-weight:800;font-size:15px;letter-spacing:-.3px}
-.nav-sub{font-size:11px;color:var(--tm);font-weight:500}
-.nav-right{display:flex;align-items:center;gap:10px}
-.nav-badge{background:var(--goldb);border:1px solid rgba(201,168,76,.32);color:var(--gold);padding:4px 11px;border-radius:20px;font-size:10px;font-weight:700;letter-spacing:.8px;text-transform:uppercase}
-.page-tabs{display:flex;gap:3px;background:var(--s2);border-bottom:1px solid var(--bd);padding:0 28px;overflow-x:auto}
-.ptab{padding:14px 20px;cursor:pointer;font-size:13px;font-weight:600;border:none;background:none;color:var(--tm);border-bottom:2px solid transparent;margin-bottom:-1px;transition:all .15s;font-family:inherit;white-space:nowrap;display:flex;align-items:center;gap:7px}
-.ptab.active{color:var(--tx);border-bottom-color:var(--gold)}
-.ptab:hover:not(.active){color:var(--tx);background:var(--s3);border-radius:8px 8px 0 0}
-.page{display:none;animation:fadeUp .22s ease}.page.active{display:block}
-@keyframes fadeUp{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
-.wrap{max-width:1280px;margin:0 auto;padding:32px 28px;position:relative;z-index:1}
-.hero{background:linear-gradient(135deg,var(--s2) 0%,var(--s3) 100%);border:1px solid var(--bdm);border-radius:var(--rx);padding:32px 36px;margin-bottom:28px;position:relative;overflow:hidden}
-.hero::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent,var(--gold) 30%,var(--ac) 70%,transparent)}
-.hero::after{content:'';position:absolute;top:-40px;right:-40px;width:200px;height:200px;border-radius:50%;background:radial-gradient(circle,var(--goldg),transparent 70%);pointer-events:none}
-.hero-title{font-size:26px;font-weight:800;letter-spacing:-.6px;margin-bottom:6px}
-.hero-sub{color:var(--tm);font-size:13px;max-width:600px;line-height:1.7}
-.hero-meta{display:flex;gap:16px;flex-wrap:wrap;margin-top:18px}
-.hero-chip{background:var(--s3);border:1px solid var(--bd);border-radius:20px;padding:5px 14px;font-size:12px;font-weight:600;color:var(--tm);display:flex;align-items:center;gap:6px}
-.kpi-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(170px,1fr));gap:14px;margin-bottom:28px}
-.kpi{background:var(--s1);border:1px solid var(--bd);border-radius:var(--rl);padding:20px 22px;position:relative;overflow:hidden;transition:transform .18s,box-shadow .18s,border-color .18s;cursor:default}
-.kpi:hover{transform:translateY(-3px);box-shadow:var(--sh);border-color:var(--bdm)}
-.kpi::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;border-radius:3px 3px 0 0}
-.kpi::after{content:'';position:absolute;bottom:-18px;right:-10px;width:64px;height:64px;border-radius:50%;opacity:.06}
-.kpi.k-blue::before{background:linear-gradient(90deg,var(--ac),var(--ac2))}.kpi.k-blue::after{background:var(--ac)}
-.kpi.k-grn::before{background:linear-gradient(90deg,var(--gr),#56e0a0)}.kpi.k-grn::after{background:var(--gr)}
-.kpi.k-am::before{background:linear-gradient(90deg,var(--am),#f5c842)}.kpi.k-am::after{background:var(--am)}
-.kpi.k-rd::before{background:linear-gradient(90deg,var(--rd),#ff8080)}.kpi.k-rd::after{background:var(--rd)}
-.kpi.k-pu::before{background:linear-gradient(90deg,var(--pu),#c4a0ff)}.kpi.k-pu::after{background:var(--pu)}
-.kpi.k-cy::before{background:linear-gradient(90deg,var(--cy),#7ae8f4)}.kpi.k-cy::after{background:var(--cy)}
-.kpi.k-gold::before{background:linear-gradient(90deg,var(--gold),var(--goldl))}.kpi.k-gold::after{background:var(--gold)}
-.kpi-icon{font-size:17px;margin-bottom:10px;opacity:.85}
-.kpi-num{font-size:34px;font-weight:800;font-family:'DM Mono',monospace;letter-spacing:-1.5px;line-height:1;margin-bottom:5px}
-.kpi-label{font-size:10px;color:var(--tm);text-transform:uppercase;letter-spacing:.9px;font-weight:700}
-.filter-bar{background:var(--s1);border:1px solid var(--bd);border-radius:var(--rl);padding:18px 22px;margin-bottom:24px;display:flex;flex-wrap:wrap;gap:14px;align-items:flex-end;box-shadow:var(--shsm)}
-.fg{display:flex;flex-direction:column;gap:5px}
-.fl{font-size:10px;color:var(--tm);text-transform:uppercase;letter-spacing:.8px;font-weight:700}
-.fs{background:var(--s2);border:1px solid var(--bd);color:var(--tx);padding:8px 13px;border-radius:var(--r);font-size:13px;font-weight:500;min-width:130px;cursor:pointer;font-family:inherit;transition:border-color .15s}
-.fs:focus{outline:none;border-color:var(--ac);box-shadow:0 0 0 3px var(--acb)}
-.fs option{background:var(--s2)}
-.charts2{display:grid;grid-template-columns:1fr 1fr;gap:18px;margin-bottom:22px}
-.charts3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:18px;margin-bottom:22px}
-.charts12{display:grid;grid-template-columns:2fr 1fr;gap:18px;margin-bottom:22px}
-@media(max-width:900px){.charts2,.charts3,.charts12{grid-template-columns:1fr}}
-.cc{background:var(--s1);border:1px solid var(--bd);border-radius:var(--rl);padding:22px 24px;box-shadow:var(--shsm);transition:border-color .2s,box-shadow .2s}
-.cc:hover{border-color:var(--bdm);box-shadow:var(--sh)}
-.cc-title{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--tm);margin-bottom:16px;display:flex;align-items:center;gap:8px}
-.cc-title::before{content:'';width:10px;height:10px;border-radius:3px;background:linear-gradient(135deg,var(--ac),var(--gold));flex-shrink:0}
-.cc-body{min-height:180px}
-.brow{display:flex;align-items:center;gap:11px;margin-bottom:9px}
-.blbl{width:155px;font-size:11px;color:var(--tm);text-align:right;flex-shrink:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-weight:500}
-.btrk{flex:1;height:24px;background:var(--s2);border-radius:6px;overflow:hidden;border:1px solid var(--bd)}
-.bfil{height:100%;border-radius:6px;transition:width .55s cubic-bezier(.25,.46,.45,.94);min-width:6px;display:flex;align-items:center;padding-left:8px}
-.bval{font-size:10px;font-weight:700;color:rgba(255,255,255,.92);font-family:'DM Mono',monospace}
-.dwrap{display:flex;align-items:center;gap:22px;flex-wrap:wrap}
-.dleg{flex:1;min-width:140px}
-.drow{display:flex;align-items:center;gap:8px;margin-bottom:7px;font-size:12px;font-weight:500}
-.ddot{width:10px;height:10px;border-radius:3px;flex-shrink:0}
-.dpct{color:var(--tm);font-size:11px;margin-left:auto;font-family:'DM Mono',monospace}
-.tbl-wrap{overflow-x:auto;border-radius:var(--r)}
-table{width:100%;border-collapse:collapse;font-size:12px}
-thead th{background:var(--s2);padding:11px 14px;text-align:left;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.8px;color:var(--tm);border-bottom:1px solid var(--bdm);white-space:nowrap;cursor:pointer;user-select:none;transition:color .15s;position:sticky;top:0}
-thead th:hover{color:var(--tx)}
-tbody tr{border-bottom:1px solid var(--bd);transition:background .1s}
-tbody tr:hover{background:var(--s2)}
-tbody tr:last-child{border-bottom:none}
-tbody td{padding:9px 14px;vertical-align:middle}
-.pg{display:flex;align-items:center;gap:6px;margin-top:16px;justify-content:flex-end;flex-wrap:wrap}
-.pg-info{color:var(--tm);font-size:12px;margin-right:8px;font-weight:500}
-.pg-btn{background:var(--s2);border:1px solid var(--bd);color:var(--tm);padding:5px 12px;border-radius:7px;font-size:12px;cursor:pointer;transition:all .14s;font-family:inherit;font-weight:600}
-.pg-btn:hover:not(:disabled){background:var(--s3);color:var(--tx);border-color:var(--bdm)}
-.pg-btn:disabled{opacity:.3;cursor:not-allowed}
-.pg-btn.on{background:var(--ac);border-color:var(--ac);color:#fff}
-.pill{padding:3px 9px;border-radius:20px;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.3px;display:inline-block;white-space:nowrap}
-.p-closed{background:var(--grb);color:var(--gr);border:1px solid rgba(52,199,123,.25)}
-.p-pending{background:var(--amb);color:var(--am);border:1px solid rgba(232,168,58,.25)}
-.p-open{background:var(--acb);color:var(--ac);border:1px solid rgba(77,134,245,.25)}
-.p-harm0{background:var(--grb);color:var(--gr)}.p-harm1{background:var(--cyb);color:var(--cy)}.p-harm2{background:var(--amb);color:var(--am)}.p-harm3{background:var(--rdb);color:#ff8080}.p-harm4{background:var(--rdb);color:var(--rd)}
-.p-risk-low{background:var(--grb);color:var(--gr)}.p-risk-mod{background:var(--amb);color:var(--am)}.p-risk-high{background:var(--rdb);color:#ff8080}.p-risk-ext{background:rgba(240,92,92,.18);color:var(--rd)}
-.p-sent{background:var(--rdb);color:var(--rd);border:1px solid rgba(240,92,92,.3);animation:sentpulse 2s infinite}
-@keyframes sentpulse{0%,100%{box-shadow:none}50%{box-shadow:0 0 8px rgba(240,92,92,.4)}}
-.ttog{width:46px;height:26px;background:var(--s3);border:1px solid var(--bdm);border-radius:13px;cursor:pointer;position:relative;transition:all .25s;flex-shrink:0}
-.ttog::after{content:'';position:absolute;width:20px;height:20px;background:var(--tm);border-radius:50%;top:2px;left:2px;transition:transform .25s cubic-bezier(.34,1.56,.64,1),background .25s;box-shadow:0 1px 4px rgba(0,0,0,.3)}
-body.light .ttog{background:var(--acb);border-color:var(--ac)}
-body.light .ttog::after{transform:translateX(20px);background:var(--ac)}
-.trow{display:flex;align-items:center;gap:7px}.tico{font-size:13px;user-select:none}
-.nodata{text-align:center;padding:48px;color:var(--tm);font-size:13px}
-.nodata-icon{font-size:36px;margin-bottom:12px;opacity:.5}
-.srch{background:var(--s2);border:1px solid var(--bd);color:var(--tx);padding:9px 14px;border-radius:var(--r);font-size:13px;width:260px;font-family:inherit;font-weight:500;transition:border-color .15s,box-shadow .15s}
-.srch:focus{outline:none;border-color:var(--ac);box-shadow:0 0 0 3px var(--acb)}
-.srch::placeholder{color:var(--td)}
-.exp-bar{display:flex;align-items:center;gap:10px;flex-wrap:wrap;justify-content:flex-end;margin-bottom:18px}
-.btn{padding:9px 18px;border-radius:var(--r);font-weight:700;font-size:13px;cursor:pointer;border:none;transition:all .18s;display:inline-flex;align-items:center;gap:7px;font-family:inherit;white-space:nowrap}
-.btn-ghost{background:var(--s2);border:1px solid var(--bdm);color:var(--tx)}.btn-ghost:hover{background:var(--s3);border-color:var(--ac);color:var(--ac)}
-.btn-gold{background:linear-gradient(135deg,#c9a84c,#e8c96a);color:#0e1520;font-weight:800;box-shadow:0 2px 10px rgba(201,168,76,.4)}.btn-gold:hover{transform:translateY(-1px);box-shadow:0 4px 16px rgba(201,168,76,.5)}
-#toast{position:fixed;bottom:28px;right:28px;background:var(--s2);border:1px solid var(--gr);color:var(--gr);padding:12px 20px;border-radius:var(--r);font-size:13px;font-weight:600;transform:translateY(70px);opacity:0;transition:all .3s cubic-bezier(.34,1.56,.64,1);z-index:300;box-shadow:0 4px 16px rgba(52,199,123,.2)}
-#toast.show{transform:translateY(0);opacity:1}
-body:not(.light) ::-webkit-scrollbar{width:5px;height:5px}
-body:not(.light) ::-webkit-scrollbar-track{background:var(--s2)}
-body:not(.light) ::-webkit-scrollbar-thumb{background:var(--s4);border-radius:3px}
-@media(max-width:640px){.wrap{padding:20px 14px}.nav,.page-tabs{padding:0 14px}}`;
-}
-
-function getStandaloneJs(cardsJson, renderCalls) {
-  const baseJs = `const KPI_CARDS=\${cardsJson};
-const MONTHS=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
-const COLORS=['#4d86f5','#34c77b','#e8a83a','#9b72ef','#3fc8d8','#f05c5c','#c9a84c','#ff8c69','#56cfe1','#a8dadc','#c77dff','#80ffdb','#ffd166','#ef476f','#06d6a0','#118ab2','#ffd60a','#3a86ff'];
-function uniq(a){return[...new Set(a.filter(Boolean))].sort()}
-function countBy(a,k){const m={};a.forEach(r=>{const v=r[k]||'Unknown';m[v]=(m[v]||0)+1});return m}
-function sortedEntries(m,n=20){return Object.entries(m).sort((a,b)=>b[1]-a[1]).slice(0,n)}
-function esc(s){return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')}
-function fval(id){return document.getElementById(id)?.value||''}
-function fillSel(id,vals,label){const el=document.getElementById(id);if(!el)return;const cur=el.value;el.innerHTML='<option value="">'+label+'</option>'+vals.map(v=>'<option value="'+esc(v)+'">'+esc(v)+'</option>').join('');if(vals.includes(cur))el.value=cur}
-function filterData(o={}){return DATA.filter(r=>{if(o.year&&r.year!==o.year)return false;if(o.month&&r.month!==o.month)return false;if(o.campus&&r.campus_code!==o.campus)return false;if(o.status&&r.status!==o.status)return false;if(o.category&&r.category!==o.category)return false;if(o.harm&&r.harm!==o.harm)return false;if(o.risk&&r.risk_level!==o.risk)return false;return true})}
-function barChart(elId,entries,opts={}){const el=document.getElementById(elId);if(!el||!entries.length){if(el)el.innerHTML='<div class="nodata"><div class="nodata-icon">📊</div>No data</div>';return}const max=entries[0][1];el.innerHTML=entries.map(([k,v],i)=>'<div class="brow"><div class="blbl" title="'+esc(k)+'">'+esc(k.length>22?k.slice(0,20)+'…':k)+'</div><div class="btrk"><div class="bfil" style="width:'+Math.max(6,Math.round(v/max*100))+'%;background:'+(opts.color||COLORS[i%COLORS.length])+'"><span class="bval">'+v+'</span></div></div></div>').join('')}
-function donutChart(elId,entries){const el=document.getElementById(elId);if(!el)return;const total=entries.reduce((s,[,v])=>s+v,0);if(!total){el.innerHTML='<div class="nodata"><div class="nodata-icon">📊</div>No data</div>';return}const slices=entries.slice(0,8).map(([k,v],i)=>({k,v,c:COLORS[i%COLORS.length],pct:Math.round(v/total*100)}));let ang=-90,paths='';for(const s of slices){const sw=360*s.v/total,st=ang,en=ang+sw,r=70,cx=90,cy=90,ir=42,p=a=>({x:cx+r*Math.cos(a*Math.PI/180),y:cy+r*Math.sin(a*Math.PI/180)}),pi=a=>({x:cx+ir*Math.cos(a*Math.PI/180),y:cy+ir*Math.sin(a*Math.PI/180)}),lg=sw>180?1:0,s1=p(st),e1=p(en),s2=pi(en),e2=pi(st);paths+='<path d="M'+s1.x+','+s1.y+' A'+r+','+r+' 0 '+lg+',1 '+e1.x+','+e1.y+' L'+s2.x+','+s2.y+' A'+ir+','+ir+' 0 '+lg+',0 '+e2.x+','+e2.y+' Z" fill="'+s.c+'" opacity=".9"/>';ang=en}const leg=slices.map(s=>'<div class="drow"><div class="ddot" style="background:'+s.c+'"></div><span>'+esc(s.k.length>20?s.k.slice(0,18)+'…':s.k)+'</span><span class="dpct">'+s.pct+'%</span></div>').join('');el.innerHTML='<div class="dwrap"><svg viewBox="0 0 180 180" width="140" height="140" style="flex-shrink:0">'+paths+'<text x="90" y="87" text-anchor="middle" fill="var(--tx)" font-size="22" font-weight="800" font-family="DM Mono,monospace">'+total+'</text><text x="90" y="104" text-anchor="middle" fill="var(--tm)" font-size="10">total</text></svg><div class="dleg">'+leg+'</div></div>'}
-function statusPill(s){const l=(s||'').toLowerCase();if(l==='closed')return'<span class="pill p-closed">Closed</span>';if(l.includes('pending'))return'<span class="pill p-pending">'+esc(s)+'</span>';return'<span class="pill p-open">'+esc(s)+'</span>'}
-function harmPill(h){if(!h||h==='Unknown')return'';const l=h.toLowerCase();if(l.includes('no harm'))return'<span class="pill p-harm0">No Harm</span>';if(l.includes('patient'))return'<span class="pill p-harm3">Patient</span>';if(l.includes('staff'))return'<span class="pill p-harm2">Staff</span>';return'<span class="pill p-harm1">'+esc(h)+'</span>'}
-function riskPill(r){const l=(r||'').toLowerCase();if(!r||r==='Not Assessed'||r==='False')return'<span class="pill" style="background:var(--s3);color:var(--tm)">N/A</span>';if(l==='low')return'<span class="pill p-risk-low">Low</span>';if(l==='moderate')return'<span class="pill p-risk-mod">Mod</span>';if(l==='high')return'<span class="pill p-risk-high">High</span>';if(l==='extreme')return'<span class="pill p-risk-ext">Ext</span>';return'<span class="pill">'+esc(r)+'</span>'}
-let recPage=1;const RPP=25;
-function getFilters(){return{year:fval('f-year'),month:fval('f-month'),campus:fval('f-campus'),status:fval('f-status'),category:fval('f-cat'),harm:fval('f-harm'),risk:fval('f-risk')}}
-function filtered(){const f=getFilters();let d=filterData(f);const q=(document.getElementById('srch')?.value||'').toLowerCase();if(q)d=d.filter(r=>Object.values(r).some(v=>String(v||'').toLowerCase().includes(q)));return d}
-function renderAll(){const d=filtered();renderKPIs(d);renderOverview(d);renderStatus(d);renderCats(d);renderHarm(d);recPage=1;window._recD=d;renderRecPage()}
-function renderKPIs(d){const total=d.length,closed=d.filter(r=>/closed/i.test(r.status)).length,pending=d.filter(r=>/pending/i.test(r.status)).length,sent=d.filter(r=>(r.sentinel||'').toLowerCase()==='yes').length,harmP=d.filter(r=>(r.harm||'').includes('Patient')).length,noH=d.filter(r=>r.harm==='No Harm').length,cr=total?Math.round(closed/total*100):0,tats=d.filter(r=>r.tat).map(r=>parseFloat(r.tat)),avgT=tats.length?Math.round(tats.reduce((a,b)=>a+b,0)/tats.length):0;document.getElementById('kpi-row').innerHTML='<div class="kpi k-blue"><div class="kpi-icon">📋</div><div class="kpi-num">'+total.toLocaleString()+'</div><div class="kpi-label">Total Incidents</div></div><div class="kpi k-grn"><div class="kpi-icon">✅</div><div class="kpi-num">'+closed.toLocaleString()+'</div><div class="kpi-label">Closed</div></div><div class="kpi k-am"><div class="kpi-icon">⏳</div><div class="kpi-num">'+pending.toLocaleString()+'</div><div class="kpi-label">Pending</div></div><div class="kpi k-rd"><div class="kpi-icon">🚨</div><div class="kpi-num">'+sent+'</div><div class="kpi-label">Sentinel Events</div></div><div class="kpi k-pu"><div class="kpi-icon">🤕</div><div class="kpi-num">'+harmP.toLocaleString()+'</div><div class="kpi-label">Harm to Patient</div></div><div class="kpi k-cy"><div class="kpi-icon">🟢</div><div class="kpi-num">'+noH.toLocaleString()+'</div><div class="kpi-label">No Harm</div></div><div class="kpi k-gold"><div class="kpi-icon">📈</div><div class="kpi-num">'+cr+'%</div><div class="kpi-label">Closure Rate</div></div><div class="kpi k-am"><div class="kpi-icon">⏱</div><div class="kpi-num">'+avgT+'</div><div class="kpi-label">Avg TAT Days</div></div>'}
-function renderOverview(d){const mm={};MONTHS.forEach(m=>mm[m]=0);d.forEach(r=>{if(r.month&&mm[r.month]!==undefined)mm[r.month]++});barChart('ch-monthly',MONTHS.map(m=>[m,mm[m]]),{color:'#4d86f5'});donutChart('ch-harm',sortedEntries(countBy(d,'harm')));barChart('ch-cat',sortedEntries(countBy(d,'category')));barChart('ch-dept',sortedEntries(countBy(d,'dept'),12),{color:'#34c77b'})}
-function renderStatus(d){donutChart('ch-st-donut',sortedEntries(countBy(d,'status')));const mm={};MONTHS.forEach(m=>mm[m]={_l:m,C:0,P:0});d.forEach(r=>{if(r.month&&mm[r.month]){if(/closed/i.test(r.status))mm[r.month].C++;else if(/pending/i.test(r.status))mm[r.month].P++}});const mx=Math.max(...Object.values(mm).map(m=>m.C+m.P),1);const el=document.getElementById('ch-st-month');if(el)el.innerHTML=MONTHS.map(m=>'<div class="brow"><div class="blbl">'+m+'</div><div class="btrk" style="display:flex;gap:2px"><div style="width:'+Math.round(mm[m].C/mx*100)+'%;background:#34c77b;height:100%;border-radius:2px" title="Closed: '+mm[m].C+'"></div><div style="width:'+Math.round(mm[m].P/mx*100)+'%;background:#e8a83a;height:100%;border-radius:2px" title="Pending: '+mm[m].P+'"></div></div><span style="font-size:10px;color:var(--tm);font-family:DM Mono,monospace;min-width:28px;text-align:right">'+(mm[m].C+mm[m].P||'')+'</span></div>').join('');barChart('ch-st-cat',sortedEntries(countBy(d.filter(r=>/closed/i.test(r.status)),'category')),{color:'#34c77b'},12)}
-function renderCats(d){barChart('ch-allcat',sortedEntries(countBy(d,'category')),{},20);barChart('ch-subcat',sortedEntries(countBy(d,'sub')),{color:'#c9a84c'},15);donutChart('ch-cat-donut',sortedEntries(countBy(d,'category')))}
-function renderHarm(d){barChart('ch-hm-cat',sortedEntries(countBy(d,'category')),{color:'#f05c5c'},12);donutChart('ch-hm-risk',sortedEntries(countBy(d,'risk_level')));const mm={};MONTHS.forEach(m=>mm[m]=0);d.forEach(r=>{if(r.month&&mm[r.month]!==undefined&&(r.harm||'').includes('Patient'))mm[r.month]++});barChart('ch-hm-month',MONTHS.map(m=>[m,mm[m]]),{color:'#f05c5c'},12);barChart('ch-hm-dept',sortedEntries(countBy(d.filter(r=>(r.harm||'').includes('Patient')),'dept'),10),{color:'#9b72ef'})}
-function renderRecPage(){const d=window._recD||DATA,start=(recPage-1)*RPP,end=Math.min(recPage*RPP,d.length),slice=d.slice(start,end);document.getElementById('rec-head').innerHTML='<tr><th>#</th><th>Month</th><th>Site</th><th>Department</th><th>Category</th><th>Sub</th><th>Status</th><th>Harm</th><th>Risk</th><th>Details</th></tr>';document.getElementById('rec-body').innerHTML=slice.length?slice.map(r=>'<tr><td style="font-family:DM Mono,monospace;color:var(--tm)">'+esc(r.no)+'</td><td style="white-space:nowrap;color:var(--tm);font-size:11px">'+esc(r.month)+' '+esc(r.year)+'</td><td><span style="background:var(--acb);color:var(--ac);padding:2px 7px;border-radius:12px;font-size:10px;font-weight:700">'+esc(r.campus_code||r.site||'')+'</span></td><td style="font-size:12px">'+esc(r.dept)+'</td><td style="font-size:11px;color:var(--tm)">'+esc(r.category)+'</td><td style="font-size:11px;color:var(--tm)">'+esc((r.sub||'').length>28?(r.sub||'').slice(0,26)+'…':r.sub||'')+'</td><td>'+statusPill(r.status)+'</td><td>'+harmPill(r.harm)+'</td><td>'+riskPill(r.risk_level)+'</td><td style="font-size:11px;color:var(--tm);max-width:200px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap" title="'+esc(r.details)+'">'+esc(r.details)+'</td></tr>').join(''):'<tr><td colspan="10" class="nodata">No records match.</td></tr>';const pages=Math.ceil(d.length/RPP);let btns='<span class="pg-info">Showing '+(start+1)+'–'+end+' of '+d.length.toLocaleString()+'</span>';btns+='<button class="pg-btn" onclick="goRec('+(recPage-1)+')" '+(recPage===1?'disabled':'')+'>← Prev</button>';for(let p=Math.max(1,recPage-2);p<=Math.min(pages,recPage+2);p++)btns+='<button class="pg-btn '+(p===recPage?'on':'')+'" onclick="goRec('+p+')">'+p+'</button>';btns+='<button class="pg-btn" onclick="goRec('+(recPage+1)+')" '+(recPage>=pages?'disabled':'')+'>Next →</button>';document.getElementById('rec-pg').innerHTML=btns}
-function goRec(p){const pages=Math.ceil((window._recD||DATA).length/RPP);if(p<1||p>pages)return;recPage=p;renderRecPage()}
-function exportCSV(){const d=window._recD||DATA;const keys=['no','year','month','site','dept','category','sub','status','harm','risk_level','sentinel','tat','details'];const rows=d.map(r=>keys.map(k=>'"'+(String(r[k]||'').replace(/"/g,'""'))+'"').join(','));const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([[keys.join(','),...rows].join('\\n')],{type:'text/csv'}));a.download='OMAC_Incident_Export.csv';a.click()}
-function showPage(id,btn){document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));document.querySelectorAll('.ptab').forEach(b=>b.classList.remove('active'));document.getElementById(id).classList.add('active');btn.classList.add('active')}
-function toggleTheme(){document.body.classList.toggle('light');localStorage.setItem('omac-theme',document.body.classList.contains('light')?'light':'dark')}
-function showToast(msg){const t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),2800)}
-function populateFilters(d){fillSel('f-year',uniq(d.map(r=>r.year)),'All Years');fillSel('f-month',MONTHS.filter(m=>d.some(r=>r.month===m)),'All Months');fillSel('f-campus',uniq(d.map(r=>r.campus_code||r.site)),'All Sites');fillSel('f-status',uniq(d.map(r=>r.status)),'All Statuses');fillSel('f-cat',uniq(d.map(r=>r.category)),'All Categories');fillSel('f-harm',uniq(d.map(r=>r.harm)),'All Harm');fillSel('f-risk',uniq(d.map(r=>r.risk_level).filter(r=>r&&r!=='False')),'All Risk')}
-(function(){const sv=localStorage.getItem('omac-theme');if(sv==='light'||((!sv)&&window.matchMedia&&window.matchMedia('(prefers-color-scheme:light)').matches))document.body.classList.add('light');populateFilters(DATA);renderAll()})();`;
-  // Patch renderAll to only call enabled sections
-  return baseJs.replace(
-    /function renderAll\(\)\{[^}]+\}/,
-    \`function renderAll(){const d=filtered();renderKPIs(d);\${renderCalls}}\`
-  );
-}
-
-// ────────────────────────────────────────────
-// DOWNLOAD DASHBOARD — clean standalone HTML
-// ────────────────────────────────────────────
-function downloadDashboard() {
+// ═══════════════════════════════════════════
+// DOWNLOAD DASHBOARD
+// ═══════════════════════════════════════════
+function downloadDashboard(){
   showToast('⏳ Building dashboard…');
-
-  const exportData = rawData.map(r => ({
-    no: r._raw ? (Object.values(r._raw)[0]||'') : '',
-    year: r.year ? String(r.year) : '',
-    month: r.month >= 0 ? MONTHS[r.month] : '',
-    site: r.site, dept: r.dept, category: r.category, sub: r.sub,
-    status: r.status, harm: r.harm, risk_level: r.risk,
-    sentinel: r.sentinel, tat: r.tat !== null ? String(r.tat) : '',
-    details: (r.details||'').slice(0,140), campus_code: r.site,
-  }));
-
-  // Only embed enabled cards
-  const enabledCards = kpiCards.filter(c => kpiCardEnabled[c.id] !== false);
-  const dataJson = JSON.stringify(exportData);
-  const cardsJson = JSON.stringify(enabledCards);
-  const filename = window._pendingFile || 'Incident Log';
-  const total = rawData.length;
-  const years = unique(rawData.map(r=>String(r.year)).filter(Boolean));
-  const sites = unique(rawData.map(r=>r.site).filter(Boolean));
-  const periodLabel = years.length > 1 ? years[0]+'–'+years[years.length-1] : (years[0]||'—');
-
-  // Which sections are enabled?
-  const enabledSections = new Set(SECTION_DEFS.filter(s => sectionEnabled[s.id]).map(s => s.id));
-  const firstEnabled = SECTION_DEFS.find(s => enabledSections.has(s.id));
-
-  const SECTION_TAB_MAP = {
-    'dp-overview':   {pgId:'pg-main',   icon:'🏠',label:'Overview'},
-    'dp-status':     {pgId:'pg-status', icon:'📊',label:'Status'},
-    'dp-categories': {pgId:'pg-cat',    icon:'🏷️',label:'Categories'},
-    'dp-harm':       {pgId:'pg-harm',   icon:'⚠️',label:'Harm &amp; Risk'},
-    'dp-records':    {pgId:'pg-rec',    icon:'📋',label:'Records'},
-  };
-
-  const tabsHtml = SECTION_DEFS.filter(s=>enabledSections.has(s.id)).map((s,i)=>{
-    const t=SECTION_TAB_MAP[s.id];
-    return `  <button class="ptab ${i===0?'active':''}" onclick="showPage('${t.pgId}',this)"><span>${s.icon}</span> ${t.label}</button>`;
-  }).join('\n');
-
-  const mk = (id,active) => enabledSections.has(id) && firstEnabled?.id===id ? active : '';
-
-  const overviewPage = !enabledSections.has('dp-overview') ? '' : `
-<div id="pg-main" class="page ${mk('dp-overview','active')}"><div class="wrap" style="padding-top:0">
-  <div class="hero"><div class="hero-title">Patient Safety Incident Log · Master Dashboard</div>
-    <div class="hero-sub">${total.toLocaleString()} incidents · ${filename} · ${periodLabel}</div>
-    <div class="hero-meta">
-      <div class="hero-chip">📅 ${periodLabel}</div>
-      <div class="hero-chip">🏢 ${sites.length?sites.join(' · '):'All Sites'}</div>
-      <div class="hero-chip">📋 ${total.toLocaleString()} Incidents</div>
-    </div></div>
-  <div class="charts2">
-    <div class="cc"><div class="cc-title">Monthly Trend</div><div class="cc-body" id="ch-monthly"></div></div>
-    <div class="cc"><div class="cc-title">Harm Distribution</div><div class="cc-body" id="ch-harm"></div></div>
-  </div>
-  <div class="charts2">
-    <div class="cc"><div class="cc-title">Top Categories</div><div class="cc-body" id="ch-cat"></div></div>
-    <div class="cc"><div class="cc-title">Top Departments</div><div class="cc-body" id="ch-dept"></div></div>
-  </div>
-</div></div>`;
-
-  const statusPage = !enabledSections.has('dp-status') ? '' : `
-<div id="pg-status" class="page ${mk('dp-status','active')}"><div class="wrap">
-  <div class="charts12">
-    <div class="cc"><div class="cc-title">Status by Month</div><div class="cc-body" id="ch-st-month"></div></div>
-    <div class="cc"><div class="cc-title">Status Breakdown</div><div class="cc-body" id="ch-st-donut"></div></div>
-  </div>
-  <div class="cc"><div class="cc-title">Closed by Category</div><div class="cc-body" id="ch-st-cat"></div></div>
-</div></div>`;
-
-  const catPage = !enabledSections.has('dp-categories') ? '' : `
-<div id="pg-cat" class="page ${mk('dp-categories','active')}"><div class="wrap">
-  <div class="charts12">
-    <div class="cc"><div class="cc-title">All Categories</div><div class="cc-body" id="ch-allcat"></div></div>
-    <div class="cc"><div class="cc-title">Category Share</div><div class="cc-body" id="ch-cat-donut"></div></div>
-  </div>
-  <div class="cc"><div class="cc-title">Sub-Categories</div><div class="cc-body" id="ch-subcat"></div></div>
-</div></div>`;
-
-  const harmPage = !enabledSections.has('dp-harm') ? '' : `
-<div id="pg-harm" class="page ${mk('dp-harm','active')}"><div class="wrap">
-  <div class="charts2">
-    <div class="cc"><div class="cc-title">Harm by Category</div><div class="cc-body" id="ch-hm-cat"></div></div>
-    <div class="cc"><div class="cc-title">Risk Levels</div><div class="cc-body" id="ch-hm-risk"></div></div>
-  </div>
-  <div class="charts2">
-    <div class="cc"><div class="cc-title">Harm Monthly Trend</div><div class="cc-body" id="ch-hm-month"></div></div>
-    <div class="cc"><div class="cc-title">Harm by Department</div><div class="cc-body" id="ch-hm-dept"></div></div>
-  </div>
-</div></div>`;
-
-  const recPage_ = !enabledSections.has('dp-records') ? '' : `
-<div id="pg-rec" class="page ${mk('dp-records','active')}"><div class="wrap">
-  <div class="exp-bar">
-    <input type="text" class="srch" id="srch" placeholder="🔍 Search…" oninput="window._recD=filtered();recPage=1;renderRecPage()">
-    <button class="btn btn-ghost" onclick="exportCSV()">⬇ CSV</button>
-  </div>
-  <div class="tbl-wrap"><table><thead id="rec-head"></thead><tbody id="rec-body"></tbody></table></div>
-  <div class="pg" id="rec-pg"></div>
-</div></div>`;
-
-  const renderCalls = [];
-  if (enabledSections.has('dp-overview'))   renderCalls.push('renderOverview(d)');
-  if (enabledSections.has('dp-status'))     renderCalls.push('renderStatus(d)');
-  if (enabledSections.has('dp-categories')) renderCalls.push('renderCats(d)');
-  if (enabledSections.has('dp-harm'))       renderCalls.push('renderHarm(d)');
-  if (enabledSections.has('dp-records'))    renderCalls.push('recPage=1;window._recD=d;renderRecPage()');
-
-  const standaloneHtml = buildStandaloneHtml({
-    dataJson, cardsJson, tabsHtml, periodLabel, filename, total, sites,
-    overviewPage, statusPage, catPage, harmPage, recPage_,
-    renderCalls: renderCalls.join(';')
+  var exportData=rawData.map(function(r){
+    return {no:r._raw?String(Object.values(r._raw)[0]||''):'',
+      year:r.year?String(r.year):'',month:r.month>=0?MONTHS[r.month]:'',
+      site:r.site,dept:r.dept,category:r.category,sub:r.sub,status:r.status,
+      harm:r.harm,risk_level:r.risk,sentinel:r.sentinel,
+      tat:r.tat!==null?String(r.tat):'',details:(r.details||'').slice(0,140),campus_code:r.site};
   });
-
-  setTimeout(() => {
-    const blob = new Blob([standaloneHtml], {type:'text/html'});
-    const a = document.createElement('a');
-    a.href = URL.createObjectURL(blob);
-    a.download = 'OMAC_Incident_Dashboard.html';
-    a.click();
+  var enabledCards=kpiCards.filter(function(c){return kpiCardEnabled[c.id]!==false;});
+  var enabledSections=new Set(SECTION_DEFS.filter(function(s){return sectionEnabled[s.id];}).map(function(s){return s.id;}));
+  var firstSec=SECTION_DEFS.find(function(s){return enabledSections.has(s.id);});
+  var years=unique(rawData.map(function(r){return String(r.year);}).filter(Boolean));
+  var sites=unique(rawData.map(function(r){return r.site;}).filter(Boolean));
+  var periodLabel=years.length>1?years[0]+'–'+years[years.length-1]:(years[0]||'—');
+  var filename=window._pendingFile||'Incident Log';
+  var total=rawData.length;
+  var SPMAP={'dp-overview':{pgId:'pg-main',icon:'🏠',label:'Overview'},'dp-status':{pgId:'pg-status',icon:'📊',label:'Status'},'dp-categories':{pgId:'pg-cat',icon:'🏷️',label:'Categories'},'dp-harm':{pgId:'pg-harm',icon:'⚠️',label:'Harm &amp; Risk'},'dp-records':{pgId:'pg-rec',icon:'📋',label:'Records'}};
+  var tabsHtml=SECTION_DEFS.filter(function(s){return enabledSections.has(s.id);}).map(function(s,i){var t=SPMAP[s.id];return '<button class="ptab '+(i===0?'active':'')+'" onclick="showPage(\''+t.pgId+'\',this)"><span>'+s.icon+'</span> '+t.label+'</button>';}).join('\n');
+  function mkA(sid){return (enabledSections.has(sid)&&firstSec&&firstSec.id===sid)?'active':'';}
+  var ovPage=!enabledSections.has('dp-overview')?'':'<div id="pg-main" class="page '+mkA('dp-overview')+'"><div class="wrap" style="padding-top:0"><div class="hero"><div class="hero-title">Patient Safety Incident Log · Master Dashboard</div><div class="hero-sub">'+total.toLocaleString()+' incidents · '+escH(filename)+' · '+periodLabel+'</div><div class="hero-meta"><div class="hero-chip">📅 '+periodLabel+'</div><div class="hero-chip">🏢 '+(sites.length?sites.join(' · '):'All Sites')+'</div><div class="hero-chip">📋 '+total.toLocaleString()+'</div></div></div><div class="charts2"><div class="cc"><div class="cc-title">Monthly Trend</div><div class="cc-body" id="ch-monthly"></div></div><div class="cc"><div class="cc-title">Harm Distribution</div><div class="cc-body" id="ch-harm"></div></div></div><div class="charts2"><div class="cc"><div class="cc-title">Top Categories</div><div class="cc-body" id="ch-cat"></div></div><div class="cc"><div class="cc-title">Top Departments</div><div class="cc-body" id="ch-dept"></div></div></div></div></div>';
+  var stPage=!enabledSections.has('dp-status')?'':'<div id="pg-status" class="page '+mkA('dp-status')+'"><div class="wrap"><div class="charts12"><div class="cc"><div class="cc-title">Status by Month</div><div class="cc-body" id="ch-st-month"></div></div><div class="cc"><div class="cc-title">Status Breakdown</div><div class="cc-body" id="ch-st-donut"></div></div></div><div class="cc"><div class="cc-title">Closed by Category</div><div class="cc-body" id="ch-st-cat"></div></div></div></div>';
+  var catPage=!enabledSections.has('dp-categories')?'':'<div id="pg-cat" class="page '+mkA('dp-categories')+'"><div class="wrap"><div class="charts12"><div class="cc"><div class="cc-title">All Categories</div><div class="cc-body" id="ch-allcat"></div></div><div class="cc"><div class="cc-title">Category Share</div><div class="cc-body" id="ch-cat-donut"></div></div></div><div class="cc"><div class="cc-title">Sub-Categories</div><div class="cc-body" id="ch-subcat"></div></div></div></div>';
+  var hmPage=!enabledSections.has('dp-harm')?'':'<div id="pg-harm" class="page '+mkA('dp-harm')+'"><div class="wrap"><div class="charts2"><div class="cc"><div class="cc-title">Harm by Category</div><div class="cc-body" id="ch-hm-cat"></div></div><div class="cc"><div class="cc-title">Risk Levels</div><div class="cc-body" id="ch-hm-risk"></div></div></div><div class="charts2"><div class="cc"><div class="cc-title">Harm Monthly Trend</div><div class="cc-body" id="ch-hm-month"></div></div><div class="cc"><div class="cc-title">Harm by Department</div><div class="cc-body" id="ch-hm-dept"></div></div></div></div></div>';
+  var recPage=!enabledSections.has('dp-records')?'':'<div id="pg-rec" class="page '+mkA('dp-records')+'"><div class="wrap"><div class="exp-bar"><input type="text" class="srch" id="srch" placeholder="🔍 Search…" oninput="window._recD=filtered();recPage=1;renderRecPage()"><button class="btn btn-ghost" onclick="exportCSV()">⬇ CSV</button></div><div class="tbl-wrap"><table><thead id="rec-head"></thead><tbody id="rec-body"></tbody></table></div><div class="pg" id="rec-pg"></div></div></div>';
+  var renderCalls=[];
+  if(enabledSections.has('dp-overview')) renderCalls.push('renderOverview(d)');
+  if(enabledSections.has('dp-status')) renderCalls.push('renderStatus(d)');
+  if(enabledSections.has('dp-categories')) renderCalls.push('renderCats(d)');
+  if(enabledSections.has('dp-harm')) renderCalls.push('renderHarm(d)');
+  if(enabledSections.has('dp-records')) renderCalls.push('recPage=1;window._recD=d;renderRecPage()');
+  var renderAllFn='function renderAll(){var d=filtered();renderKPIs(d);'+renderCalls.join(';')+';}';
+  var standaloneKpiJs='var KPI_CARDS='+JSON.stringify(enabledCards)+';\nfunction countCardSA(d,card){if(card.type==="total")return d.length;if(card.type==="avg_tat"){var t=d.filter(function(r){return r.tat;}).map(function(r){return parseFloat(r.tat);});return t.length?Math.round(t.reduce(function(a,b){return a+b;},0)/t.length):0;}var fields=["status","harm","risk_level","dept","category","sub","site","campus_code"];function gv(r){for(var i=0;i<fields.length;i++){if(fields[i]===card.col||fields[i].toLowerCase()===card.col.toLowerCase())return String(r[fields[i]]||"");}return"";}if(!card.val)return d.filter(function(r){return gv(r)!=="";}).length;var ex=d.filter(function(r){return gv(r)===card.val;}).length;return ex>0?ex:d.filter(function(r){return gv(r).toLowerCase().indexOf(card.val.toLowerCase())>=0;}).length;}\nfunction renderKPIs(d){var CMAP={blue:"k-blue",green:"k-grn",amber:"k-am",red:"k-rd",purple:"k-pu",cyan:"k-cy",gold:"k-gold"};var h=(KPI_CARDS||[]).map(function(card){var cnt=countCardSA(d,card);var num=card.type==="pct"?(d.length?Math.round(cnt/d.length*100)+"%":"0%"):card.type==="avg_tat"?cnt+"d":cnt;var cls=CMAP[card.color]||"k-blue";return"<div class=\\"kpi "+cls+"\\"><div class=\\"kpi-icon\\">"+card.icon+"</div><div class=\\"kpi-num\\">"+(typeof num==="number"?num.toLocaleString():num)+"</div><div class=\\"kpi-label\\">"+card.label+"</div></div>";}).join("");document.getElementById("kpi-row").innerHTML=h||"<div>No KPI cards.</div>";}';
+  var htmlParts=[
+    '<!DOCTYPE html>\n<html lang="en">\n<head>\n<meta charset="UTF-8">\n<meta name="viewport" content="width=device-width,initial-scale=1.0">\n<title>Incident Dashboard \u00b7 OMAC Developers</title>',
+    '<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">',
+    '<style>'+DASH_CSS+'</style>\n</head>\n<body>',
+    '<nav class="nav"><div class="nav-brand"><div class="nav-logo">OI</div><div><div class="nav-title">Incident Intelligence Dashboard</div><div class="nav-sub">OMAC Developers \u00b7 S M Baqir \u00b7 '+periodLabel+'</div></div></div><div class="nav-right"><div class="nav-badge">OMAC Developers \u00b7 S M Baqir</div><div class="trow"><span class="tico">\uD83C\uDF19</span><div class="ttog" onclick="toggleTheme()"></div><span class="tico">\u2600\uFE0F</span></div></div></nav>',
+    '<div class="page-tabs">'+tabsHtml+'</div>',
+    '<div style="max-width:1280px;margin:0 auto;padding:24px 28px 0;position:relative;z-index:1"><div class="filter-bar"><div class="fg"><div class="fl">📅 Year</div><select class="fs" id="f-year" onchange="renderAll()"><option value="">All Years</option></select></div><div class="fg"><div class="fl">📆 Month</div><select class="fs" id="f-month" onchange="renderAll()"><option value="">All Months</option></select></div><div class="fg"><div class="fl">🏢 Site</div><select class="fs" id="f-campus" onchange="renderAll()"><option value="">All Sites</option></select></div><div class="fg"><div class="fl">📋 Category</div><select class="fs" id="f-cat" onchange="renderAll()"><option value="">All Categories</option></select></div><div class="fg"><div class="fl">🔵 Status</div><select class="fs" id="f-status" onchange="renderAll()"><option value="">All Statuses</option></select></div><div class="fg"><div class="fl">⚠️ Harm</div><select class="fs" id="f-harm" onchange="renderAll()"><option value="">All Harm</option></select></div><div class="fg"><div class="fl">🎯 Risk</div><select class="fs" id="f-risk" onchange="renderAll()"><option value="">All Risk</option></select></div><div style="margin-left:auto;align-self:flex-end"><button class="btn btn-ghost" onclick="[].forEach.call(document.querySelectorAll(\'.fs\'),function(s){s.value=\'\';});renderAll()">↺ Reset</button></div></div><div class="kpi-grid" id="kpi-row"></div></div>',
+    ovPage,stPage,catPage,hmPage,recPage,
+    '<div id="toast"></div>',
+    '<scr'+'ipt>',
+    'var DATA='+JSON.stringify(exportData)+';',
+    standaloneKpiJs,
+    DASH_JS,
+    renderAllFn,
+    '(function(){var sv=localStorage.getItem("omac-theme");if(sv==="light"||((!sv)&&window.matchMedia&&window.matchMedia("(prefers-color-scheme:light)").matches))document.body.classList.add("light");populateFilters(DATA);renderAll();})();',
+    '<\\/scr'+'ipt>\n</body>\n</html>'
+  ];
+  var standaloneHtml=htmlParts.join('\n');
+  setTimeout(function(){
+    var blob=new Blob([standaloneHtml],{type:'text/html'});
+    var a=document.createElement('a');
+    a.href=URL.createObjectURL(blob); a.download='OMAC_Incident_Dashboard.html'; a.click();
     showToast('✓ Dashboard downloaded');
-  }, 100);
+  },100);
 }
 
-function buildStandaloneHtml({dataJson,cardsJson,tabsHtml,periodLabel,filename,total,sites,overviewPage,statusPage,catPage,harmPage,recPage_,renderCalls}) {
-  const css = getStandaloneCss();
-  const js  = getStandaloneJs(cardsJson, renderCalls);
-  return `<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
-<title>Incident Dashboard · OMAC Developers</title>
-<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
-<style>${css}</style></head><body>
-<nav class="nav">
-  <div class="nav-brand"><div class="nav-logo">OI</div><div>
-    <div class="nav-title">Incident Intelligence Dashboard</div>
-    <div class="nav-sub">OMAC Developers · S M Baqir · ${periodLabel}</div>
-  </div></div>
-  <div class="nav-right">
-    <div class="nav-badge">OMAC Developers · S M Baqir</div>
-    <div class="trow"><span class="tico">🌙</span><div class="ttog" onclick="toggleTheme()"></div><span class="tico">☀️</span></div>
-  </div>
-</nav>
-<div class="page-tabs">${tabsHtml}</div>
-<div style="max-width:1280px;margin:0 auto;padding:24px 28px 0;position:relative;z-index:1">
-<div class="filter-bar">
-  <div class="fg"><div class="fl">📅 Year</div><select class="fs" id="f-year" onchange="renderAll()"><option value="">All Years</option></select></div>
-  <div class="fg"><div class="fl">📆 Month</div><select class="fs" id="f-month" onchange="renderAll()"><option value="">All Months</option></select></div>
-  <div class="fg"><div class="fl">🏢 Site</div><select class="fs" id="f-campus" onchange="renderAll()"><option value="">All Sites</option></select></div>
-  <div class="fg"><div class="fl">📋 Category</div><select class="fs" id="f-cat" onchange="renderAll()"><option value="">All Categories</option></select></div>
-  <div class="fg"><div class="fl">🔵 Status</div><select class="fs" id="f-status" onchange="renderAll()"><option value="">All Statuses</option></select></div>
-  <div class="fg"><div class="fl">⚠️ Harm</div><select class="fs" id="f-harm" onchange="renderAll()"><option value="">All Harm</option></select></div>
-  <div class="fg"><div class="fl">🎯 Risk</div><select class="fs" id="f-risk" onchange="renderAll()"><option value="">All Risk</option></select></div>
-  <div style="margin-left:auto;align-self:flex-end"><button class="btn btn-ghost" onclick="document.querySelectorAll('.fs').forEach(s=>s.value='');renderAll()">↺ Reset</button></div>
-</div>
-<div class="kpi-grid" id="kpi-row"></div>
-</div>
-${overviewPage}${statusPage}${catPage}${harmPage}${recPage_}
-<div id="toast"></div>
-<script>const DATA=${dataJson};${js}<\/script></body></html>`;
-}
 </script>
 </body>
 </html>
